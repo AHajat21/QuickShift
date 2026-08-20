@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+// ENUMS
+enum Role {
+	MANAGER
+	EMPLOYEE
+}
+
+enum ShiftSwapStatus {
+	PENDING
+	ACCEPTED
+	REJECTED
+	CANCELLED
+}
+
+enum TimeOffStatus {
+	PENDING
+	ACCEPTED
+	REJECTED
+	CANCELLED
+}
+
+
+// MODELS
+model users {
+	id                    String                 @id @default(uuid())
+	companyId             String
+	email                 String                 @unique
+	password              String
+	firstName             String
+	lastName              String?
+	role                  Role
+	createdAt             DateTime               @default(now())
+
+	company               companies              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+	shifts                shifts[]
+	availabilities        availabilities[]
+	timeOffRequests       time_off_requests[]  
+	swapRequestsSent      shift_swap_requests[]  @relation("SwapRequester")
+	swapRequestsRevieved  shift_swap_requests[]  @relation("SwapTarget")
+
+	@@index([companyId])
+}
+
+model companies {
+	id           String        @id @default(uuid())
+	email        String        @unique
+	name         String
+	description  String?
+	createdAt    DateTime      @default(now())
+
+	users        users[]
+	timetable    timetables[]  
+}
+
+model timetables {
+	id              String     @id @default(uuid())
+	companyId       String
+	name            String
+	weekCommencing  DateTime
+	createdAt       DateTime   @default(now())
+
+	company         companies  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+	shifts          shifts[]
+
+	@@index([companyId])
+}
+
+model shifts {
+	id                String                 @id @default(uuid())
+	employeeId        String
+	timetableId       String
+	date              DateTime
+	startTime         DateTime
+	endTime           DateTime
+	createdAt         DateTime               @default(now())
+
+	employee          users                  @relation(fields: [employeeId], references: [id], onDelete: NoAction)
+	timetable         timetables             @relation(fields: [timetableId], references: [id], onDelete: Cascade)
+	
+	shiftSwapRequest  shift_swap_requests[]   
+
+	@@index([timetableId])
+	@@index([employeeId])
+}
+
+model availabilities {
+	id          String    @id @default(uuid())
+	employeeId  String
+	dayOfWeek   Int
+	startTime   DateTime
+	endTime     DateTime
+	createdAt   DateTime  @default(now())
+
+	employee    users     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+	@@index([employeeId])
+}
+
+model time_off_requests {
+	id          String         @id @default(uuid())
+	employeeId  String
+	startDate   DateTime
+	endDate     DateTime
+	reason      String?
+	status      TimeOffStatus  @default(PENDING)
+	createdAt   DateTime       @default(now())
+
+	employee    users          @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+	@@index([employeeId])
+	@@index([status])
+}
+
+model shift_swap_requests {
+	id           String           @id @default(uuid())
+	shiftId      String
+	requesterId  String
+	targetId     String
+	status       ShiftSwapStatus  @default(PENDING)
+	createdAt    DateTime         @default(now())
+
+	shift        shifts           @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+	requester    users            @relation("SwapRequester", fields: [requesterId], references: [id], onDelete: NoAction)
+	target       users            @relation("SwapTarget", fields: [targetId], references: [id], onDelete: NoAction)
+
+	@@index([shiftId])
+	@@index([requesterId])
+	@@index([targetId])
+	@@index([status])
+}
