@@ -37,15 +37,16 @@ enum TimeOffStatus {
 // MODELS
 model users {
 	id                    String                 @id @default(uuid())
-	companyId             String
+	companyId             String?
 	email                 String                 @unique
-	password              String
+	password              String?
+	googleId              String?                @unique
 	firstName             String
 	lastName              String?
 	role                  Role
 	createdAt             DateTime               @default(now())
 
-	company               companies              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+	company               companies?              @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
 	shifts                shifts[]
 	availabilities        availabilities[]
