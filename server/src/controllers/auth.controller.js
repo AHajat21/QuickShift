@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
-import { hashPassword } from "../utils/password.js";
+import { hashPassword, verifyPassword } from "../utils/password.js";
 import { prisma } from "../lib/prisma.js"
+import { generateSessionToken, hashSessionToken } from "../utils/session.js";
 
 // MANAGER REGISTRATION
 export const registerManager = async (req, res, next) => {
@@ -46,7 +47,7 @@ export const registerManager = async (req, res, next) => {
 };
 
 
-export const loginManager = (req, res, next) => {
+export const loginManager = async (req, res, next) => {
 	const errors = validationResult(req)
 
 	if (!errors.isEmpty()) {
@@ -58,19 +59,20 @@ export const loginManager = (req, res, next) => {
 	const {email, password} = req.body
 	
 	try {
-		const manager = await prisma.users.findUnique({
+		// VERIFY PASSWORD WITH DATABASE
+		const managerAccount = await prisma.users.findUnique({
 			where: {
 				email
 			}
 		})
 
-		if (!manager) {
+		if (!managerAccount) {
 			return res.status(401).json({
 				message: "Invalid email or password"
 			});
 		}
 
-		const passwordIsValid = await verifyPassword(password,manager.password);
+		const passwordIsValid = await verifyPassword(password, managerAccount.password);
 
 		if (!passwordIsValid) {
 			return res.status(401).json({
@@ -78,7 +80,30 @@ export const loginManager = (req, res, next) => {
 			});
 		}
 
-		
+		// CREATE SESSION
+		const sessionToken = generateSessionToken()
+		const tokenHash = hashSessionToken(sessionToken)
+
+		// DATABASE
+		await prisma.sessions.create({
+			data: {
+				userId: managerAccount.id,
+				tokenHash,
+				expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+			}
+		})
+
+		// COOKIE
+		res.cookie("session", sessionToken, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "lax",
+			maxAge: 7 * 24 * 60 * 60 * 1000,
+		})
+
+		res.status(201).json({
+			mssage: "Successful login"
+		})
 
 	} catch (error) {
 		next(error)
