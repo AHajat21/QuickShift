@@ -48,6 +48,7 @@ model users {
 
 	company               companies?              @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
+	sessions              sessions[]
 	shifts                shifts[]
 	availabilities        availabilities[]
 	timeOffRequests       time_off_requests[]  
@@ -55,6 +56,19 @@ model users {
 	swapRequestsRevieved  shift_swap_requests[]  @relation("SwapTarget")
 
 	@@index([companyId])
+}
+
+model sessions {
+	id         String    @id @default(uuid())
+	userId     String
+	tokenHash  String    @unique
+	expiresAt  DateTime
+	createdAt  DateTime  @default(now())
+
+	user       users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+	@@index([userId])
+	@@index([expiresAt])
 }
 
 model companies {

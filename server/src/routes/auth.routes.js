@@ -1,6 +1,6 @@
 import express from "express"
-import { registerManager, registerEmployee } from "../controllers/auth.controller.js"
-import { registrationValidator } from "../validators/auth.validator.js"
+import { registerManager, registerEmployee, loginManager } from "../controllers/auth.controller.js"
+import { loginValidator, registrationValidator } from "../validators/auth.validator.js"
 
 const router = express.Router()
 
@@ -8,6 +8,11 @@ router.post(
 	"/manager/register",
 	registrationValidator,
 	registerManager,
+)
+router.post(
+	"/manager/login",
+	loginValidator,
+	loginManager
 )
 
 router.post(
