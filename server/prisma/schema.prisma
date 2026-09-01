@@ -17,20 +17,24 @@ datasource db {
 enum Role {
 	MANAGER
 	EMPLOYEE
+	NULL
 }
 
-enum ShiftSwapStatus {
+enum RequestStatus {
 	PENDING
 	ACCEPTED
 	REJECTED
 	CANCELLED
 }
 
-enum TimeOffStatus {
-	PENDING
-	ACCEPTED
-	REJECTED
-	CANCELLED
+enum DayOfWeek {
+	MONDAY
+	TUESDAY
+	WEDNESDAY
+	THURSDAY
+	FRIDAY
+	SATURDAY
+	SUNDAY
 }
 
 
@@ -46,7 +50,7 @@ model users {
 	role                  Role
 	createdAt             DateTime               @default(now())
 
-	company               companies?              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+	company               companies?              @relation(fields: [companyId], references: [id], onDelete: SetNull)
 
 	sessions              sessions[]
 	shifts                shifts[]
@@ -73,9 +77,9 @@ model sessions {
 
 model companies {
 	id           String        @id @default(uuid())
-	email        String        @unique
 	name         String
 	description  String?
+	joinCode     String        @unique
 	createdAt    DateTime      @default(now())
 
 	users        users[]
@@ -101,8 +105,8 @@ model shifts {
 	employeeId        String
 	timetableId       String
 	date              DateTime
-	startTime         DateTime
-	endTime           DateTime
+	startTime         String
+	endTime           String
 	createdAt         DateTime               @default(now())
 
 	employee          users                  @relation(fields: [employeeId], references: [id], onDelete: NoAction)
@@ -115,14 +119,14 @@ model shifts {
 }
 
 model availabilities {
-	id          String    @id @default(uuid())
+	id          String     @id @default(uuid())
 	employeeId  String
-	dayOfWeek   Int
-	startTime   DateTime
-	endTime     DateTime
-	createdAt   DateTime  @default(now())
+	dayOfWeek   DayOfWeek  
+	startTime   String
+	endTime     String
+	createdAt   DateTime   @default(now())
 
-	employee    users     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+	employee    users      @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
 	@@index([employeeId])
 }
@@ -133,7 +137,7 @@ model time_off_requests {
 	startDate   DateTime
 	endDate     DateTime
 	reason      String?
-	status      TimeOffStatus  @default(PENDING)
+	status      RequestStatus  @default(PENDING)
 	createdAt   DateTime       @default(now())
 
 	employee    users          @relation(fields: [employeeId], references: [id], onDelete: Cascade)
@@ -147,7 +151,7 @@ model shift_swap_requests {
 	shiftId      String
 	requesterId  String
 	targetId     String
-	status       ShiftSwapStatus  @default(PENDING)
+	status       RequestStatus  @default(PENDING)
 	createdAt    DateTime         @default(now())
 
 	shift        shifts           @relation(fields: [shiftId], references: [id], onDelete: Cascade)

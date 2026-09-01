@@ -1,4 +1,4 @@
-export const errorHandler = (err, req, res, next) => {
+export const prismaErrorHandler = (err, req, res, next) => {
 	console.error(err)
 
 	if (err.code === "P2002") {
@@ -6,8 +6,13 @@ export const errorHandler = (err, req, res, next) => {
 			message: "A record with this value already exists"
 		})
 	}
+	else if (err.code === "P2025") {
+		return res.status(404).json({
+			message: "Not found"
+		})
+	}
 
-	res.status(500).json({
+	return res.status(500).json({
 		message: "Internal server error"
 	})
 }

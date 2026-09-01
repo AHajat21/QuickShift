@@ -1,31 +1,26 @@
 import express from "express"
-import { registerManager, registerEmployee, loginManager } from "../controllers/auth.controller.js"
+import { register, login, logout } from "../controllers/auth.controller.js"
 import { loginValidator, registrationValidator } from "../validators/auth.validator.js"
-import { authenticate } from "../middleware/auth.middleware.js"
+import { authenticate, requireGuest } from "../middleware/auth.middleware.js"
 
 const router = express.Router()
 
 router.post(
-	"/manager/register",
+	"/register",
+	requireGuest,
 	registrationValidator,
-	registerManager,
+	register
 )
-router.get("/me", authenticate, (req, res) => {
-	res.json({
-		message: "You are authenticated",
-		userId: req.userId
-	});
-});
 router.post(
-	"/manager/login",
+	"/login",
+	requireGuest,
 	loginValidator,
-	loginManager
+	login
 )
-
 router.post(
-	"/employee/register",
-	registrationValidator,
-	registerEmployee,
+	"/logout",
+	authenticate,
+	logout
 )
 
 export default router

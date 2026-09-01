@@ -15,7 +15,11 @@ export const registrationValidator = [
 
 	body("lastName")
 		.optional()
-		.trim()
+		.trim(),
+		
+	body("role")
+    .isIn(["MANAGER", "EMPLOYEE"])
+    .withMessage("Role must be MANAGER or EMPLOYEE")
 ]
 
 export const loginValidator = [
