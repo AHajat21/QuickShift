@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma.js"
+import { prisma } from "../lib/prisma.js";
 
 export const getAllEmployees = async (req, res, next) => {
 	try {
@@ -80,48 +80,6 @@ export const getEmployeeShifts = async (req, res, next) => {
 		return res.status(200).json({
 			message: "Employee shifts received",
 			employeeShifts
-		})
-	} catch(error) {
-		next(error)
-	}
-}
-
-
-
-
-// AVAILABILITIES
-export const getEmployeeAvailabilities = async (req, res, next) => {
-	try {
-		const employeeAvailabilities = await prisma.availabilities.findMany({
-			where: {
-				employeeId: req.user.id
-			}
-		})
-
-		return res.status(200).json({
-			message: "Employee availabilities fetched",
-			employeeAvailabilities
-		})
-	} catch(error) {
-		next(error)
-	}
-}
-
-export const createAvailability = async (req, res, next) => {
-	const { dayOfWeek, startTime, endTime } = req.body
-	try {
-		const availability = await prisma.availabilities.findMany({
-			data: {
-				employeeId: req.user.id,
-				dayOfWeek,
-				startTime,
-				endTime
-			}
-		})
-
-		return res.status(201).json({
-			message: "Availability created",
-			availability
 		})
 	} catch(error) {
 		next(error)

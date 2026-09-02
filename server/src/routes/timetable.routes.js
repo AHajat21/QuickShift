@@ -1,6 +1,6 @@
 import express from "express"
 import { requireCompanyMembership, requireManager } from "../middleware/auth.middleware.js"
-import { createTimetable, deleteAvailability, deleteTimetable, getAllAvailabilities, getAllTimetables, viewTimetable } from "../controllers/timetable.controller.js"
+import { createTimetable, deleteTimetable, getAllTimetables, viewTimetable } from "../controllers/timetable.controller.js"
 import { createShift, deleteShift, getAllShifts, updateShift } from "../controllers/shift.controller.js"
 
 const router = express.Router()
@@ -54,24 +54,6 @@ router.delete(
 	requireManager,
 	requireCompanyMembership,
 	deleteShift
-)
-
-
-
-
-// AVAILABILITIES
-router.get(
-	"/availabilities",
-	requireManager,
-	requireCompanyMembership,
-	getAllAvailabilities
-)
-
-router.delete(
-	"/availabilities/:availabilityId",
-	requireManager,
-	requireCompanyMembership,
-	deleteAvailability
 )
 
 export default router

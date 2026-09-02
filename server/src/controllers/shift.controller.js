@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.js"
+import { isValidTime } from "../validators/time.validator.js"
 
 
 export const getAllShifts = async (req, res, next) => {
@@ -24,17 +25,18 @@ export const getAllShifts = async (req, res, next) => {
 export const createShift = async (req, res, next) => {
 	const { employeeId, date, startTime, endTime } = req.body
 	const shiftDate = new Date(date)
-	if (!employeeId || !date || !startTime || !endTime) {
-		return res.status(400).json({
-			message: "Please fill in all the required fields first"
-		})
-	}
+
 	if (isNaN(shiftDate.getTime()) || shiftDate < new Date()) {
 		return res.status(400).json({
 			message: "Date is invalid"
 		})
 	}
-	if ( startTime >= endTime) {
+	if (!isValidTime(startTime) || !isValidTime(endTime)) {
+		return res.status(400).json({
+			message: "Start time or end time is invalid"
+		})
+	}
+	if (startTime >= endTime) {
 		return res.status(400).json({
 			message: "Start time or end time is invalid"
 		})
@@ -79,17 +81,17 @@ export const updateShift = async (req, res, next) => {
 	const { employeeId, date, startTime, endTime} = req.body
 	const shiftDate = new Date(date)
 
-	if (!employeeId || !date || !startTime || !endTime) {
-		return res.status(400).json({
-			message: "Please fill in all the required fields first"
-		})
-	}
 	if (isNaN(shiftDate.getTime()) || shiftDate < new Date()) {
 		return res.status(400).json({
 			message: "Date is invalid"
 		})
 	}
-	if ( startTime >= endTime) {
+	if (!isValidTime(startTime) || !isValidTime(endTime)) {
+		return res.status(400).json({
+			message: "Start time or end time is invalid"
+		})
+	}
+	if (startTime >= endTime) {
 		return res.status(400).json({
 			message: "Start time or end time is invalid"
 		})

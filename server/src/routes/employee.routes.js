@@ -1,12 +1,96 @@
 import express from "express"
 
 import { requireCompanyMembership, requireEmployee, requireManager } from "../middleware/auth.middleware.js"
-import { createAvailability, getAllEmployees, getEmployee, getEmployeeAvailabilities, getEmployeeShifts, removeEmployee } from "../controllers/employee.controller.js"
-import { deleteAvailability } from "../controllers/timetable.controller.js"
+import { getAllEmployees, getEmployee, getEmployeeShifts, removeEmployee } from "../controllers/employee.controller.js"
+import { createAvailability, deleteAvailability, getAllAvailabilities, getEmployeeAvailabilities } from "../controllers/availability.controller.js"
+import { cancelTimeOff, createTimeOffRequest, getAllTimesOff, getEmployeeTimesOff, updateTimeOffRequest } from "../controllers/timeOff.controller.js"
 
 const router = express.Router()
 
-// MANAGER managing employees
+// EMPLOYEE
+
+// self
+router.get(
+	"/me/shifts",
+	requireEmployee,
+	requireCompanyMembership,
+	getEmployeeShifts
+)
+
+// availability
+router.get(
+	"/me/availability",
+	requireEmployee,
+	requireCompanyMembership,
+	getEmployeeAvailabilities
+)
+router.post(
+	"/me/availability",
+	requireEmployee,
+	requireCompanyMembership,
+	createAvailability
+)
+router.delete(
+	"/me/availability/:availabilityId",
+	requireEmployee,
+	requireCompanyMembership,
+	deleteAvailability
+)
+
+// time-off
+router.get(
+	"/me/time-off",
+	requireEmployee,
+	requireCompanyMembership,
+	getEmployeeTimesOff
+)
+router.post(
+	"/me/time-off",
+	requireEmployee,
+	requireCompanyMembership,
+	createTimeOffRequest
+)
+router.patch(
+	"/me/time-off/:timeOffId",
+	requireEmployee,
+	requireCompanyMembership,
+	cancelTimeOff
+)
+
+
+
+
+// MANAGER
+
+// availability
+router.get(
+	"/availabilities",
+	requireManager,
+	requireCompanyMembership,
+	getAllAvailabilities
+)
+router.delete(
+	"/availabilities/:availabilityId",
+	requireManager,
+	requireCompanyMembership,
+	deleteAvailability
+)
+
+// time-off
+router.get(
+	"/times-off",
+	requireManager,
+	requireCompanyMembership,
+	getAllTimesOff
+)
+router.patch(
+	"/times-off/:timeOffId",
+	requireManager,
+	requireCompanyMembership,
+	updateTimeOffRequest
+)
+
+// employees
 router.get(
 	"/",
 	requireManager,
@@ -26,37 +110,5 @@ router.delete(
 	removeEmployee
 )
 
-
-
-
-// SHIFTS
-router.get(
-	"/me/shifts",
-	requireEmployee,
-	requireCompanyMembership,
-	getEmployeeShifts
-)
-
-
-
-// AVAILABILITY
-router.get(
-	"/me/availability",
-	requireEmployee,
-	requireCompanyMembership,
-	getEmployeeAvailabilities
-)
-router.post(
-	"/me/availability",
-	requireEmployee,
-	requireCompanyMembership,
-	createAvailability
-)
-router.delete(
-	"/me/availabliity/:availabilityId",
-	requireEmployee,
-	requireCompanyMembership,
-	deleteAvailability
-)
 
 export default router
