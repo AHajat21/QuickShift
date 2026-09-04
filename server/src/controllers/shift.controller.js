@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prisma.js"
-import { isValidTime } from "../validators/time.validator.js"
+import { isValidTime } from "../utils/timeFormat.js"
 
 
 export const getAllShifts = async (req, res, next) => {
@@ -25,25 +25,18 @@ export const getAllShifts = async (req, res, next) => {
 export const createShift = async (req, res, next) => {
 	const { employeeId, date, startTime, endTime } = req.body
 	const shiftDate = new Date(date)
-
 	if (isNaN(shiftDate.getTime()) || shiftDate < new Date()) {
 		return res.status(400).json({
 			message: "Date is invalid"
 		})
 	}
-	if (!isValidTime(startTime) || !isValidTime(endTime)) {
-		return res.status(400).json({
-			message: "Start time or end time is invalid"
-		})
-	}
-	if (startTime >= endTime) {
+	if (!isValidTime(startTime) || !isValidTime(endTime) || startTime >= endTime) {
 		return res.status(400).json({
 			message: "Start time or end time is invalid"
 		})
 	}
 
 	try {
-		// Timetable and employeeId of shift belongs to same compamny
 		await prisma.companies.findFirstOrThrow({
 			where: {
 				id: req.user.companyId,
@@ -51,7 +44,7 @@ export const createShift = async (req, res, next) => {
 					id: employeeId,
 					role: "EMPLOYEE"
 				},
-				timetable: {
+				timetables: {
 					id: req.params.timetableId
 				}
 			}
@@ -80,25 +73,18 @@ export const createShift = async (req, res, next) => {
 export const updateShift = async (req, res, next) => {
 	const { employeeId, date, startTime, endTime} = req.body
 	const shiftDate = new Date(date)
-
 	if (isNaN(shiftDate.getTime()) || shiftDate < new Date()) {
 		return res.status(400).json({
 			message: "Date is invalid"
 		})
 	}
-	if (!isValidTime(startTime) || !isValidTime(endTime)) {
-		return res.status(400).json({
-			message: "Start time or end time is invalid"
-		})
-	}
-	if (startTime >= endTime) {
+	if (!isValidTime(startTime) || !isValidTime(endTime) || startTime >= endTime) {
 		return res.status(400).json({
 			message: "Start time or end time is invalid"
 		})
 	}
 
 	try {
-		// Timetable and employeeId belongs to same compamny, ad shift belongs to timetable
 		await prisma.companies.findFirstOrThrow({
 			where: {
 				id: req.user.companyId,
@@ -106,10 +92,12 @@ export const updateShift = async (req, res, next) => {
 					id: employeeId,
 					role: "EMPLOYEE"
 				},
-				timetable: {
+				timetables: {
 					id: req.params.timetableId,
-					shift: {
-						id: req.params.shiftId
+					shifts: {
+						some: {
+							id: req.params.shiftId
+						}
 					}
 				}
 			}

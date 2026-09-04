@@ -7,6 +7,7 @@ const router = express.Router()
 
 router.get(
 	"/",
+	requireCompanyMembership,
 	getAllTimetables
 )
 router.post(
@@ -18,6 +19,7 @@ router.post(
 
 router.get(
 	"/:timetableId",
+	requireCompanyMembership,
 	viewTimetable
 )
 router.delete(

@@ -83,7 +83,7 @@ model companies {
 	createdAt    DateTime      @default(now())
 
 	users        users[]
-	timetable    timetables[]  
+	timetables   timetables[]  
 }
 
 model timetables {

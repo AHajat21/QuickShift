@@ -78,7 +78,7 @@ export const getEmployeeShifts = async (req, res, next) => {
 		})
 
 		return res.status(200).json({
-			message: "Employee shifts received",
+			message: "Employee shifts fetched successfully",
 			employeeShifts
 		})
 	} catch(error) {

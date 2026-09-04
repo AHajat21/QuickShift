@@ -16,8 +16,12 @@ export const createCompany = async (req, res, next) => {
 			}
 		})
 		await prisma.users.update({
-			where: {id: req.user.id},
-			data: {companyId: company.id}
+			where: {
+				id: req.user.id
+			},
+			data: {
+				companyId: company.id
+			}
 		})
 
 		return res.status(201).json({
@@ -35,13 +39,21 @@ export const joinCompany = async (req, res, next) => {
 
 	try {
 		const company = await prisma.companies.findUniqueOrThrow({
-			select: { id: true },
-			where: { joinCode }
+			select: {
+				id: true
+			},
+			where: {
+				joinCode
+			}
 		})
 
 		await prisma.users.update({
-			where: {id: req.user.id},
-			data: {companyId: company.id}
+			where: {
+				id: req.user.id
+			},
+			data: {
+				companyId: company.id
+			}
 		})
 
 		return res.status(200).json({
@@ -59,8 +71,12 @@ export const joinCompany = async (req, res, next) => {
 export const leaveCompany = async (req, res, next) => {
 	try {
 		await prisma.users.update({
-			where: { id: req.user.id },
-			data: { companyId: null }
+			where: {
+				id: req.user.id
+			},
+			data: {
+				companyId: null
+			}
 		})
 
 		return res.status(200).json({
@@ -81,6 +97,7 @@ export const viewCompany = async (req, res, next) => {
 		})
 
 		return res.status(200).json({
+			message: "Company data fetched successfully",
 			company
 		})
 	} catch (error) {

@@ -68,14 +68,7 @@ export const getEmployeeAvailabilities = async (req, res, next) => {
 
 export const createAvailability = async (req, res, next) => {
 	const { dayOfWeek, startTime, endTime } = req.body
-	const shiftDate = new Date(date)
-
-	if (!isValidTime(startTime) || !isValidTime(endTime)) {
-		return res.status(400).json({
-			message: "Start time or end time is invalid"
-		})
-	}
-	if (startTime >= endTime) {
+	if (!isValidTime(startTime) || !isValidTime(endTime) || startTime >= endTime) {
 		return res.status(400).json({
 			message: "Start time or end time is invalid"
 		})
