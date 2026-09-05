@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.js"
+import { validateShiftService } from "../services/shift.service.js"
 import { isValidTime } from "../utils/timeFormat.js"
 
 
@@ -25,6 +26,8 @@ export const getAllShifts = async (req, res, next) => {
 export const createShift = async (req, res, next) => {
 	const { employeeId, date, startTime, endTime } = req.body
 	const shiftDate = new Date(date)
+
+	// Input validation
 	if (isNaN(shiftDate.getTime()) || shiftDate < new Date()) {
 		return res.status(400).json({
 			message: "Date is invalid"
@@ -37,24 +40,20 @@ export const createShift = async (req, res, next) => {
 	}
 
 	try {
-		await prisma.companies.findFirstOrThrow({
-			where: {
-				id: req.user.companyId,
-				employee: {
-					id: employeeId,
-					role: "EMPLOYEE"
-				},
-				timetables: {
-					id: req.params.timetableId
-				}
-			}
+		await validateShiftService({
+			employeeId,
+			timetableId: req.params.timetableId,
+			companyId: req.user.companyId,
+			shiftDate,
+			startTime,
+			endTime
 		})
 
 		const shift = await prisma.shifts.create({
 			data: {
 				employeeId,
 				timetableId: req.params.timetableId,
-				date,
+				date: shiftDate,
 				startTime,
 				endTime
 			}
@@ -85,22 +84,14 @@ export const updateShift = async (req, res, next) => {
 	}
 
 	try {
-		await prisma.companies.findFirstOrThrow({
-			where: {
-				id: req.user.companyId,
-				employee: {
-					id: employeeId,
-					role: "EMPLOYEE"
-				},
-				timetables: {
-					id: req.params.timetableId,
-					shifts: {
-						some: {
-							id: req.params.shiftId
-						}
-					}
-				}
-			}
+		await validateShiftService({
+			employeeId,
+			timetableId: req.params.timetableId,
+			shiftId: req.params.shiftId,
+			companyId: req.user.companyId,
+			shiftDate,
+			startTime,
+			endTime,
 		})
 
 		const newShift = await prisma.shifts.update({
@@ -109,7 +100,7 @@ export const updateShift = async (req, res, next) => {
 			},
 			data: {
 				employeeId,
-				date,
+				date: shiftDate,
 				startTime,
 				endTime
 			}
@@ -123,6 +114,7 @@ export const updateShift = async (req, res, next) => {
 		next(error)
 	}
 }
+
 
 export const deleteShift = async (req, res, next) => {
 	try {

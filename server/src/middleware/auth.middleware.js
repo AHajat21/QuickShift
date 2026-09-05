@@ -52,7 +52,9 @@ export const authenticate = async (req, res, next) => {
 
 };
 
-
+export const createSessionCookie = {
+	
+}
 
 
 export const requireManager = (req, res, next) => {

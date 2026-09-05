@@ -29,16 +29,32 @@ export const register = async (req, res, next) => {
 				role
 			}
 		})
+
+		// CREATE SESSION
+		const sessionToken = generateSessionToken()
+		const tokenHash = hashSessionToken(sessionToken)
+
+		// DATABASE
+		await prisma.sessions.create({
+			data: {
+				userId: account.id,
+				tokenHash,
+				expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+			}
+		})
+
+		// COOKIE
+		res.cookie("session", sessionToken, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "lax",
+			path: "/",
+			maxAge: 7 * 24 * 60 * 60 * 1000
+		})
 		
 		res.status(201).json({
 			message: role + " registered successfully",
-			user: {
-				id: account.id,
-				email: account.email,
-				firstName: account.firstName,
-				lastName: account.lastName,
-				role: account.role
-			}
+			account
 		})
 	} catch (error) {
 		next(error)
@@ -103,7 +119,8 @@ export const login = async (req, res, next) => {
 		})
 
 		res.status(200).json({
-			message: "Successful login"
+			message: "Successful login",
+			account
 		})
 
 	} catch (error) {

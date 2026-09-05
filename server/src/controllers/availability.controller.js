@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prisma.js"
-import { isValidTime } from "../validators/time.validator.js"
+import { isValidTime } from "../utils/timeFormat.js"
 
 
 export const getAllAvailabilities = async (req, res, next) => {
