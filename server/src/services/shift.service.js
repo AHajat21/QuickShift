@@ -8,17 +8,15 @@ export const validateShiftService = async ({
 	await prisma.companies.findFirstOrThrow({
 		where: {
 			id: companyId,
-			employee: {
-				id: employeeId,
-				role: "EMPLOYEE"
+			employees: {
+				some: {id: employeeId,}
 			},
 			timetables: {
 				id: timetableId,
 				...(shiftId && {
-						shifts: {
-							some: {id: shiftId}}
-					})
-				
+					shifts: {
+						some: {id: shiftId}}
+				})
 			}
 		}
 	})

@@ -2,7 +2,7 @@ import { prisma } from "../lib/prisma.js"
 
 export const getAllTimetables = async (req, res, next) => {
 	try {
-		const timtableArray = await prisma.timetables.findMany({
+		const timtables = await prisma.timetables.findMany({
 			where: {
 				companyId: req.user.companyId
 			}
@@ -10,13 +10,13 @@ export const getAllTimetables = async (req, res, next) => {
 
 		return res.status(200).json({
 			message: "All timetables fetched",
-			timtableArray
+			timtables
 		})
 	} catch(error) {
 		next(error)
 	}
 }
-export const viewTimetable = async (req, res, next) => {
+export const getTimetable = async (req, res, next) => {
 	try {
 		const timetable = await prisma.timetables.findFirstOrThrow({
 			where: {

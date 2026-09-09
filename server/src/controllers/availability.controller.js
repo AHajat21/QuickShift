@@ -21,39 +21,14 @@ export const getAllAvailabilities = async (req, res, next) => {
 	}
 }
 
-export const deleteAvailability = async (req, res, next) => {
-	const roleDependantValidation = req.user.role === "MANAGER" ? {} : {id: req.user.id}
-	try {
-		await prisma.availabilities.findFirstOrThrow({
-			where: {
-				id: req.params.availabilityId,
-				employee: {
-					...roleDependantValidation,
-					companyId: req.user.companyId
-				}
-			}
-		})
 
-		await prisma.availabilities.delete({
-			where: {
-				id: req.params.availabilityId
-			}
-		})
-
-		return res.status(200).json({
-			message: "Availability deleted successfully"
-		})
-	} catch(error) {
-		next(error)
-	}
-}
 
 
 export const getEmployeeAvailabilities = async (req, res, next) => {
 	try {
 		const employeeAvailabilities = await prisma.availabilities.findMany({
 			where: {
-				employeeId: req.user.id
+				employeeId: req.params.employeeId,
 			}
 		})
 
@@ -77,7 +52,7 @@ export const createAvailability = async (req, res, next) => {
 	try {
 		const availability = await prisma.availabilities.create({
 			data: {
-				employeeId: req.user.id,
+				employeeId: req.params.employeeId,
 				dayOfWeek,
 				startTime,
 				endTime
@@ -87,6 +62,23 @@ export const createAvailability = async (req, res, next) => {
 		return res.status(201).json({
 			message: "Availability created",
 			availability
+		})
+	} catch(error) {
+		next(error)
+	}
+}
+
+export const deleteAvailability = async (req, res, next) => {
+	try {
+		await prisma.availabilities.delete({
+			where: {
+				id: req.params.availabilityId,
+				employeeId: req.params.employeeId
+			}
+		})
+
+		return res.status(200).json({
+			message: "Availability deleted successfully"
 		})
 	} catch(error) {
 		next(error)

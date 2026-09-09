@@ -14,7 +14,7 @@ export const register = async (req, res, next) => {
 		})
 	}
 
-	const { email, password, firstName, lastName, role } = req.body
+	const { email, password, firstName, lastName } = req.body
 
 	// ACCESS DATABASE
 	try {
@@ -26,7 +26,6 @@ export const register = async (req, res, next) => {
 				password: passwordHash,
 				firstName,
 				lastName,
-				role
 			}
 		})
 
@@ -34,7 +33,6 @@ export const register = async (req, res, next) => {
 		const sessionToken = generateSessionToken()
 		const tokenHash = hashSessionToken(sessionToken)
 
-		// DATABASE
 		await prisma.sessions.create({
 			data: {
 				userId: account.id,
@@ -43,7 +41,6 @@ export const register = async (req, res, next) => {
 			}
 		})
 
-		// COOKIE
 		res.cookie("session", sessionToken, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
@@ -132,19 +129,31 @@ export const login = async (req, res, next) => {
 
 
 
-// LOGOUT
+export const getMe = async (req, res, next) => {
+	try {
+		const user = await prisma.users.findFirst({
+			where: {
+				id: req.user.id
+			}
+		})
+
+		return res.status(200).json({
+			message: "User found",
+			user
+		})
+	} catch(error) {
+		next(error)
+	}
+}
+
+
+
 export const logout = async (req, res, next) => {
 	const cookies = req.headers.cookie
 
 	const sessionCookie = cookies
 		?.split("; ")
 		.find(cookie => cookie.startsWith("session="))
-
-	if (!sessionCookie) {
-		return res.status(200).json({
-			message: "Logged out successfully"
-		})
-	}
 
 	const sessionToken = sessionCookie.split("=")[1];
 	const tokenHash = hashSessionToken(sessionToken);

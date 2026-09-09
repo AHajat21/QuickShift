@@ -2,10 +2,9 @@ import { prisma } from "../lib/prisma.js";
 
 export const getAllEmployees = async (req, res, next) => {
 	try {
-		const employees = await prisma.users.findMany({
+		const employees = await prisma.employees.findMany({
 			where: {
 				companyId: req.user.companyId,
-				role: "EMPLOYEE"
 			}
 		})
 		return res.status(200).json({
@@ -20,11 +19,10 @@ export const getAllEmployees = async (req, res, next) => {
 
 export const getEmployee = async (req, res, next) => {
 	try {
-		const employee = await prisma.users.findFirstOrThrow({
+		const employee = await prisma.employees.findFirstOrThrow({
 			where: {
-				id: req.params.id,
+				id: req.params.employeeId,
 				companyId: req.user.companyId,
-				role: "EMPLOYEE"
 			}
 		})
 
@@ -38,50 +36,19 @@ export const getEmployee = async (req, res, next) => {
 }
 
 
-export const removeEmployee = async (req, res, next) => {
+export const deleteEmployee = async (req, res, next) => {
 	try {
-		await prisma.users.findFirstOrThrow({
+		await prisma.employees.delete({
 			where: {
-				id: req.params.id,
-				companyId: req.user.companyId,
-				role: "EMPLOYEE"
-			}
-		})
-
-		await prisma.users.update({
-			where: {
-				id: req.params.id
-			},
-			data: {
-				companyId: null
+				id: req.params.employeeId,
+				companyId: req.user.companyId
 			}
 		})
 
 		return res.status(200).json({
-			message: "Employee has been removed from company",
+			message: "Employee has been deleted",
 		})
 	} catch (error) {
-		next(error)
-	}
-}
-
-
-
-
-// SHIFT
-export const getEmployeeShifts = async (req, res, next) => {
-	try {
-		const employeeShifts = await prisma.shifts.findMany({
-			where: {
-				employeeId: req.user.id
-			}
-		})
-
-		return res.status(200).json({
-			message: "Employee shifts fetched successfully",
-			employeeShifts
-		})
-	} catch(error) {
 		next(error)
 	}
 }

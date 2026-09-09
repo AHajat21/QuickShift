@@ -1,8 +1,8 @@
 import { prisma } from "../lib/prisma.js";
 
-export const getAllTimesOff = async (req, res, next) => {
+export const getAllTimeOffs = async (req, res, next) => {
 	try {
-		const timesOff = await prisma.time_off_requests.findMany({
+		const timeOffs = await prisma.time_offs.findMany({
 			where: {
 				employee: {
 					companyId: req.user.companyId
@@ -11,20 +11,20 @@ export const getAllTimesOff = async (req, res, next) => {
 		})
 
 		return res.status(200).json({
-			message: "Employee time-off fetched successfully",
-			timesOff
+			message: "Employee time-offs fetched successfully",
+			timeOffs
 		})
 	} catch(error) {
 		next(error)
 	}
 }
 
-export const createTimeOffRequest = async (req, res, next) => {
+export const createTimeOff = async (req, res, next) => {
 	const { startDate, endDate, reason } = req.body
 	try {
-		const timeOff = await prisma.time_off_requests.create({
+		const timeOff = await prisma.time_offs.create({
 			data: {
-				employeeId: req.user.id,
+				employeeId: req.params.employeeId,
 				startDate,
 				endDate,
 				reason
@@ -41,79 +41,34 @@ export const createTimeOffRequest = async (req, res, next) => {
 }
 
 
-export const cancelTimeOff = async (req, res, next) => {
+export const deleteTimeOff = async (req, res, next) => {
 	try {
-		await prisma.time_off_requests.findFirstOrThrow({
+		await prisma.time_offs.delete({
 			where: {
 				id: req.params.timeOffId,
-				employeeId: req.user.id
-			}
-		})
-		const newTimeOff = await prisma.time_off_requests.update({
-			where: {
-				id: req.params.timeOffId
-			},
-			data: {
-				status: "CANCELLED"
+				employeeId: req.params.employeeId
 			}
 		})
 
 		return res.status(200).json({
-			message: "Time-off cancelled successfully",
-			newTimeOff
+			message: "Time-off deleted successfully"
 		})
 	} catch(error) {
 		next(error)
 	}
 }
 
-export const getEmployeeTimesOff = async (req, res, next) => {
+export const getEmployeeTimeOffs = async (req, res, next) => {
 	try {
-		const employeeTimesOff = await prisma.time_off_requests.findMany({
+		const employeeTimeOffs = await prisma.time_offs.findMany({
 			where: {
-				employeeId: req.user.id
+				employeeId: req.params.employeeId
 			}
 		})
 
 		return res.status(200).json({
-			message: "All times-off fetched successfully",
-			employeeTimesOff
-		})
-	} catch(error) {
-		next(error)
-	}
-}
-
-export const updateTimeOffRequest = async (req, res, next) => {
-	const { status } = req.body
-	if (status !== "ACCEPTED" && status !== "REJECTED") {
-		return res.status(400).json({
-			message: "You can't update this time-off request"
-		})
-	}
-	try {
-		await prisma.time_off_requests.findFirstOrThrow({
-			where: {
-				id: req.params.timeOffId,
-				status: "PENDING",
-				employee: {
-					companyId: req.user.companyId
-				}
-			}
-		})
-
-		const newTimeOff = await prisma.time_off_requests.update({
-			where: {
-				id: req.params.timeOffId
-			},
-			data: {
-				status
-			}
-		})
-
-		return res.status(200).json({
-			message: "Employee time-off updated successfully",
-			
+			message: "Employees time-offs fetched successfully",
+			employeeTimeOffs
 		})
 	} catch(error) {
 		next(error)

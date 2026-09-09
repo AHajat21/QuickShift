@@ -1,18 +1,14 @@
 import { prisma } from "../lib/prisma.js"
-import { generateJoinCode } from "../utils/generator.js"
 
 
 export const createCompany = async (req, res, next) => {
-	const {name, description} = req.body
-	const joinCode = generateJoinCode()
+	const {name} = req.body
 
 	try {
 		// ADD PRISMA TRANSACTION
 		const company = await prisma.companies.create({
 			data: {
-				name,
-				description,
-				joinCode
+				name
 			}
 		})
 		await prisma.users.update({
@@ -34,61 +30,7 @@ export const createCompany = async (req, res, next) => {
 }
 
 
-export const joinCompany = async (req, res, next) => {
-	const { joinCode } = req.body
-
-	try {
-		const company = await prisma.companies.findUniqueOrThrow({
-			select: {
-				id: true
-			},
-			where: {
-				joinCode
-			}
-		})
-
-		await prisma.users.update({
-			where: {
-				id: req.user.id
-			},
-			data: {
-				companyId: company.id
-			}
-		})
-
-		return res.status(200).json({
-			message: "You've joined a company!"
-		})
-
-	} catch (error) {
-		next(error)
-	}
-
-
-}
-
-
-export const leaveCompany = async (req, res, next) => {
-	try {
-		await prisma.users.update({
-			where: {
-				id: req.user.id
-			},
-			data: {
-				companyId: null
-			}
-		})
-
-		return res.status(200).json({
-			message: "You have left a company"
-		})
-	} catch (error) {
-		next(error)
-	}
-}
-
-
-export const viewCompany = async (req, res, next) => {
+export const getCompany = async (req, res, next) => {
 	try {
 		const company = await prisma.companies.findUniqueOrThrow({
 			where: {
@@ -106,8 +48,6 @@ export const viewCompany = async (req, res, next) => {
 }
 
 
-
-
 export const deleteCompany = async (req, res, next) => {
 	try {
 		await prisma.companies.delete({
@@ -122,5 +62,4 @@ export const deleteCompany = async (req, res, next) => {
 	} catch (error) {
 		next(error)
 	}
-
 }

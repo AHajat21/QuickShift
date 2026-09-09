@@ -51,28 +51,6 @@ export const authenticate = async (req, res, next) => {
 	}
 
 };
-
-export const createSessionCookie = {
-	
-}
-
-
-export const requireManager = (req, res, next) => {
-	if (req?.user.role !== "MANAGER") {
-		return res.status(403).json({
-			message: "You are not authorised for this action"
-		})
-	}
-	next()
-}
-export const requireEmployee = (req, res, next) => {
-	if (req?.user.role !== "EMPLOYEE") {
-		return res.status(403).json({
-			message: "You are not able to perform this action"
-		})
-	}
-	next()
-}
 export const requireGuest = (req, res, next) => {
 	if (req?.user) {
 		return res.status(403).json({
@@ -97,4 +75,17 @@ export const requireNoCompanyMembership = (req, res, next) => {
 		})
 	}
 	next()
+}
+
+export const requireCompanyMatch = async (req, res, next) => {
+	try {
+		await prisma.employees.findUniqueOrThrow({
+			where: {
+				id: req.params.employeeId,
+				companyId: req.user.companyId,
+			}
+		})
+	} catch(error) {
+		next(error)
+	}
 }

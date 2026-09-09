@@ -1,6 +1,6 @@
 import express from "express"
-import { requireCompanyMembership, requireManager } from "../middleware/auth.middleware.js"
-import { createTimetable, deleteTimetable, getAllTimetables, viewTimetable } from "../controllers/timetable.controller.js"
+import { requireCompanyMembership } from "../middleware/auth.middleware.js"
+import { createTimetable, deleteTimetable, getAllTimetables, getTimetable } from "../controllers/timetable.controller.js"
 import { createShift, deleteShift, getAllShifts, updateShift } from "../controllers/shift.controller.js"
 
 const router = express.Router()
@@ -12,7 +12,6 @@ router.get(
 )
 router.post(
 	"/",
-	requireManager,
 	requireCompanyMembership,
 	createTimetable
 )
@@ -20,11 +19,10 @@ router.post(
 router.get(
 	"/:timetableId",
 	requireCompanyMembership,
-	viewTimetable
+	getTimetable
 )
 router.delete(
 	"/:timetableId",
-	requireManager,
 	requireCompanyMembership,
 	deleteTimetable
 )
@@ -40,20 +38,17 @@ router.get(
 )
 router.post(
 	"/:timetableId/shifts",
-	requireManager,
 	requireCompanyMembership,
 	createShift
 )
 
 router.patch(
 	"/:timetableId/shifts/:shiftId",
-	requireManager,
 	requireCompanyMembership,
 	updateShift
 )
 router.delete(
 	"/:timetableId/shifts/:shiftId",
-	requireManager,
 	requireCompanyMembership,
 	deleteShift
 )

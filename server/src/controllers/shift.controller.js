@@ -23,6 +23,25 @@ export const getAllShifts = async (req, res, next) => {
 	}
 }
 
+
+export const getEmployeeShifts = async (req, res, next) => {
+	try {
+		const employeeShifts = await prisma.shifts.findMany({
+			where: {
+				employeeId: req.params.employeeId,
+			}
+		})
+
+		return res.status(200).json({
+			message: "Employee shifts fetched successfully",
+			employeeShifts
+		})
+	} catch(error) {
+		next(error)
+	}
+}
+
+
 export const createShift = async (req, res, next) => {
 	const { employeeId, date, startTime, endTime } = req.body
 	const shiftDate = new Date(date)

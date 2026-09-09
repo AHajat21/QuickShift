@@ -1,7 +1,7 @@
 import express from "express"
-import { register, login, logout } from "../controllers/auth.controller.js"
+import { register, login, logout, getMe } from "../controllers/auth.controller.js"
 import { loginValidator, registrationValidator } from "../validators/auth.validator.js"
-import { authenticate, requireGuest } from "../middleware/auth.middleware.js"
+import { authenticate, requireCompanyMembership, requireGuest } from "../middleware/auth.middleware.js"
 
 const router = express.Router()
 
@@ -17,6 +17,12 @@ router.post(
 	loginValidator,
 	login
 )
+router.get(
+	"/me",
+	authenticate,
+	getMe
+)
+
 router.post(
 	"/logout",
 	authenticate,

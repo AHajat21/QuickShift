@@ -14,19 +14,6 @@ datasource db {
 
 
 // ENUMS
-enum Role {
-	MANAGER
-	EMPLOYEE
-	NULL
-}
-
-enum RequestStatus {
-	PENDING
-	ACCEPTED
-	REJECTED
-	CANCELLED
-}
-
 enum DayOfWeek {
 	MONDAY
 	TUESDAY
@@ -38,28 +25,21 @@ enum DayOfWeek {
 }
 
 
+
+
 // MODELS
 model users {
-	id                    String                 @id @default(uuid())
-	companyId             String?
-	email                 String                 @unique
-	password              String?
-	googleId              String?                @unique
-	firstName             String
-	lastName              String?
-	role                  Role
-	createdAt             DateTime               @default(now())
+	id         String      @id @default(uuid())
+	companyId  String?     @unique
+	email      String      @unique
+	password   String?
+	googleId   String?     @unique
+	firstName  String
+	lastName   String?
+	createdAt  DateTime    @default(now())
 
-	company               companies?              @relation(fields: [companyId], references: [id], onDelete: SetNull)
-
-	sessions              sessions[]
-	shifts                shifts[]
-	availabilities        availabilities[]
-	timeOffRequests       time_off_requests[]  
-	swapRequestsSent      shift_swap_requests[]  @relation("SwapRequester")
-	swapRequestsRevieved  shift_swap_requests[]  @relation("SwapTarget")
-
-	@@index([companyId])
+   company    companies?  @relation(fields: [companyId], references: [id])
+	sessions   sessions[]
 }
 
 model sessions {
@@ -70,20 +50,35 @@ model sessions {
 	createdAt  DateTime  @default(now())
 
 	user       users     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+   
 	@@index([userId])
 	@@index([expiresAt])
 }
 
 model companies {
-	id           String        @id @default(uuid())
-	name         String
-	description  String?
-	joinCode     String        @unique
-	createdAt    DateTime      @default(now())
+	id          String        @id @default(uuid())
+	name        String
+	createdAt   DateTime      @default(now())
 
-	users        users[]
-	timetables   timetables[]  
+	user        users[]
+	employees   employees[]
+	timetables  timetables[]  
+}
+
+model employees {
+	id              String            @id @default(uuid())
+   companyId       String
+   firstName       String
+   lastName        String?
+   email           String?
+   phone           String?
+   createdAt       DateTime          @default(now())
+
+   company         companies         @relation(fields: [companyId], references: [id])
+
+   shifts          shifts[]
+   availabilities  availabilities[]
+   timeOff         time_offs[]
 }
 
 model timetables {
@@ -109,10 +104,8 @@ model shifts {
 	endTime           String
 	createdAt         DateTime               @default(now())
 
-	employee          users                  @relation(fields: [employeeId], references: [id], onDelete: NoAction)
-	timetable         timetables             @relation(fields: [timetableId], references: [id], onDelete: Cascade)
-	
-	shiftSwapRequest  shift_swap_requests[]   
+	employee          employees              @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+	timetable         timetables             @relation(fields: [timetableId], references: [id], onDelete: Cascade) 
 
 	@@index([timetableId])
 	@@index([employeeId])
@@ -121,45 +114,25 @@ model shifts {
 model availabilities {
 	id          String     @id @default(uuid())
 	employeeId  String
-	dayOfWeek   DayOfWeek  
+	dayOfWeek   DayOfWeek
 	startTime   String
 	endTime     String
 	createdAt   DateTime   @default(now())
 
-	employee    users      @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+	employee    employees  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
 	@@index([employeeId])
 }
 
-model time_off_requests {
-	id          String         @id @default(uuid())
+model time_offs {
+	id          String     @id @default(uuid())
 	employeeId  String
 	startDate   DateTime
 	endDate     DateTime
 	reason      String?
-	status      RequestStatus  @default(PENDING)
-	createdAt   DateTime       @default(now())
+	createdAt   DateTime   @default(now())
 
-	employee    users          @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+	employee    employees  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
 	@@index([employeeId])
-	@@index([status])
-}
-
-model shift_swap_requests {
-	id           String           @id @default(uuid())
-	shiftId      String
-	requesterId  String
-	targetId     String
-	status       RequestStatus  @default(PENDING)
-	createdAt    DateTime         @default(now())
-
-	shift        shifts           @relation(fields: [shiftId], references: [id], onDelete: Cascade)
-	requester    users            @relation("SwapRequester", fields: [requesterId], references: [id], onDelete: NoAction)
-	target       users            @relation("SwapTarget", fields: [targetId], references: [id], onDelete: NoAction)
-
-	@@index([shiftId])
-	@@index([requesterId])
-	@@index([targetId])
-	@@index([status])
 }
