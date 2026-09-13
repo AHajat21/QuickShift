@@ -6,12 +6,12 @@ type User = {
 	email: string
 	firstName: string
 	lastName?: string
-	role: "MANAGER" | "EMPLOYEE"
 	companyId?: string
 }
 
 type AuthContextType = {
 	user: User | null
+	setUser: React.Dispatch<React.SetStateAction<User | null>>; 
 	loading: boolean
 }
 
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	useEffect(() => {
 		const getCurrentUser = async () => {
 			try {
-				const response = await api.get("/auth/profile")
+				const response = await api.get("/auth/me")
 				setUser(response.data.user)
 			} catch(error) {
 				setUser(null)
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [])
 
 	return (
-		<AuthContext.Provider value={{user, loading}}>
+		<AuthContext.Provider value={{ user, setUser, loading }}>
 			{children}
 		</AuthContext.Provider>
 	)
@@ -45,8 +45,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useAuth = () => {
 	const context = useContext(AuthContext)
-
 	if (!context) {
 		throw new Error("useAuth must be used within an AuthProvider")
 	}
+	return context
 }

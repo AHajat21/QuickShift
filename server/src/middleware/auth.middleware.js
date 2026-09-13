@@ -2,18 +2,12 @@ import { prisma } from "../lib/prisma.js";
 import { hashSessionToken } from "../utils/session.js";
 
 export const authenticate = async (req, res, next) => {
-	const cookies = req.headers.cookie;
-	const sessionCookie = cookies
-		?.split("; ")
-		.find(cookie => cookie.startsWith("session="))
-
-	if (!sessionCookie) {
+	const sessionToken = req.cookies.session
+	if (!sessionToken) {
 		return res.status(401).json({
 			message: "Authentication required"
 		})
 	}
-
-	const sessionToken = sessionCookie.split("=")[1]
 	const tokenHash = hashSessionToken(sessionToken)
 	
 	try {

@@ -1,19 +1,31 @@
-import {type SubmitEvent , useState } from 'react'
-import { api } from '../services/api'
+import {type SubmitEvent , useState, useEffect } from 'react'
+import { useNavigate } from 'react-router'
+import { api } from '../../services/api'
+import { useAuth } from '../../context/AuthContext'
 
 const Login = () => {
+	const { user, setUser } = useAuth()
+	const navigate = useNavigate()
+
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
 
+	useEffect(() => {
+		if (user) navigate("/dashboard", {replace: true})
+	}, [user, navigate])
+
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
-
-		const response = await api.post("/api/auth/login", {
+		try {
+			const response = await api.post("/auth/login", {
 				email,
 				password
-		})
-
-		console.log(response.data)
+			})
+			setUser(response.data.user)
+			navigate("/dashboard", { replace: true })
+		} catch(error) {
+			console.error("Login failed: " + error)
+		}
 	}
 
 	return (

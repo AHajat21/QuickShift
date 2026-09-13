@@ -1,0 +1,73 @@
+.dashboard {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+
+.welcome {
+	min-width: 0;
+	align-self: flex-start;
+	border-radius: 0 100px 100px 0;
+	background-color: rgb(74, 137, 107);
+
+	padding: 8px;
+
+	cursor: default;
+	transition: padding-left 0.2s, box-shadow 0.2s;
+
+	p {
+		margin-left: 8px;
+		font-size: 14px;
+	}
+}
+.welcome:hover {
+	padding-left: 12px;
+	box-shadow: 1px 1px 5px 1px rgba(0, 120, 62, 0.647);
+}
+
+a {
+	font-size: 12px;
+	align-self: flex-end;
+}
+a:hover {
+	border: 1px solid #faf2f2;
+}
+
+.summaryCards {
+	display: flex;
+	justify-content: space-evenly;
+	border-radius: 10px;
+	padding: 4px;
+	margin: 4px;
+	
+
+	article {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		background-color: #faf6f6;
+		border-radius: 10px;
+		width: 30%;
+		height: 150px;
+
+		padding: 8px;
+		margin: 4px;
+
+
+		transition: box-shadow 0.2s;
+	}
+	article:hover {
+		box-shadow: 1px 3px 1px  rgba(0, 0, 0, 0.1);
+	}
+
+}
+
+.todaysShifts {
+
+}
+
+.timetableOptions {
+	margin-bottom: 56px;
+}

@@ -1,26 +1,37 @@
 import {type SubmitEvent, useEffect, useState } from 'react'
-import { api } from '../services/api'
+import { useNavigate } from 'react-router'
+import { api } from '../../services/api.ts'
+import { useAuth } from '../../context/AuthContext.tsx'
 
 const Register = () => {
+	const { user, setUser } = useAuth()
+	const navigate = useNavigate()
+
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
 	const [firstName, setFirstName] = useState("")
 	const [lastName, setLastName] = useState("")
-	const [role, setRole] = useState("employee")
+
+	useEffect(() => {
+		if (user) navigate("/dashboard", {replace: true})
+	}, [user, navigate])
 
 
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 
-		const response = await api.post("/auth/register", {
+		try {
+			const response = await api.post("/auth/register", {
 				firstName,
 				lastName,
 				email,
-				password,
-				role
-		})
-
-		console.log(response.data)
+				password
+			})
+			setUser(response.data.user)
+			navigate("/dashboard", { replace: true })
+		} catch(error) {
+			console.error("Login failed: " + error)
+		}
 	}
 
 	return (
@@ -54,7 +65,6 @@ const Register = () => {
 						</div>
 					</div>
 
-
 					<div>
 						<label htmlFor='email'>Email</label>
 						<input
@@ -68,7 +78,6 @@ const Register = () => {
 						/>
 					</div>
 
-
 					<div>
 						<label htmlFor='password'>Password</label>
 						<input
@@ -80,36 +89,6 @@ const Register = () => {
 							required
 						/>
 					</div>
-
-
-					<fieldset>
-						<legend>Account type</legend>
-
-						<div>
-							<input
-								id='employee'
-								name='role'
-								type='radio'
-								value='employee'
-								checked={role === "employee"}
-								onChange={(e) => setRole(e.target.value)}
-							/>
-							<label htmlFor='employee'>Employee</label>
-						</div>
-
-						<div>
-							<input
-								id='manager'
-								name='role'
-								type='radio'
-								value='manager'
-								checked={role === "manager"}
-								onChange={(e) => setRole(e.target.value)}
-							/>
-							<label htmlFor='manager'>Manager</label>
-						</div>
-					</fieldset>
-
 					
 					<button type='submit'>Register</button>
 				</form>

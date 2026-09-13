@@ -1,0 +1,43 @@
+.appLayout {
+	display: flex;
+	min-height: 100vh;
+
+	background: #eef7fe
+}
+
+.mainContent {
+	width: 100%;
+	padding: 2px;
+	margin: 2px;
+	
+	
+	header {
+		display: flex;
+		justify-content: space-between;
+
+		margin: 4px 8px;
+		padding: 6px 8px;
+
+		border-radius: 8px;
+		background-color: #006CFF;
+		box-shadow: 1px 1px 5px 1px #006CFF;
+
+		color: rgb(255, 240, 240);
+		letter-spacing: 1px;
+
+
+		.logoutButton {
+			border: none;
+			background-color: #006cff;
+			border-radius: 5px;
+
+			padding: 2px;
+
+			color: #eef7fe;
+
+			cursor: pointer;
+		}
+	}
+}
+
+

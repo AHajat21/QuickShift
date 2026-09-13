@@ -2,8 +2,8 @@ import { validationResult } from "express-validator";
 import { hashPassword, verifyPassword } from "../utils/password.js";
 import { prisma } from "../lib/prisma.js"
 import { generateSessionToken, hashSessionToken } from "../utils/session.js";
+import cookieParser from "cookie-parser"
 
-// MANAGER REGISTRATION
 export const register = async (req, res, next) => {
 	// VALIDATE USER INPUT
 	const errors = validationResult(req)
@@ -20,7 +20,7 @@ export const register = async (req, res, next) => {
 	try {
 		const passwordHash = await hashPassword(password)
 
-		const account = await prisma.users.create({
+		const user = await prisma.users.create({
 			data: {
 				email,
 				password: passwordHash,
@@ -35,7 +35,7 @@ export const register = async (req, res, next) => {
 
 		await prisma.sessions.create({
 			data: {
-				userId: account.id,
+				userId: user.id,
 				tokenHash,
 				expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 			}
@@ -50,8 +50,8 @@ export const register = async (req, res, next) => {
 		})
 		
 		res.status(201).json({
-			message: role + " registered successfully",
-			account
+			message: "Registered successfully",
+			user
 		})
 	} catch (error) {
 		next(error)
@@ -73,19 +73,19 @@ export const login = async (req, res, next) => {
 	
 	try {
 		// VERIFY PASSWORD WITH DATABASE
-		const account = await prisma.users.findUnique({
+		const user = await prisma.users.findUnique({
 			where: {
 				email
 			}
 		})
 
-		if (!account) {
+		if (!user) {
 			return res.status(401).json({
 				message: "Invalid email or password"
 			});
 		}
 
-		const passwordIsValid = await verifyPassword(password, account.password);
+		const passwordIsValid = await verifyPassword(password, user.password);
 
 		if (!passwordIsValid) {
 			return res.status(401).json({
@@ -100,7 +100,7 @@ export const login = async (req, res, next) => {
 		// DATABASE
 		await prisma.sessions.create({
 			data: {
-				userId: account.id,
+				userId: user.id,
 				tokenHash,
 				expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 			}
@@ -117,7 +117,7 @@ export const login = async (req, res, next) => {
 
 		res.status(200).json({
 			message: "Successful login",
-			account
+			user
 		})
 
 	} catch (error) {
@@ -149,13 +149,7 @@ export const getMe = async (req, res, next) => {
 
 
 export const logout = async (req, res, next) => {
-	const cookies = req.headers.cookie
-
-	const sessionCookie = cookies
-		?.split("; ")
-		.find(cookie => cookie.startsWith("session="))
-
-	const sessionToken = sessionCookie.split("=")[1];
+	const sessionToken = req.cookies.session
 	const tokenHash = hashSessionToken(sessionToken);
 
 	try {

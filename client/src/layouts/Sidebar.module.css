@@ -1,0 +1,48 @@
+.sidebar {
+	display: flex;
+	flex-direction: column;
+	position: sticky;
+	left: 0;
+
+	width: 20%;
+	height: 100vh;
+	padding: 4px;
+	
+
+	border-radius: 20px;
+	background-color: #ffffff;
+	box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.1);
+}
+.logo {
+	color: #0055b7;
+	padding: 2px;
+	margin: 2px;
+
+	text-shadow: 2px 4px 5px #4ea0ff6d;
+	text-align: center;
+}
+nav {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.navButton {
+		padding: 8px;
+		margin: 4px;
+		margin-left: 12px;
+		border: none;
+		background-color: #eeeeee;
+		box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+		border-radius: 8px 8px;
+		
+		text-align: left;
+		color: #0072f5;
+
+		cursor: pointer;
+	}
+	.navButton:last-child {
+		position: absolute;
+		bottom: 24px;
+		
+	}
+}
