@@ -7,17 +7,17 @@ import { getAllTimeOffs } from "../controllers/timeOff.controller.js"
 const router = express.Router()
 
 router.post(
-	"/create",
+	"/",
 	requireNoCompanyMembership,
 	createCompany
 )
 router.get(
-	"/profile",
+	"/",
 	requireCompanyMembership,
 	getCompany
 )
 router.delete(
-	"/delete",
+	"/",
 	requireCompanyMembership,
 	deleteCompany
 )

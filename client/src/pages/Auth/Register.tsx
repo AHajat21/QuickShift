@@ -19,7 +19,6 @@ const Register = () => {
 
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
-
 		try {
 			const response = await api.post("/auth/register", {
 				firstName,
@@ -87,6 +86,7 @@ const Register = () => {
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							required
+							autoComplete='new-password'
 						/>
 					</div>
 					

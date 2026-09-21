@@ -100,6 +100,7 @@ model shifts {
 	employeeId        String
 	timetableId       String
 	date              DateTime
+	day               String
 	startTime         String
 	endTime           String
 	createdAt         DateTime               @default(now())

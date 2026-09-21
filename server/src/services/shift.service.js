@@ -21,45 +21,45 @@ export const validateShiftService = async ({
 		}
 	})
 
-	// Employee availibility and timeoff check
-	await prisma.users.findFirstOrThrow({
-		where: {
-			id: employeeId,
-			availabilities: {
-				some: {
-					dayOfWeek: daysOfWeek[shiftDate.getDay()],
-					startTime: {lte: startTime},
-					endTime: {gte: endTime}
-				}
-			},
-			timeOffRequests: {
-				none: {
-					startDate: {lte: shiftDate},
-					endDate: {gte: shiftDate},
-					status: "ACCEPTED"
-				}
-			}
-		}
-	})
+	// // Employee availibility and timeoff check
+	// await prisma.users.findFirstOrThrow({
+	// 	where: {
+	// 		id: employeeId,
+	// 		availabilities: {
+	// 			some: {
+	// 				dayOfWeek: daysOfWeek[shiftDate.getDay()],
+	// 				startTime: {lte: startTime},
+	// 				endTime: {gte: endTime}
+	// 			}
+	// 		},
+	// 		timeOffRequests: {
+	// 			none: {
+	// 				startDate: {lte: shiftDate},
+	// 				endDate: {gte: shiftDate},
+	// 				status: "ACCEPTED"
+	// 			}
+	// 		}
+	// 	}
+	// })
 
 
-	// Check for conflicting shift
-	const conflictingShift = await prisma.shifts.findFirst({
-		where: {
-			date: shiftDate,
-			startTime: {lt: endTime},
-			endTime: {gt: startTime},
-			employeeId,
+	// // Check for conflicting shift
+	// const conflictingShift = await prisma.shifts.findFirst({
+	// 	where: {
+	// 		date: shiftDate,
+	// 		startTime: {lt: endTime},
+	// 		endTime: {gt: startTime},
+	// 		employeeId,
 
-			...(shiftId && {
-            id: { not: shiftId }
-        })
-		}
-	})
+	// 		...(shiftId && {
+   //          id: { not: shiftId }
+   //      })
+	// 	}
+	// })
 
-	if (conflictingShift) {
-   	throw new Error("Employee already has a shift during this time")
-	}
+	// if (conflictingShift) {
+   // 	throw new Error("Employee already has a shift during this time")
+	// }
 }
 
 

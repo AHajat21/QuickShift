@@ -3,6 +3,9 @@ import { prisma } from "../lib/prisma.js";
 export const getAllEmployees = async (req, res, next) => {
 	try {
 		const employees = await prisma.employees.findMany({
+			orderBy: {
+				firstName: "asc"
+			},
 			where: {
 				companyId: req.user.companyId,
 			}

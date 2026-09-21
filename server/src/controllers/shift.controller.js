@@ -5,7 +5,15 @@ import { isValidTime } from "../utils/timeFormat.js"
 
 export const getAllShifts = async (req, res, next) => {
 	try {
-		const shiftArray = await prisma.shifts.findMany({
+		const shifts = await prisma.shifts.findMany({
+			orderBy: [
+				{
+					employee: {firstName: "asc"}
+				},
+				{
+					day: "asc"	
+				}
+			],
 			where: {
 				timetableId: req.params.timetableId,
 				timetable: {
@@ -16,7 +24,7 @@ export const getAllShifts = async (req, res, next) => {
 
 		return res.status(200).json({
 			message: "All shifts have been fetched",
-			shiftArray
+			shifts
 		})
 	} catch(error) {
 		next(error)
@@ -45,6 +53,8 @@ export const getEmployeeShifts = async (req, res, next) => {
 export const createShift = async (req, res, next) => {
 	const { employeeId, date, startTime, endTime } = req.body
 	const shiftDate = new Date(date)
+	const daysOfWeek = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
+	const day = daysOfWeek[shiftDate.getDay()]
 
 	// Input validation
 	if (isNaN(shiftDate.getTime()) || shiftDate < new Date()) {
@@ -73,6 +83,7 @@ export const createShift = async (req, res, next) => {
 				employeeId,
 				timetableId: req.params.timetableId,
 				date: shiftDate,
+				day,
 				startTime,
 				endTime
 			}

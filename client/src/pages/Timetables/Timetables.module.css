@@ -1,0 +1,9 @@
+.timetableList {
+	display: flex;
+	flex-direction: column;
+
+}
+.timetableCard {
+	display: flex;
+	gap: 20px
+}

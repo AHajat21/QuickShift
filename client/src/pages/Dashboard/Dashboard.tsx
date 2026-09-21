@@ -41,7 +41,7 @@ const Dashboard = () => {
 
 			<section className={styles.todaysShifts}>
 				<div>
-					<h3>Today ({currentDate.getDay()}, {currentDate.getDate()}): </h3>
+					<h3>Today ({currentDate.toLocaleDateString()}): </h3>
 					<NavLink to="/timetables">See all</NavLink>
 				</div>
 
@@ -52,12 +52,6 @@ const Dashboard = () => {
 					</div>
 				</div> */}
 			</section>
-
-
-			<section className={styles.timetableOptions}>
-				<NavLink to="/timetables/new">Create new timetable</NavLink>
-			</section>
-
 		</div>
 	)
 }

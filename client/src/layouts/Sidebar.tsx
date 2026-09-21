@@ -19,8 +19,8 @@ const Sidebar = () => {
 					onClick={() => navigate("/timetables")}
 				> Timetables</button>
 				<button className={styles.navButton}
-					onClick={() => navigate("/employees")}
-				> Employees</button>
+					onClick={() => navigate("/company")}
+				> Company</button>
 				<button className={styles.navButton}
 					onClick={() => navigate("/availabilities")}
 				> Availabilities</button>
