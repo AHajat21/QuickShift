@@ -31,11 +31,11 @@ const ManageTimetable = () => {
 		const getTimetableData = async () => {
 			try {
 				const [timetableResponse, shiftsResponse, employeesResponse] =
-						await Promise.all([
-							api.get(`/timetables/${timetableId}`),
-							api.get(`/timetables/${timetableId}/shifts`),
-							api.get("/employees")
-						])
+					await Promise.all([
+						api.get(`/timetables/${timetableId}`),
+						api.get(`/timetables/${timetableId}/shifts`),
+						api.get("/employees")
+					])
 
 				setWeekCommencing(new Date(timetableResponse.data.timetable.weekCommencing))
 				setShifts(shiftsResponse.data.shifts)
@@ -63,7 +63,7 @@ const ManageTimetable = () => {
 	const createShift = async (employeeId: string, day: string) => {
 		const date = new Date(weekCommencing)
 		date.setDate(
-			date.getDate() + daysOfWeek.indexOf(day)
+			date.getDate() + daysOfWeek.indexOf(day)+1
 		)
 		try {
 			const response = await api.post(`/timetables/${timetableId}/shifts`, {
@@ -71,13 +71,24 @@ const ManageTimetable = () => {
 				day: day.toUpperCase(),
 				date,
 				startTime: "00:00",
-				endTime: "00:00"
+				endTime: "00:01"
 			})
-			const newShift: Shift = response.data.shift
 
-			setShifts(prev => [...prev, newShift])
+			setShifts(prev => [...prev, response.data.shift])
 		} catch (error) {
 			console.error("Failed to create shift")
+		}
+	}
+	const deleteShift = async (shiftId: string) => {
+		try {
+			await api.delete(`/timetables/${timetableId}/shifts/${shiftId}`)
+			setShifts(prev =>
+				prev.filter(s =>
+					s.id !== shiftId
+				)
+			)
+		} catch (error) {
+			console.error("Failed to remove shift:", error)
 		}
 	}
 
@@ -93,22 +104,31 @@ const ManageTimetable = () => {
 			<div className={styles.timetable}>
 				<div className={styles.corner}></div>
 
-				{daysOfWeek.map((day) => (
+				{daysOfWeek.map(day => (
 					<div key={day} className={styles.dayHeader}>
-							{day}
+						{day}
 					</div>
 				))}
 
-				{employees.map((employee) => (
+				{employees.map(employee => (
 					<React.Fragment key={employee.id}>
-						<div className={styles.employeeName}>
+						<div className={styles.employeeCell}>
 							{employee.firstName}
 						</div>
 
-						{daysOfWeek.map((day) => {
+						{daysOfWeek.map(day => {
 							const shift = shifts.find(shift => 
 								shift.employeeId === employee.id &&
 								shift.day === day.toUpperCase()
+							)
+
+							if (!shift) return (
+								<button key={`${employee.id}-${day}`}
+									className={`${styles.shiftCell} ${styles.emptyCell}`}
+									onClick={() => createShift(employee.id, day)}
+								>
+									+
+								</button>
 							)
 							
 							if (shift) return (
@@ -116,15 +136,15 @@ const ManageTimetable = () => {
 									<input
 										type="time"
 										value={shift.startTime}
-										onChange={(e) => {
+										onChange={e => 
 											setShifts(prev =>
 												prev.map(s =>
 													s.id === shift.id ? { ...s, startTime: e.target.value }
 													: s
 												)
 											)
-										}}
-										onBlur={(e) => updateShift(shift.id, "startTime", e.target.value)}
+										}
+										onBlur={e => updateShift(shift.id, "startTime", e.target.value)}
 									/>
 
 									<span>-</span>
@@ -132,32 +152,28 @@ const ManageTimetable = () => {
 									<input
 										type="time"
 										value={shift.endTime}
-										onChange={(e) => {
+										onChange={e => 
 											setShifts(prev =>
 												prev.map(s =>
 													s.id === shift.id ? { ...s, endTime: e.target.value }
 													: s
 												)
 											)
-										}}
-										onBlur={(e) => updateShift(shift.id, "endTime", e.target.value)}
+										}
+										onBlur={e => updateShift(shift.id, "endTime", e.target.value)}
 									/>
+
+									<button className={styles.deleteShift} onClick={() => deleteShift(shift.id)}>X</button>
 								</div>
 							)
 
-							if (!shift) return (
-								<div key={`${employee.id}-${day}`}
-									className={`${styles.shiftCell} ${styles.emptyCell}`}
-									onClick={() => {
-										createShift(employee.id, day)
-									}}
-								>
-									+
-								</div>
-							)
 						})}
 					</React.Fragment>
 				))}
+			</div>
+
+			<div>
+				{shifts.map(s => (<div key={s.id}>{s.day}, {s.employeeId}, {s.startTime}</div>))}
 			</div>
 
 		</div>

@@ -37,7 +37,6 @@ const Timetable = () => {
 				weekCommencing: new Date()
 			})
 			setTimetables(prev => [...prev, response.data.timetable])
-			console.log(response)
 		} catch (error) {
 			console.error("Failed to create timetable")
 		}
@@ -55,15 +54,15 @@ const Timetable = () => {
 			{timetables.length === 0 ? (
 				<p>No timetables yet</p>
 			) : (
-				timetables.map((timetable) => (
-					<div key={timetable.id} className={styles.timetableCard}>
-						<h2>{timetable.name}</h2>
+				timetables.map(t => (
+					<div key={t.id} className={styles.timetableCard}>
+						<h2>{t.name}</h2>
 						<p>
-							Week commencing: {" "}
-							{new Date(timetable.weekCommencing).toLocaleDateString()}
+							Week commencing:
+							{new Date(t.weekCommencing).toLocaleDateString()}
 						</p>
 
-						<Link to={`/timetables/${timetable.id}`}>Go to timetable</Link>
+						<Link to={`/timetables/${t.id}`}>Go to timetable</Link>
 					</div>
 				))
 			)}

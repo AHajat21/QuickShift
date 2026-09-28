@@ -42,7 +42,7 @@ const Dashboard = () => {
 			<section className={styles.todaysShifts}>
 				<div>
 					<h3>Today ({currentDate.toLocaleDateString()}): </h3>
-					<NavLink to="/timetables">See all</NavLink>
+					<NavLink to="/timetables">See full timetable</NavLink>
 				</div>
 
 				{/* <div className={styles.shiftList}>

@@ -7,37 +7,38 @@
 
 .timetable {
 	display: grid;
-	grid-template-columns: 150px repeat(7, 1fr);
+	grid-template-columns: 2fr repeat(7, 1fr);
    width: 100%;
-   max-width: 1200px;
 }
 
+.corner {}
+
 .dayHeader,
-.employeeName,
+.employeeCell,
 .shiftCell {
 	border: 1px solid #ddd;
-	min-height: 80px;
 }
 
 .dayHeader {
 	text-align: center;
 	font-weight: bold;
+	font-size: 11px;
 }
 
-.employeeName {
-	display: flex;
-	align-items: center;
-	padding: 10px;
+.employeeCell {
+	padding: 1px 2px;
+	font-size: 11px;
 }
 
 .shiftCell {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 4px;
-	padding: 5px;
+	padding: 2px;
+	font-size: 10px;
 }
 
-.emptyCell {
-	background-color: black;
+.deleteShift {
+	position: absolute;
+	right: 0;
 }

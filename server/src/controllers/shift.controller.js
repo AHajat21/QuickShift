@@ -1,6 +1,6 @@
 import { prisma } from "../lib/prisma.js"
 import { validateShiftService } from "../services/shift.service.js"
-import { isValidTime } from "../utils/timeFormat.js"
+import { isValidTime, timeToMinutes } from "../utils/timeFormat.js"
 
 
 export const getAllShifts = async (req, res, next) => {
@@ -57,11 +57,11 @@ export const createShift = async (req, res, next) => {
 	const day = daysOfWeek[shiftDate.getDay()]
 
 	// Input validation
-	if (isNaN(shiftDate.getTime()) || shiftDate < new Date()) {
-		return res.status(400).json({
-			message: "Date is invalid"
-		})
-	}
+	// if (isNaN(shiftDate.getTime()) || shiftDate < new Date()) {
+	// 	return res.status(400).json({
+	// 		message: "Date is invalid"
+	// 	})
+	// }
 	if (!isValidTime(startTime) || !isValidTime(endTime) || startTime >= endTime) {
 		return res.status(400).json({
 			message: "Start time or end time is invalid"
@@ -107,7 +107,7 @@ export const updateShift = async (req, res, next) => {
 			message: "Date is invalid"
 		})
 	}
-	if (!isValidTime(startTime) || !isValidTime(endTime) || startTime >= endTime) {
+	if (!isValidTime(startTime) || !isValidTime(endTime) || timeToMinutes(startTime) >= timeToMinutes(endTime)) {
 		return res.status(400).json({
 			message: "Start time or end time is invalid"
 		})

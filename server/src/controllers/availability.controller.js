@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prisma.js"
-import { isValidTime } from "../utils/timeFormat.js"
+import { isValidTime, timeToMinutes } from "../utils/timeFormat.js"
 
 
 export const getAllAvailabilities = async (req, res, next) => {
@@ -42,18 +42,22 @@ export const getEmployeeAvailabilities = async (req, res, next) => {
 }
 
 export const createAvailability = async (req, res, next) => {
-	const { dayOfWeek, startTime, endTime } = req.body
-	if (!isValidTime(startTime) || !isValidTime(endTime) || startTime >= endTime) {
+	const { day, startTime, endTime } = req.body
+	if (!isValidTime(startTime) || !isValidTime(endTime) || timeToMinutes(startTime) >= timeToMinutes(endTime)) {
 		return res.status(400).json({
 			message: "Start time or end time is invalid"
 		})
 	}
 	
+
+	
 	try {
+
+		
 		const availability = await prisma.availabilities.create({
 			data: {
 				employeeId: req.params.employeeId,
-				dayOfWeek,
+				day,
 				startTime,
 				endTime
 			}

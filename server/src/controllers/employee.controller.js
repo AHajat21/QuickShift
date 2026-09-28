@@ -1,5 +1,27 @@
 import { prisma } from "../lib/prisma.js";
 
+export const createEmployee = async (req, res, next) => {
+	const {firstName, lastName, email, phone} = req.body
+	try {
+		const employee = await prisma.employees.create({
+			data: {
+				companyId: req.user.companyId,
+				firstName,
+				lastName,
+				email,
+				phone
+			}
+		})
+
+		return res.status(201).json({
+			message: "Employee created successfully",
+			employee
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
 export const getAllEmployees = async (req, res, next) => {
 	try {
 		const employees = await prisma.employees.findMany({

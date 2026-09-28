@@ -37,11 +37,6 @@ export const getTimetable = async (req, res, next) => {
 
 export const createTimetable = async (req, res, next) => {
 	let { name, weekCommencing } = req.body
-	if (!weekCommencing) {
-		return res.status(400).json({
-			message: "Please specify a week for this timetable"
-		})
-	}
 	if (!name) {
 		name = weekCommencing
 	}
