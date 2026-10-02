@@ -12,17 +12,22 @@ const AppLayout = () => {
 
 	const pageNames: Record<string, string> = {
 		"/dashboard": "Dashboard",
-		"/employees": "Employees",
+		"/company": "Company",
 		"/timetables": "Timetables",
-		"/time-off": "Time Offs",
+		"/availabilities": "Employee availabilities",
+		"/time-offs": "Time Offs",
 		"/settings": "Settings"
 	}
 	const pageName = pageNames[location.pathname] ?? "QuickShift"
 
 	const handleLogout = () => {
-		api.post("/auth/logout")
-		setUser(null)
-		navigate("/login")
+		try {
+			api.post("/auth/logout")
+			setUser(null)
+			navigate("/login")
+		} catch (error) {
+			console.error("Failed to logout: ", error)
+		}
 	}
 
 	return (
@@ -31,7 +36,7 @@ const AppLayout = () => {
 
 			<div className={styles.mainContent}>
 				<header>
-					<h2>{pageName}</h2>
+					<h2 className={styles.pageName}>{pageName}</h2>
 					<button className={styles.logoutButton} onClick={handleLogout}>Logout</button>
 				</header>
 

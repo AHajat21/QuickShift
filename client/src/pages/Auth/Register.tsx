@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router'
 import { api } from '../../services/api.ts'
 import { useAuth } from '../../context/AuthContext.tsx'
 
+import styles from './Register.module.css'
+
 const Register = () => {
 	const { user, setUser } = useAuth()
 	const navigate = useNavigate()
@@ -28,43 +30,42 @@ const Register = () => {
 			})
 			setUser(response.data.user)
 			navigate("/dashboard", { replace: true })
-		} catch(error) {
+		} catch (error) {
 			console.error("Login failed: " + error)
 		}
 	}
 
 	return (
-		<main className='register-page'>
-			<section className='register-box'>
-				<h1>Register</h1>
+		<main className={styles.registerPage}>
+			<h1 className={styles.logo}>QuickShift</h1>
+			<section className={styles.registerBox}>
+				<h2>Register</h2>
 				<form onSubmit={handleSubmit}>
-					<div>
-						<div>
-							<label htmlFor='firstName'>First name</label>
-							<input
-								id='firstName'
-								name='firstName'
-								type='text'
-								value={firstName}
-								onChange={e => setFirstName(e.target.value)}
-								autoComplete='given-name'
-								required
-							/>
-						</div>
-						<div>
-							<label htmlFor='lastName'>Last name</label>
-							<input
-								id='lastName'
-								name='lastName'
-								type='text'
-								value={lastName}
-								onChange={e => setLastName(e.target.value)}
-								autoComplete='family-name'
-							/>
-						</div>
+					<div className={styles.formGroup}>
+						<label htmlFor='firstName'>First name</label>
+						<input
+							id='firstName'
+							name='firstName'
+							type='text'
+							value={firstName}
+							onChange={e => setFirstName(e.target.value)}
+							autoComplete='given-name'
+							required
+						/>
+					</div>
+					<div className={styles.formGroup}>
+						<label htmlFor='lastName'>Last name</label>
+						<input
+							id='lastName'
+							name='lastName'
+							type='text'
+							value={lastName}
+							onChange={e => setLastName(e.target.value)}
+							autoComplete='family-name'
+						/>
 					</div>
 
-					<div>
+					<div className={styles.formGroup}>
 						<label htmlFor='email'>Email</label>
 						<input
 							id='email'
@@ -77,7 +78,7 @@ const Register = () => {
 						/>
 					</div>
 
-					<div>
+					<div className={styles.formGroup}>
 						<label htmlFor='password'>Password</label>
 						<input
 							id='password'
@@ -85,8 +86,8 @@ const Register = () => {
 							type='password'
 							value={password}
 							onChange={e => setPassword(e.target.value)}
-							required
 							autoComplete='new-password'
+							required
 						/>
 					</div>
 					

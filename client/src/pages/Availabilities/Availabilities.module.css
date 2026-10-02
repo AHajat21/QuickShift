@@ -1,4 +1,4 @@
-.availabilities {
+.availabilitiesPage {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -8,6 +8,7 @@
 	display: grid;
 	grid-template-columns: 10% 90%;
 	width: 100%;
+	border: 1px solid black;
 }
 
 .timeHeader,
@@ -16,31 +17,30 @@
 	border: 1px solid #ddd;
 }
 
-.corner {}
+.corner {background-color: grey;}
 
 .timesHeader {
 	display: flex;
 	align-items: flex-end;
 	justify-content: space-evenly;
 	text-align: center;
+	padding: 1px;
 
 
 	.smallTime {
-		font-size: 9px;
+		font-size: 0.5rem;
 		font-weight: 500;
-	}
-	.bigTime {
-		font-size: 11px;
-		font-weight: 800;
 	}
 }
 
 .employeeCell {
+	font-size: 0.75rem;
 	font-weight: 900;
 	padding: 1px 2px;
 }
 
 .availabilityCell {
+	position: relative;
 }
 
 .availabilityBar {
@@ -55,6 +55,8 @@
 
 	cursor: pointer;
 	transition: background-color 0.2s, width 0.2s;
+
+	z-index: 100;
 }
 .availabilityBar:hover .deleteAvailability {
 	width: 30px;
@@ -62,4 +64,10 @@
 }
 .deleteAvailability:hover {
 	background-color: rgb(180, 37, 37, 0.75);
+}
+
+.startTimeIndicator {
+	position: absolute;
+	width: 1px;
+	height: 100%;
 }

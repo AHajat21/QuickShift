@@ -2,47 +2,121 @@
 	display: flex;
 	flex-direction: column;
 	position: sticky;
-	left: 0;
 
-	width: 20%;
+	width: 15%;
+	min-width: 200px;
 	height: 100vh;
-	padding: 4px;
-	
 
+	padding: 4px;
+	margin: 6px 4px;
+	
 	border-radius: 20px;
 	background-color: #ffffff;
-	box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.1);
+	box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
 }
-.logo {
-	color: #0055b7;
-	padding: 2px;
-	margin: 2px;
 
-	text-shadow: 2px 4px 5px #4ea0ff6d;
-	text-align: center;
+.pullTab {
+	position: absolute;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	
+	height: 32px;
+	width: 20px;
+
+	right: -20px;
+	top: calc(50% - 16px);
+
+	border: 1px solid #d5dcd8;
+	border-left: none;
+	border-radius: 0 6px 6px 0;
+
+	background-color: #ffffff;
+	color: #4a896b;
+
+	transform-origin: left;
+	cursor: pointer;
+	transition: 
+		background-color 0.2s ease,
+		color 0.15s ease-out,
+		transform 0.1s;
 }
+.pullTab:hover {
+	background-color: #ebebeb;
+}
+.pullTab:active {
+	transform: scale(0.98);
+}
+
+
+.logo {
+	color: #376952;
+	margin: 8px;
+
+	font-size: 1.6rem;
+	font-weight: 700;
+	text-shadow: 2px 4px 5px #4ea1ff2d;
+	text-align: center;
+	letter-spacing: -1px;
+}
+
 nav {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+	padding-top: 8px;
 
-	.navButton {
-		padding: 8px;
-		margin: 4px;
+	.navLink {
+		padding: 10px 12px;
+		margin: 4px 8px;
 		margin-left: 12px;
 		border: none;
 		background-color: #eeeeee;
 		box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-		border-radius: 8px 8px;
+		border-radius: 8px;
 		
-		text-align: left;
 		color: #0072f5;
+		text-align: left;
+		font-size: 0.95rem;
 
 		cursor: pointer;
+		transition: 
+			box-shadow 0.2s ease,
+			background-color 0.2s ease,
+			transform 0.1s ease;
 	}
-	.navButton:last-child {
-		position: absolute;
-		bottom: 24px;
-		
+	.navLink:last-child {
+		margin-top: auto;
+		margin-bottom: 12px;
+		align-self: flex-end;
 	}
+	.navLink:hover {
+		box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+		background-color: #e4eee9;
+	}
+	.navLink:active {
+		transform: scale(0.97);
+	}
+	.navLink .active {
+		color: #5000d0;
+	}
+}
+
+
+@media (max-width: 768px) {
+	.sidebar {
+		position: fixed;
+		height: calc(100vh - 12px);
+		transform: translateX(calc(-100%));
+
+		transition: transform 0.25s ease;
+	}
+	.sidebar.open {transform: translateX(0);}
+	.pullTab {display: flex;}
+}
+
+@media (max-width: 480px) {
+	.sidebar {width: 10%;}
+	.logo {font-size: 1.3rem;}
+	.navLink {font-size: 0.85rem;}
 }

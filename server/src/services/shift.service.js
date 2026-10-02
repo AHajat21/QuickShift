@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma.js"
 
 export const validateShiftService = async ({
-	employeeId, timetableId, shiftId, companyId, shiftDate, startTime, endTime
+	employeeId, timetableId, shiftId, companyId, shiftDate
 }) => {
 	const daysOfWeek = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 	// Same company and same timetable check
@@ -30,7 +30,7 @@ export const validateShiftService = async ({
 	// 		id: employeeId,
 	// 		availabilities: {
 	// 			some: {
-	// 				dayOfWeek: daysOfWeek[shiftDate.getDay()],
+	// 				day: daysOfWeek[shiftDate.getDay()],
 	// 				startTime: {lte: startTime},
 	// 				endTime: {gte: endTime}
 	// 			}

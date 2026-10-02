@@ -49,6 +49,7 @@ const Company = () => {
 				name: companyName
 			})
 			setCompany(response.data.company)
+			setCompanyName("")
 		} catch (error) {
 			console.error("Failed to create a company:", error)
 		}
@@ -60,8 +61,9 @@ const Company = () => {
 				firstName: employeeName
 			})
 			setEmployees(prev => [...prev, response.data.employee])
+			setEmployeeName("")
 		} catch (error) {
-			console.error("Failed to create a company:", error)
+			console.error("Failed to create a employee:", error)
 		}
 	}
 	const deleteEmployee = async (employeeId: string) => {
@@ -78,28 +80,25 @@ const Company = () => {
 	}
 
 
-
-
 	if (loading) return <p>Loading...</p>
 	
-	if (!company) 
-		return (
-			<div>
-				Create your company:
-				<form onSubmit={createCompany}>
-					<label htmlFor="name">Company name: </label>
-					<input
-						id='name'
-						name='name'
-						type='text'
-						value={companyName}
-						onChange={e => setCompanyName(e.target.value)}
-						required
-					/>
-					<button type='submit'>Submit</button>
-				</form>
-			</div>
-		)
+	if (!company) return (
+		<div className={styles.companyPage}>
+			Create your company:
+			<form onSubmit={createCompany}>
+				<label htmlFor="name">Company name: </label>
+				<input
+					id='name'
+					name='name'
+					type='text'
+					value={companyName}
+					onChange={e => setCompanyName(e.target.value)}
+					required
+				/>
+				<button type='submit'>Create</button>
+			</form>
+		</div>
+	)
 
 	return (
 		<div className={styles.companyPage}>
@@ -108,11 +107,22 @@ const Company = () => {
 			<section className={styles.employeeSection}>
 				<h2>Employees:</h2>
 				<div className={styles.employeeList}>
-					{employees.map(employee => (
-						<div key={employee.id} className={styles.employeeRow}>
-							{employee.firstName} {employee.lastName}
+					{employees.length === 0 ? 
+						<div className={styles.emptyState}>
 
-							<button className={styles.deleteEmployee} onClick={() => deleteEmployee(employee.id)}>X</button>
+						</div>
+					: 
+					employees.map(employee => (
+						<div key={employee.id} className={styles.employeeRow}>
+							<span>
+								{employee.firstName} {employee.lastName}
+							</span>
+
+							<button
+								className={styles.deleteEmployee}
+								onClick={() => deleteEmployee(employee.id)}
+								aria-label={`Delete ${employee.firstName} ${employee.lastName}`}
+							>X</button>
 						</div>
 					))}
 				</div>

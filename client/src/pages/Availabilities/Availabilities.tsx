@@ -62,18 +62,19 @@ const Availabilities = () => {
 			})
 			setAvailabilities(prev => [...prev, response.data.availability])
 		} catch (error) {
-			console.log("Failed to create availability:", error)
+			console.error("Failed to create availability:", error)
 		}
 	}
 	const deleteAvailability = async (employeeId: string, availabilityId: string) => {
 		try {
-			await api.delete(`/employees/${employeeId}/availabilities/${availabilityId}`)
+			const res = await api.delete(`/employees/${employeeId}/availabilities/${availabilityId}`)
+			console.log(res)
 			setAvailabilities(prev =>
 				prev.filter(a => 
 					a.id !== availabilityId
 			))
 		} catch (error) {
-			console.log("Failed to delete availability:", error)
+			console.error("Failed to delete availability:", error)
 		}
 	}
 
@@ -133,22 +134,18 @@ const Availabilities = () => {
 					}}
 				>
 					{daysOfWeek.map(day =>
-						<option value={day}>{day}</option>
+						<option key={day} value={day}>{day}</option>
 					)}
 				</select>
 			</label>
 			
 			<div className={styles.availabilitiesChart}>
-				<div className={styles.corner}></div>
+				<div className={styles.corner}/>
 
 				<div className={styles.timesHeader}>
 					{times.map(t => (
-						<>
-							<div className={styles.smallTime}>.30</div>
-							<div className={styles.bigTime}>{t}</div>
-						</>
+						<div key={t} className={styles.smallTime}>{t}</div>
 					))}
-					<div className={styles.smallTime}>.30</div>
 				</div>
 
 				{employees.map(employee => (
@@ -158,7 +155,7 @@ const Availabilities = () => {
 						</div>
 
 						<div className={styles.availabilityCell}
-							onMouseUp={e => handleAvailabilityClick(e, employee.id)}
+							onClick={e => handleAvailabilityClick(e, employee.id)}
 						>
 							{/* ONLY this employees availabilities */}
 							{availabilities.filter(a => 
@@ -171,7 +168,12 @@ const Availabilities = () => {
 										width: `${((timeToMinutes(a.endTime) - timeToMinutes(a.startTime)) / 1440) * 100}%`
 									}}
 								>
-									<button className={styles.deleteAvailability} onClick={() => deleteAvailability(a.employeeId, a.id)}>X</button>
+									<button className={styles.deleteAvailability} 
+										onClick={e => {
+											e.stopPropagation()
+											deleteAvailability(a.employeeId, a.id)}
+										}
+									>X</button>
 								</div>
 							))}
 

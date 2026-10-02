@@ -1,36 +1,72 @@
-import React from 'react'
-import { useNavigate } from 'react-router'
+import React, { useState } from 'react'
+import { useNavigate, NavLink } from 'react-router'
 
 import styles from './Sidebar.module.css'
 
 const Sidebar = () => {
 	const navigate = useNavigate()
+	const [open, setOpen] = useState(false)
+
 	return (
-		<aside className={styles.sidebar}>
-			<div className={styles.logo}>
-				<h1>QuickShift</h1>
-			</div>
+		<aside className={`${styles.sidebar} ${open && styles.open}`}>
+			<h1 className={styles.logo}>QuickShift</h1>
 
 			<nav>
-				<button className={styles.navButton} 
-					onClick={() => navigate("/dashboard")}
-				> Dashboard</button>
-				<button className={styles.navButton}
-					onClick={() => navigate("/timetables")}
-				> Timetables</button>
-				<button className={styles.navButton}
-					onClick={() => navigate("/company")}
-				> Company</button>
-				<button className={styles.navButton}
-					onClick={() => navigate("/availabilities")}
-				> Availabilities</button>
-				<button className={styles.navButton}
-					onClick={() => navigate("/time-offs")}
-				> Time Offs</button>
-				<button className={styles.navButton}
-					onClick={() => navigate("/settings")}
-				> Settings</button>
+				<NavLink to="/dashboard" className={styles.navLink}
+					onClick={() => setOpen(prev => prev === true && false)}
+				>
+					{({ isActive }) => (
+    					<span className={isActive ? styles.active : ""}>Dashboard</span>
+ 					)}
+				</NavLink>
+
+				<NavLink to="/timetables" className={styles.navLink}
+					onClick={() => setOpen(prev => prev === true && false)}
+				>
+					{({ isActive }) => (
+   					<span className={isActive ? styles.active : ""}>Timetables</span>
+					)}
+				</NavLink>
+
+				<NavLink to="/company" className={styles.navLink}
+					onClick={() => setOpen(prev => prev === true && false)}
+				>
+					{({ isActive }) => (
+   					<span className={isActive ? styles.active : ""}>Company</span>
+					)}
+				</NavLink>
+
+				<NavLink to="/availabilities" className={styles.navLink}
+					onClick={() => setOpen(prev => prev === true && false)}
+				>
+					{({ isActive }) => (
+   					<span className={isActive ? styles.active : ""}>Availabilities</span>
+					)}
+				</NavLink>
+
+				<NavLink to="/time-offs" className={styles.navLink}
+					onClick={() => setOpen(prev => prev === true && false)}
+				>
+					{({ isActive }) => (
+   					<span className={isActive ? styles.active : ""}>Time Offs</span>
+					)}
+				</NavLink>
+
+				<NavLink to="/settings" className={styles.navLink}
+					onClick={() => setOpen(prev => prev === true && false)}
+				>
+					{({ isActive }) => (
+   					<span className={isActive ? styles.active : ""}>Settings</span>
+					)}
+				</NavLink>
 			</nav>
+
+			<div 
+				className={styles.pullTab}
+				onClick={() => setOpen(prev => !prev)}
+			>
+   			<span>{open ? "<" : ">"}</span>
+			</div>
 		</aside>
 	)
 }

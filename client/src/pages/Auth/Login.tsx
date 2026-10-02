@@ -1,7 +1,9 @@
 import {type SubmitEvent , useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { api } from '../../services/api'
-import { useAuth } from '../../context/AuthContext'
+import { api } from '../../services/api.ts'
+import { useAuth } from '../../context/AuthContext.tsx'
+
+import styles from './Login.module.css'
 
 const Login = () => {
 	const { user, setUser } = useAuth()
@@ -23,17 +25,18 @@ const Login = () => {
 			})
 			setUser(response.data.user)
 			navigate("/dashboard", { replace: true })
-		} catch(error) {
+		} catch (error) {
 			console.error("Login failed: " + error)
 		}
 	}
 
 	return (
-		<main className='login-page'>
-			<section className='login-box'>
-				<h1>Login</h1>
+		<main className={styles.loginPage}>
+			<h1 className={styles.logo}>QuickShift</h1>
+			<section className={styles.loginBox}>
+				<h2>Login</h2>
 				<form onSubmit={handleSubmit}>
-					<div>
+					<div className={styles.formGroup}>
 						<label htmlFor='email'>Email</label>
 						<input
 							id='email'
@@ -46,7 +49,7 @@ const Login = () => {
 						/>
 					</div>
 
-					<div>
+					<div className={styles.formGroup}>
 						<label htmlFor='password'>Password</label>
 						<input
 							id='password'

@@ -79,6 +79,7 @@ export const requireCompanyMatch = async (req, res, next) => {
 				companyId: req.user.companyId,
 			}
 		})
+		next()
 	} catch(error) {
 		next(error)
 	}

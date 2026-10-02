@@ -26,7 +26,7 @@ export const getAllShifts = async (req, res, next) => {
 			message: "All shifts have been fetched",
 			shifts
 		})
-	} catch(error) {
+	} catch (error) {
 		next(error)
 	}
 }
@@ -44,38 +44,23 @@ export const getEmployeeShifts = async (req, res, next) => {
 			message: "Employee shifts fetched successfully",
 			employeeShifts
 		})
-	} catch(error) {
+	} catch (error) {
 		next(error)
 	}
 }
 
 
 export const createShift = async (req, res, next) => {
-	const { employeeId, date, startTime, endTime } = req.body
+	const { employeeId, date} = req.body
 	const shiftDate = new Date(date)
 	const daysOfWeek = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 	const day = daysOfWeek[shiftDate.getDay()]
-
-	// Input validation
-	// if (isNaN(shiftDate.getTime()) || shiftDate < new Date()) {
-	// 	return res.status(400).json({
-	// 		message: "Date is invalid"
-	// 	})
-	// }
-	if (!isValidTime(startTime) || !isValidTime(endTime) || startTime >= endTime) {
-		return res.status(400).json({
-			message: "Start time or end time is invalid"
-		})
-	}
-
 	try {
 		await validateShiftService({
 			employeeId,
 			timetableId: req.params.timetableId,
 			companyId: req.user.companyId,
 			shiftDate,
-			startTime,
-			endTime
 		})
 
 		const shift = await prisma.shifts.create({
@@ -84,8 +69,8 @@ export const createShift = async (req, res, next) => {
 				timetableId: req.params.timetableId,
 				date: shiftDate,
 				day,
-				startTime,
-				endTime
+				startTime: "00:00",
+				endTime: "00:00"
 			}
 		})
 
@@ -93,23 +78,24 @@ export const createShift = async (req, res, next) => {
 			message: "Shift has been created",
 			shift
 		})
-	} catch(error) {
+	} catch (error) {
 		next(error)
 	}
 }
 
 
 export const updateShift = async (req, res, next) => {
-	const { employeeId, date, startTime, endTime} = req.body
+	const { employeeId, date, field, value} = req.body
 	const shiftDate = new Date(date)
-	if (isNaN(shiftDate.getTime()) || shiftDate < new Date()) {
+	if (isNaN(shiftDate.getTime())) {
+		console.log(date)
 		return res.status(400).json({
 			message: "Date is invalid"
 		})
 	}
-	if (!isValidTime(startTime) || !isValidTime(endTime) || timeToMinutes(startTime) >= timeToMinutes(endTime)) {
+	if (!isValidTime(value)) {
 		return res.status(400).json({
-			message: "Start time or end time is invalid"
+			message: "The entered time is invalid"
 		})
 	}
 
@@ -119,9 +105,6 @@ export const updateShift = async (req, res, next) => {
 			timetableId: req.params.timetableId,
 			shiftId: req.params.shiftId,
 			companyId: req.user.companyId,
-			shiftDate,
-			startTime,
-			endTime,
 		})
 
 		const newShift = await prisma.shifts.update({
@@ -131,8 +114,7 @@ export const updateShift = async (req, res, next) => {
 			data: {
 				employeeId,
 				date: shiftDate,
-				startTime,
-				endTime
+				[field]: value
 			}
 		})
 
@@ -140,7 +122,7 @@ export const updateShift = async (req, res, next) => {
 			message: "Shift has been updated",
 			newShift
 		})
-	} catch(error) {
+	} catch (error) {
 		next(error)
 	}
 }
@@ -167,7 +149,7 @@ export const deleteShift = async (req, res, next) => {
 		return res.status(200).json({
 			message: "Shift has been deleted"
 		})
-	} catch(error) {
+	} catch (error) {
 		next(error)
 	}
 }

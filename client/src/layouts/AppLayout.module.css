@@ -1,43 +1,106 @@
 .appLayout {
 	display: flex;
 	min-height: 100vh;
-
-	background: #eef7fe
+	background: #f5f7f6;
+	color: #222;
 }
 
 .mainContent {
 	width: 100%;
-	padding: 2px;
-	margin: 2px;
-	
-	
-	header {
-		display: flex;
-		justify-content: space-between;
+	padding: 4px;
+	margin: 4px;
+}
 
-		margin: 4px 8px;
-		padding: 6px 8px;
+header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
-		border-radius: 8px;
-		background-color: #006CFF;
-		box-shadow: 1px 1px 5px 1px #006CFF;
+	min-height: 52px;
+	margin: 4px 8px 12px;
+	padding: 8px 16px;
 
-		color: rgb(255, 240, 240);
-		letter-spacing: 1px;
+	border: 1px solid #dce7e1;
+	border-radius: 16px;
 
+	background: linear-gradient(135deg, #4a896b, #376952);
+	box-shadow: 0 4px 12px rgba(55, 105, 82, 0.16);
+}
 
-		.logoutButton {
-			border: none;
-			background-color: #006cff;
-			border-radius: 5px;
+.pageName {
+	color: #ffffff;
+	letter-spacing: -0.4px;
+	font-size: 1.4rem;
+	font-weight: 650;
+}
 
-			padding: 2px;
+.logoutButton {
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: rgba(255, 255, 255, 0.12);
+	border-radius: 7px;
 
-			color: #eef7fe;
+	padding: 7px 11px;
 
-			cursor: pointer;
-		}
-	}
+	color: #eef7fe;
+	font-size: 0.8rem;
+	font-weight: 600;
+
+	cursor: pointer;
+	transition: 
+		background-color 0.2s ease,
+		transform 0.15s ease,
+		box-shadow 0.2s ease;
+}
+.logoutButton:hover {
+	background-color: rgba(255, 255, 255, 0.2);
+	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+.logoutButton:active {
+	transform: scale(0.96);
+}
+
+.logoutButton:focus-visible {
+	outline: 2px solid #ffffff;
+	outline-offset: 2px;
 }
 
 
+@media (max-width: 768px) {
+	.mainContent {
+		padding: 2px;
+		margin: 2px;
+	}
+
+	header {
+		margin: 4px 6px 10px;
+		padding: 7px 16px;
+
+		.pageName {
+			font-size: 1.25rem;
+		}
+	}
+
+}
+
+@media (max-width: 480px) {
+	.mainContent {
+		margin: 0;
+		padding: 0;
+	}
+
+	header {
+		min-height: 48px;
+
+		margin: 4px;
+		padding: 7px 9px;
+
+		border-radius: 8px;
+
+		.pageName {font-size: 1.1rem;}
+		.logoutButton {
+			padding: 6px 9px;
+			font-size: 0.8rem;
+		}
+	}
+
+}

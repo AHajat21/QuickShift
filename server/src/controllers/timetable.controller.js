@@ -30,7 +30,6 @@ export const getTimetable = async (req, res, next) => {
 			timetable
 		})
 	} catch(error) {
-		console.log(error)
 		next(error)
 	}
 }

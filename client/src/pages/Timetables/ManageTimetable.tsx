@@ -51,10 +51,17 @@ const ManageTimetable = () => {
 	}, [timetableId])
 
 
-	const updateShift = async (shiftId: string, field: "startTime" | "endTime", value: string) => {
+	const updateShift = async (shiftId: string, employeeId: string, day: string, field: "startTime" | "endTime", value: string) => {
+		const date = new Date(weekCommencing)
+		date.setDate(
+			date.getDate() + daysOfWeek.indexOf(day)
+		)
 		try {
 			await api.patch(`/timetables/${timetableId}/shifts/${shiftId}`, {
-				[field]: value
+				date,
+				employeeId,
+				field,
+				value
 			})
 		} catch (error) {
 			console.error("Failed to update shift:", error)
@@ -63,15 +70,13 @@ const ManageTimetable = () => {
 	const createShift = async (employeeId: string, day: string) => {
 		const date = new Date(weekCommencing)
 		date.setDate(
-			date.getDate() + daysOfWeek.indexOf(day)+1
+			date.getDate() + daysOfWeek.indexOf(day)
 		)
 		try {
 			const response = await api.post(`/timetables/${timetableId}/shifts`, {
 				employeeId,
 				day: day.toUpperCase(),
-				date,
-				startTime: "00:00",
-				endTime: "00:01"
+				date
 			})
 
 			setShifts(prev => [...prev, response.data.shift])
@@ -144,10 +149,9 @@ const ManageTimetable = () => {
 												)
 											)
 										}
-										onBlur={e => updateShift(shift.id, "startTime", e.target.value)}
+										onBlur={e => updateShift(shift.id, employee.id, day, "startTime", e.target.value)}
+										title='startTime'
 									/>
-
-									<span>-</span>
 
 									<input
 										type="time"
@@ -160,7 +164,8 @@ const ManageTimetable = () => {
 												)
 											)
 										}
-										onBlur={e => updateShift(shift.id, "endTime", e.target.value)}
+										onBlur={e => updateShift(shift.id, employee.id, day, "endTime", e.target.value)}
+										title='endTime'
 									/>
 
 									<button className={styles.deleteShift} onClick={() => deleteShift(shift.id)}>X</button>
@@ -170,10 +175,6 @@ const ManageTimetable = () => {
 						})}
 					</React.Fragment>
 				))}
-			</div>
-
-			<div>
-				{shifts.map(s => (<div key={s.id}>{s.day}, {s.employeeId}, {s.startTime}</div>))}
 			</div>
 
 		</div>
