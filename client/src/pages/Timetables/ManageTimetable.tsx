@@ -144,8 +144,7 @@ const ManageTimetable = () => {
 										onChange={e => 
 											setShifts(prev =>
 												prev.map(s =>
-													s.id === shift.id ? { ...s, startTime: e.target.value }
-													: s
+													s.id === shift.id ? { ...s, startTime: e.target.value } : s
 												)
 											)
 										}

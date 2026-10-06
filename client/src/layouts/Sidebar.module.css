@@ -13,6 +13,8 @@
 	border-radius: 20px;
 	background-color: #ffffff;
 	box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+	
+	z-index: 2;
 }
 
 .pullTab {
@@ -27,12 +29,12 @@
 	right: -20px;
 	top: calc(50% - 16px);
 
-	border: 1px solid #d5dcd8;
+	border: 1px solid #d5dcd840;
 	border-left: none;
 	border-radius: 0 6px 6px 0;
 
-	background-color: #ffffff;
-	color: #4a896b;
+	background-color: #ffffff20;
+	color: #4a896b80;
 
 	transform-origin: left;
 	cursor: pointer;
@@ -42,7 +44,8 @@
 		transform 0.1s;
 }
 .pullTab:hover {
-	background-color: #ebebeb;
+	background-color: #ffffff;
+	color: #4a896b;
 }
 .pullTab:active {
 	transform: scale(0.98);
@@ -85,11 +88,11 @@ nav {
 			background-color 0.2s ease,
 			transform 0.1s ease;
 	}
-	.navLink:last-child {
+	/* .navLink:last-child {
 		margin-top: auto;
 		margin-bottom: 12px;
 		align-self: flex-end;
-	}
+	} */
 	.navLink:hover {
 		box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
 		background-color: #e4eee9;

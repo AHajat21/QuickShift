@@ -60,6 +60,28 @@ export const getEmployee = async (req, res, next) => {
 	}
 }
 
+export const updateEmployee = async (req, res, next) => {
+	const {employeeId, field, value} = req.body
+	try {
+		const newEmployee = await prisma.employees.update({
+			where: {
+				id: employeeId,
+				companyId: req.user.companyId,
+			},
+			data: {
+				[field]: value
+			}
+		})
+
+		return res.status(200).json({
+			message: "Employee fetched successfully",
+			newEmployee
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
 
 export const deleteEmployee = async (req, res, next) => {
 	try {

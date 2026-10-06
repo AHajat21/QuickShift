@@ -1,7 +1,7 @@
 import express from "express"
 
 import { requireCompanyMatch, requireCompanyMembership } from "../middleware/auth.middleware.js"
-import { createEmployee, getAllEmployees, getEmployee, deleteEmployee } from "../controllers/employee.controller.js"
+import { createEmployee, getAllEmployees, getEmployee, deleteEmployee, updateEmployee } from "../controllers/employee.controller.js"
 import { createAvailability, deleteAvailability, getEmployeeAvailabilities } from "../controllers/availability.controller.js"
 import { deleteTimeOff, createTimeOff, getEmployeeTimeOffs } from "../controllers/timeOff.controller.js"
 import { getEmployeeShifts } from "../controllers/shift.controller.js"
@@ -23,13 +23,16 @@ router.post(
 router.get(
 	"/:employeeId",
 	requireCompanyMembership,
-	// requireCompanyMatch integrated
 	getEmployee
+)
+router.patch(
+	"/:employeeId",
+	requireCompanyMembership,
+	updateEmployee
 )
 router.delete(
 	"/:employeeId",
 	requireCompanyMembership,
-	// requireCompanyMatch integrated
 	deleteEmployee
 )
 

@@ -1,39 +1,33 @@
 .companyPage {
 	min-height: 100%;
-	padding: 36px;
-	box-sizing: border-box;
-
+	padding: 32px;
 	color: #222;
 }
 
 .companyPage > h1 {
-	margin: 0 0 32px;
+	margin: 0 0 28px;
 
 	font-size: 2rem;
 	font-weight: 650;
 	letter-spacing: -0.5px;
 
-	color: #222;
+	color: #376952;
 }
 
 .employeeSection {
 	width: 100%;
-	max-width: 800px;
+	max-width: 850px;
 
-	padding: 28px;
+	padding: 24px;
 
-	box-sizing: border-box;
-
-	background: #fff;
+	background: #ffffff;
 	border: 1px solid #e3e8e5;
 	border-radius: 14px;
-
-	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
-
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
 }
 
 .employeeSection h2 {
-	margin: 0 0 20px;
+	margin: 0 0 16px;
 
 	font-size: 1.15rem;
 	font-weight: 600;
@@ -54,75 +48,93 @@
 }
 
 .employeeRow {
-	min-height: 52px;
-
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-
-	padding: 0 14px;
-
-	box-sizing: border-box;
-
-	background: #fff;
-
-	font-size: 0.95rem;
-	color: #333;
-
+	
+	min-height: 54px;
+	padding: 8 12px;
 	border-bottom: 1px solid #e8ecea;
-}
+	background-color: #ffffff;
 
-.employeeRow:last-child {
+	transition: background-color 0.2s ease;
+}
+.employeeRow:hover {
+	background-color: #f8faf9;
 	border-bottom: none;
 }
 
-.employeeRow:hover {
-	background: #f8faf9;
+.employeeRow input {
+	min-width: 0;
+	width: 180px;
+
+	padding: 8px 9px;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	background-color: transparent;
+
+	color: #333;
+	font-size: 0.9rem;
+	font-weight: 600;
+
+	outline: none;
+
+	transition: 
+		border-color 0.2s ease,
+		background-color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+.employeeRow input:hover {
+	background-color: #f2f5f3;
+}
+.employeeRow input:focus-visible {
+	background-color: #ffffff;
+	border-color: #b9d0c3;
+	box-shadow: 0 0 0 3px rgba(74, 137, 107, 0.1);
 }
 
 .deleteEmployee {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-shrink: 0;
 
 	width: 30px;
 	height: 30px;
 
+	margin-left: auto;
 	padding: 0;
-
+	
 	border: none;
 	border-radius: 7px;
-
 	background: transparent;
-	color: #888;
 
+	color: #888;
 	font-size: 1.15rem;
 	line-height: 1;
 
 	cursor: pointer;
-
 	transition:
 		background-color 0.15s ease,
-		color 0.15s ease;
+		color 0.15s ease,
+		transform 0.15s ease;
 }
-
+.deleteEmployee:focus-visible {
+	outline: 2px solid #4a896b;
+	outline-offset: 2px;
+}
 .deleteEmployee:hover {
 	background: #fbecec;
 	color: #c44;
-}
-
-.deleteEmployee:focus-visible {
-	outline: 2px solid rgb(74, 137, 107);
-	outline-offset: 2px;
+	transform: scale(0.94);
 }
 
 .employeeSection form {
 	display: flex;
-	align-items: flex-end;
+	align-items: center;
 	gap: 10px;
 }
 
-.employeeSection form label {
+.formGroup label {
 	display: flex;
 	flex-direction: column;
 	gap: 7px;
@@ -132,16 +144,16 @@
 	color: #444;
 }
 
-.employeeSection form input {
+.formGroup input {
 	width: 240px;
 
-	padding: 11px 12px;
+	padding: 10px 12px;
 	box-sizing: border-box;
 
 	border: 1px solid #d5dcd8;
 	border-radius: 8px;
 
-	background: #fff;
+	background: #ffffff;
 	color: #222;
 
 	font-size: 0.95rem;
@@ -153,19 +165,19 @@
 		box-shadow 0.2s ease;
 }
 
-.employeeSection form input:focus {
-	border-color: rgb(74, 137, 107);
+.formGroup input:focus {
+	border-color: #4a896b;
 	box-shadow: 0 0 0 3px rgba(74, 137, 107, 0.12);
 }
 
-.employeeSection form button {
-	padding: 11px 16px;
+.formGroup button {
+	padding: 10px 16px;
 
 	border: none;
 	border-radius: 8px;
 
-	background: rgb(74, 137, 107);
-	color: white;
+	background: #4a896b;
+	color: #ffffff;
 
 	font-size: 0.9rem;
 	font-weight: 600;
@@ -174,28 +186,58 @@
 
 	transition:
 		background-color 0.2s ease,
-		transform 0.1s ease;
+		transform 0.1s ease,
+		box-shadow 0.2s ease;
+}
+.formGroup button:hover {
+	background: #3d775b;
+	box-shadow: 0 3px 8px rgba(55, 105, 82, 0.15);
+}
+.formGroup button:active {
+	transform: scale(0.97);
 }
 
-.employeeSection form button:hover {
-	background: rgb(61, 119, 91);
+.emptyState {
+	padding: 28px 16px;
+
+	text-align: center;
+	color: #888;
+	font-size: 0.9rem;
 }
 
-.employeeSection form button:active {
-	transform: scale(0.98);
+
+@media (max-width: 768px) {
+	.companyPage {padding: 24px;}
+	.employeeSection {padding: 20px;}
+	.employeeRow input {width: 160px;}
 }
 
-/* @media (max-width: 600px) {
-	.companyPage {
-		padding: 24px 16px;
+@media (max-width: 600px) {
+	.companyPage {padding: 20px 12px}
+	.companyPage > h1 {
+		margin-bottom: 20px;
+		font-size: 1.6rem;
 	}
+
 	.employeeSection {
-		padding: 20px;
+		padding: 16px;
+		border-radius: 12px;
+	}
+
+	.employeeRow {
+		gap: 6px;
+		padding: 8px;
+	}
+
+	.employeeRow input {
+		width: 0;
+		padding: 8px 6px;
 	}
 
 	.employeeSection form {
 		flex-direction: column;
 		align-items: stretch;
+		gap: 10px;
 	}
 
 	.employeeSection form input {
@@ -205,5 +247,19 @@
 	.employeeSection form button {
 		width: 100%;
 	}
+}
 
-} */
+@media (max-width: 400px) {
+	.employeeRow {
+	flex-wrap: wrap;
+	}
+
+	.employeeRow input {
+		width: calc(50% - 18px);
+		flex: 1 1 calc(50% - 18px);
+	}
+
+	.deleteEmployee {
+		margin-left: 0;
+	}
+}

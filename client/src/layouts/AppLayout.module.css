@@ -25,6 +25,8 @@ header {
 
 	background: linear-gradient(135deg, #4a896b, #376952);
 	box-shadow: 0 4px 12px rgba(55, 105, 82, 0.16);
+
+	z-index: 1;
 }
 
 .pageName {

@@ -16,7 +16,8 @@ type Employee = {
 const Company = () => {
 	const [company, setCompany] = useState<Company>()
 	const [employees, setEmployees] = useState<Employee[]>([])
-	const [employeeName, setEmployeeName] = useState("")
+	const [employeeFirstName, setEmployeeFirstName] = useState("")
+	const [employeeLastName, setEmployeeLastName] = useState("")
 	const [companyName, setCompanyName] = useState("")
 	const [loading, setLoading] = useState(true)
 
@@ -58,12 +59,16 @@ const Company = () => {
 		e.preventDefault()
 		try {
 			const response = await api.post("/employees", {
-				firstName: employeeName
+				firstName: employeeFirstName,
+				lastName: employeeLastName
 			})
 			setEmployees(prev => [...prev, response.data.employee])
-			setEmployeeName("")
+
 		} catch (error) {
-			console.error("Failed to create a employee:", error)
+			console.error("Failed to create employee:", error)
+		} finally {
+			setEmployeeFirstName("")
+			setEmployeeLastName("")
 		}
 	}
 	const deleteEmployee = async (employeeId: string) => {
@@ -78,13 +83,23 @@ const Company = () => {
 			console.error("Failed to remove employee:", error)
 		}
 	}
+	const updateEmployee = async (employeeId: string, field: "firstName" | "lastName", value: string) => {
+		try {
+			await api.patch(`/employees/${employeeId}`, {
+				employeeId, field, value
+			})
+		} catch (error) {
+			console.error("Failed to update employee")
+		}
+	}
 
 
 	if (loading) return <p>Loading...</p>
 	
 	if (!company) return (
 		<div className={styles.companyPage}>
-			Create your company:
+			<h1>Create your company</h1>
+
 			<form onSubmit={createCompany}>
 				<label htmlFor="name">Company name: </label>
 				<input
@@ -109,34 +124,70 @@ const Company = () => {
 				<div className={styles.employeeList}>
 					{employees.length === 0 ? 
 						<div className={styles.emptyState}>
-
+							No employees yet. Add your first employee below.
 						</div>
 					: 
-					employees.map(employee => (
-						<div key={employee.id} className={styles.employeeRow}>
-							<span>
-								{employee.firstName} {employee.lastName}
-							</span>
+						employees.map(employee => (
+							<div key={employee.id} className={styles.employeeRow}>
+								<input
+									type='text'
+									value={employee.firstName ?? ""}
+									onChange={e => 
+										setEmployees(prev =>
+											prev.map(emp =>
+												emp.id === employee.id ? { ...emp, firstName: e.target.value } : emp
+											)
+										)
+									}
+									onBlur={e => updateEmployee(employee.id, "firstName", e.target.value)}
+								/>
+								<input
+									type='text'
+									value={employee.lastName ?? ""}
+									onChange={e => 
+										setEmployees(prev =>
+											prev.map(emp =>
+												emp.id === employee.id ? { ...emp, lastName: e.target.value } : emp
+											)
+										)
+									}
+									onBlur={e => updateEmployee(employee.id, "lastName", e.target.value)}
+								/>
 
-							<button
-								className={styles.deleteEmployee}
-								onClick={() => deleteEmployee(employee.id)}
-								aria-label={`Delete ${employee.firstName} ${employee.lastName}`}
-							>X</button>
-						</div>
-					))}
+								<button
+									className={styles.deleteEmployee}
+									onClick={() => deleteEmployee(employee.id)}
+									aria-label={`Delete ${employee.firstName} ${employee.lastName}`}
+								>X</button>
+							</div>
+						))}
 				</div>
 
 				<form onSubmit={createEmployee}>
-					<label htmlFor="firstName">Employee first name: </label>
-					<input
-						id='firstName'
-						name='firstName'
-						type='text'
-						value={employeeName}
-						onChange={e => setEmployeeName(e.target.value)}
-						required
-					/>
+					<div className={styles.formGroup}>
+						<label htmlFor="firstName">First name*</label>
+						<input
+							id='firstName'
+							name='firstName'
+							type='text'
+							value={employeeFirstName}
+							onChange={e => setEmployeeFirstName(e.target.value)}
+							required
+						/>
+					</div>
+
+
+					<div className={styles.formGroup}>
+						<label htmlFor="lastName">Last name</label>
+						<input
+							id='lastName'
+							name='lastName'
+							type='text'
+							value={employeeLastName}
+							onChange={e => setEmployeeLastName(e.target.value)}
+						/>
+					</div>
+
 					<button type='submit'>Create employee</button>
 				</form>
 			</section>

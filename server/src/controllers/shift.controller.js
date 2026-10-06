@@ -7,12 +7,8 @@ export const getAllShifts = async (req, res, next) => {
 	try {
 		const shifts = await prisma.shifts.findMany({
 			orderBy: [
-				{
-					employee: {firstName: "asc"}
-				},
-				{
-					day: "asc"	
-				}
+				{employee: {firstName: "asc"}},
+				{day: "asc"	}
 			],
 			where: {
 				timetableId: req.params.timetableId,
@@ -23,8 +19,55 @@ export const getAllShifts = async (req, res, next) => {
 		})
 
 		return res.status(200).json({
-			message: "All shifts have been fetched",
+			message: "All shifts fetched successfully!",
 			shifts
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
+export const getTodayShifts = async (req, res, next) => {
+	const today = new Date()
+
+	const startOfToday = new Date(today)
+	startOfToday.setHours(0, 0, 0, 0)
+
+	const startOfTomorrow = new Date(startOfToday)
+	startOfTomorrow.setDate(startOfTomorrow.getDate() + 1)
+	
+	try {
+		const todayShifts = await prisma.shifts.findMany({
+			where: {
+				date: {
+					gte: startOfToday,
+					lt: startOfTomorrow
+
+				},
+				timetable: {
+					companyId: req.user.companyId
+				}
+			},
+			include: {
+				timetable: {
+					select: {name: true}
+				},
+				employee: {
+					select: {
+						firstName: true,
+						lastName: true
+					}
+				}
+			},
+			orderBy: [
+				{timetableId: "asc"},
+				{startTime: "asc"}
+			]
+		})
+
+		return res.status(200).json({
+			message: "Today's shifts fetched successfully!",
+			todayShifts
 		})
 	} catch (error) {
 		next(error)
@@ -41,7 +84,7 @@ export const getEmployeeShifts = async (req, res, next) => {
 		})
 
 		return res.status(200).json({
-			message: "Employee shifts fetched successfully",
+			message: "Employee shifts fetched successfully!",
 			employeeShifts
 		})
 	} catch (error) {
@@ -75,7 +118,7 @@ export const createShift = async (req, res, next) => {
 		})
 
 		return res.status(201).json({
-			message: "Shift has been created",
+			message: "Shift created successfully!",
 			shift
 		})
 	} catch (error) {
@@ -105,6 +148,7 @@ export const updateShift = async (req, res, next) => {
 			timetableId: req.params.timetableId,
 			shiftId: req.params.shiftId,
 			companyId: req.user.companyId,
+			shiftDate
 		})
 
 		const newShift = await prisma.shifts.update({
@@ -112,14 +156,12 @@ export const updateShift = async (req, res, next) => {
 				id: req.params.shiftId
 			},
 			data: {
-				employeeId,
-				date: shiftDate,
 				[field]: value
 			}
 		})
 
 		return res.status(200).json({
-			message: "Shift has been updated",
+			message: "Shift updated successfully!",
 			newShift
 		})
 	} catch (error) {
@@ -147,7 +189,7 @@ export const deleteShift = async (req, res, next) => {
 		})
 
 		return res.status(200).json({
-			message: "Shift has been deleted"
+			message: "Shift deleted successfully!"
 		})
 	} catch (error) {
 		next(error)
