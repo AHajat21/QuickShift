@@ -36,7 +36,7 @@ const AppLayout = () => {
 
 			<div className={styles.mainContent}>
 				<header>
-					<h2 className={styles.pageName}>{pageName}</h2>
+					<h2 className={styles.pageName} onClick={() => navigate("/dashboard")}>{pageName}</h2>
 					<button className={styles.logoutButton} onClick={handleLogout}>Logout</button>
 				</header>
 

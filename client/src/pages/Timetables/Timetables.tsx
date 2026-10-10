@@ -115,14 +115,14 @@ const Timetables = () => {
 			</form>
 
 
-			<div className={styles.timetableCards}>
+			<div className={styles.timetableGrid}>
 				{timetables.length === 0 ? 
 					<div className={styles.emptyState}>
 						<h2>No timetables yet</h2>
 						<p>Create your first timetable to get started.</p>
 					</div>
 				: 
-				timetables.map(t => (
+				timetables.map(t =>
 					<div key={t.id} className={styles.timetableCard}>
 						<div className={styles.timetableHeader}>
 							<h2>{t.name}</h2>
@@ -130,14 +130,13 @@ const Timetables = () => {
 						</div>
 
 						<p>
-							Week commencing: 
-							{new Date(t.weekCommencing).toLocaleDateString()}
+							Week commencing: {new Date(t.weekCommencing).toLocaleDateString()}
 						</p>
 
 						<Link to={`/timetables/${t.id}`} className={styles.viewTimetable}>Open timetable</Link>
 
 					</div>
-				))}
+				)}
 			</div>
 
 		</div>

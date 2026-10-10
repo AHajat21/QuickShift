@@ -3,6 +3,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 28px;
+	padding: 8px;
 }
 
 .welcome {
@@ -35,13 +36,13 @@
 }
 
 .summaryCards {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	display: flex;
 	gap: 14px;
 	margin: 0 8px;
 	
 
 	article {
+		flex: 1;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
@@ -154,11 +155,16 @@
 	}
 
 	.summaryCards {
+		flex-direction: column;
 		gap: 10px;
 		margin: 0 4px;
-	}
-	.summaryCards article {
-		padding: 14px;
+
+
+		article {
+			flex-direction: row;
+			min-height: 50px;
+			padding: 14px;
+		}
 	}
 
 	.timetableCard {

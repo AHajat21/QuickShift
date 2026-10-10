@@ -81,7 +81,7 @@ const ManageTimetable = () => {
 
 			setShifts(prev => [...prev, response.data.shift])
 		} catch (error) {
-			console.error("Failed to create shift")
+			console.error("Failed to create shift:", error)
 		}
 	}
 	const deleteShift = async (shiftId: string) => {
@@ -104,78 +104,76 @@ const ManageTimetable = () => {
 	if (employees.length === 0) return <p>You have no employees. Please add some first.</p>
 
 	return (
-		<div className={styles.viewTimetable}>
+		<div className={styles.manageTimetable}>
+			<div className={styles.timetableContainer}>
+				<div className={styles.timetable}>
+					<div className={styles.corner}/>
 
-			<div className={styles.timetable}>
-				<div className={styles.corner}></div>
-
-				{daysOfWeek.map(day => (
-					<div key={day} className={styles.dayHeader}>
-						{day}
-					</div>
-				))}
-
-				{employees.map(employee => (
-					<React.Fragment key={employee.id}>
-						<div className={styles.employeeCell}>
-							{employee.firstName}
+					{daysOfWeek.map(day =>
+						<div key={day} className={styles.dayHeader}>
+							{day}
 						</div>
+					)}
 
-						{daysOfWeek.map(day => {
-							const shift = shifts.find(shift => 
-								shift.employeeId === employee.id &&
-								shift.day === day.toUpperCase()
-							)
+					{employees.map(employee =>
+						<React.Fragment key={employee.id}>
+							<div className={styles.employeeCell}>
+								{employee.firstName}
+							</div>
 
-							if (!shift) return (
-								<button key={`${employee.id}-${day}`}
-									className={`${styles.shiftCell} ${styles.emptyCell}`}
-									onClick={() => createShift(employee.id, day)}
-								>
-									+
-								</button>
-							)
-							
-							if (shift) return (
-								<div key={`${employee.id}-${day}`} className={styles.shiftCell}>
-									<input
-										type="time"
-										value={shift.startTime}
-										onChange={e => 
-											setShifts(prev =>
-												prev.map(s =>
-													s.id === shift.id ? { ...s, startTime: e.target.value } : s
+							{daysOfWeek.map(day => {
+								const shift = shifts.find(shift => 
+									shift.employeeId === employee.id &&
+									shift.day === day.toUpperCase()
+								)
+
+								if (!shift) return (
+									<button key={`${employee.id}-${day}`}
+										className={styles.emptyCell}
+										onClick={() => createShift(employee.id, day)}
+									> + </button>
+								)
+								
+								if (shift) return (
+									<div key={`${employee.id}-${day}`} className={styles.shiftCell}>
+										<input
+											type="time"
+											value={shift.startTime}
+											onChange={e => 
+												setShifts(prev =>
+													prev.map(s =>
+														s.id === shift.id ? { ...s, startTime: e.target.value } : s
+													)
 												)
-											)
-										}
-										onBlur={e => updateShift(shift.id, employee.id, day, "startTime", e.target.value)}
-										title='startTime'
-									/>
+											}
+											onBlur={e => updateShift(shift.id, employee.id, day, "startTime", e.target.value)}
+											title='startTime'
+										/>
 
-									<input
-										type="time"
-										value={shift.endTime}
-										onChange={e => 
-											setShifts(prev =>
-												prev.map(s =>
-													s.id === shift.id ? { ...s, endTime: e.target.value }
-													: s
+										<input
+											type="time"
+											value={shift.endTime}
+											onChange={e => 
+												setShifts(prev =>
+													prev.map(s =>
+														s.id === shift.id ? { ...s, endTime: e.target.value }
+														: s
+													)
 												)
-											)
-										}
-										onBlur={e => updateShift(shift.id, employee.id, day, "endTime", e.target.value)}
-										title='endTime'
-									/>
+											}
+											onBlur={e => updateShift(shift.id, employee.id, day, "endTime", e.target.value)}
+											title='endTime'
+										/>
 
-									<button className={styles.deleteShift} onClick={() => deleteShift(shift.id)}>X</button>
-								</div>
-							)
+										<button className={styles.deleteShift} onClick={() => deleteShift(shift.id)}>X</button>
+									</div>
+								)
 
-						})}
-					</React.Fragment>
-				))}
+							})}
+						</React.Fragment>
+					)}
+				</div>
 			</div>
-
 		</div>
 	)
 }

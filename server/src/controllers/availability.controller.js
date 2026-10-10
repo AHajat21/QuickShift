@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.js"
+import { validateAvailabilityService } from "../services/availability.service.js"
 import { isValidTime, timeToMinutes } from "../utils/timeFormat.js"
 
 
@@ -49,11 +50,11 @@ export const createAvailability = async (req, res, next) => {
 		})
 	}
 	
-
-	
 	try {
+		await validateAvailabilityService(
+			{employeeId: req.params.employeeId, day, startTime, endTime}
+		)
 
-		
 		const availability = await prisma.availabilities.create({
 			data: {
 				employeeId: req.params.employeeId,

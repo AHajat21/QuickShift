@@ -2,72 +2,194 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	width: 100%;
+	gap: 16px;
+	padding: 2px;
+}
+
+.selectDay {
+	align-self: flex-start;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	
+	border: 1px solid #e1e5ea;
+	border-radius: 10px;
+	background-color: #ffffff;
+	padding: 10px 14px;
+
+
+	label {
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: #374151;
+	}
+
+	select {
+		font-size: 0.9rem;
+		font-weight: 500;
+		color: #374151;
+
+		border: 1px solid #d1d5db;
+		border-radius: 7px;
+		background-color: #f8fafc;
+		padding: 7px 32px 7px 10px;
+
+		cursor: pointer;
+		outline: none;
+		transition: 
+			border-color 0.15s ease,
+			box-shadow 0.15s ease,
+			background-color 0.15s ease;
+	}
+	select:hover {
+		background-color: #ffffff;
+		border-color: #b8c0ca;
+	}
+	select:focus-visible {
+		background-color: #ffffff;
+		border-color: rgb(74, 137, 107);
+		box-shadow: 0 0 0 3px rgba(74, 137, 107, 0.12);
+	}
+}
+
+.chartContainer {
+	width: 100%;
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+	padding: 4px;
 }
 
 .availabilitiesChart {
 	display: grid;
-	grid-template-columns: 10% 90%;
+	grid-template-columns: 120px 1fr;
+	min-width: 900px;
 	width: 100%;
-	border: 1px solid black;
+
+	border: 1px solid #dddddd;
+	border-radius: 12px;
+	overflow: auto;
+	background-color: #ffffff;
 }
 
-.timeHeader,
-.employeeCell,
-.availabilityCell {
-	border: 1px solid #ddd;
+.corner {
+	background-color: #eef4fb;
+	border-right: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
 }
-
-.corner {background-color: grey;}
 
 .timesHeader {
 	display: flex;
 	align-items: flex-end;
 	justify-content: space-evenly;
-	text-align: center;
-	padding: 1px;
+	height: 36px;
+	padding: 0 4px;
+	
+	background-color: #f8fafc;
+	border-bottom: 1px solid #dddddd;
 
 
 	.smallTime {
-		font-size: 0.5rem;
-		font-weight: 500;
+		font-size: 0.65rem;
+		font-weight: 600;
+		color: #6b7280;
+		text-align: center;
 	}
 }
 
 .employeeCell {
+	display: flex;
+	align-items: center;
+	
+	position: sticky;
+	left: 0;
+
 	font-size: 0.75rem;
 	font-weight: 900;
-	padding: 1px 2px;
+	color: #374151;
+
+	border-right: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+	padding: 2px 10px;
+
+	z-index: 2;
 }
 
 .availabilityCell {
 	position: relative;
+	min-height: 42px;
+
+	background-color: #ffffff;
+	border-bottom: 1px solid #dddddd;
+
+	background-image: linear-gradient(
+		to right,
+		transparent calc(100% - 1px),
+		#f1f1f1bb calc(100% - 1px)
+	);
+	background-size: calc(100% / 24) 100%;
+}
+.availabilityCell:hover {
+	background-color: #fafafa;
 }
 
 .availabilityBar {
 	position: absolute;
-	height: 100%;
-	background-color: rgb(0, 180, 0);
+
+	top: 5px;
+	bottom: 5px;
+	background-color: rgb(74, 137, 107);
+	border-radius: 5px;
+
+	transition: 
+		filter 0.15s ease,
+		transform 0.15s ease;
 }
+.availabilityBar:hover {
+	filter: brightness(0.92);
+}
+
 .deleteAvailability {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
 	position: absolute;
 	left: 0;
+	top: 0;
+
 	width: 0;
+	height: 100%;
+	overflow: hidden;
+
+	border: none;
+	border-radius: 5px 0 0 5px;
+	background-color: transparent;
+	color: #ffffff;
+
+	font-size: 0.7rem;
+	font-weight: 600;
 
 	cursor: pointer;
-	transition: background-color 0.2s, width 0.2s;
-
-	z-index: 100;
+	transition: 
+		width 0.2s ease,
+		background-color 0.2s;
 }
 .availabilityBar:hover .deleteAvailability {
-	width: 30px;
-	background-color: rgba(175, 17, 17, 0.65);
+	width: min(30px, 100%);
+	overflow: hidden;
+	background-color: rgba(175, 17, 17, 0.8);
 }
 .deleteAvailability:hover {
-	background-color: rgb(180, 37, 37, 0.75);
+	background-color: rgb(180, 37, 37);
 }
 
 .startTimeIndicator {
 	position: absolute;
+	top: 0;
+	bottom: 0;
 	width: 1px;
-	height: 100%;
+	background-color: rgb(74, 137, 107);
+
+	pointer-events: none;
 }

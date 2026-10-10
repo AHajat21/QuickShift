@@ -1,106 +1,111 @@
 .timetablePage {
 	min-height: 100%;
 	padding: 32px;
+	color: #222222;
 }
 
 .header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	gap: 20px;
 	margin-bottom: 32px;
-}
-.header h1 {
-	margin: 0;
-	font-size: 2rem;
-	font-weight: 700;
-}
-.header p {
-	color: #6b7280;
+
+
+	h1 {
+		margin: 0;
+		color: #376952;
+		font-size: 2rem;
+		font-weight: 700;
+		letter-spacing: -0.5px;
+	}
+
+	p {
+		margin: 8px 0 0;
+		color: #6b7280;
+		font-size: 0.95rem;
+		line-height: 1.5;
+	}
 }
 
 .createButton {
 	border: none;
-	border-radius: 10px;
+	border-radius: 9px;
 	padding: 11px 18px;
-	background: rgb(74, 137, 107);
-	color: white;
+	background-color: #4a896b;
+
+	color: #ffffff;
 	font-size: 0.95rem;
 	font-weight: 600;
+	
 	cursor: pointer;
-	transition: transform 0.15s ease, box-shadow 0.15s ease;
+	transition:
+		background-color 0.2s ease,
+		transform 0.15s ease, 
+		box-shadow 0.15s ease;
 }
-
 .createButton:hover {
+	background-color: #3d775b;
 	transform: translateY(-1px);
-	box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
+	box-shadow: 0 5px 14px rgba(55, 105, 82, 0.18);
+}
+.createButton:active {
+	transform: translateY(0);
+}
+.createButton:focus-visible {
+	outline: 3px solid rgba(74, 137, 107, 0.35);
+	outline-offset: 3px;
 }
 
 .createForm {
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	gap: 16px;
 	max-width: 500px;
-	margin-bottom: 24px;
-	padding: 16px;
-	border: 1px solid #e5e7eb;
-	border-radius: 12px;
-	background: white;
+	margin-bottom: 28px;
+	padding: 24px;
+	border: 1px solid #e3e8e5;
+	border-radius: 14px;
+	background: #ffffff;
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 .formGroup {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 7px;
+
+
+	label {
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: #374151;
+	}
+
+	input {
+		padding: 10px 12px;
+		border: 1px solid #d5dcd8;
+		border-radius: 8px;
+		color: #222222;
+		font-size: 0.95rem;
+		outline: none;
+
+		transition:
+			border-color 0.15s ease,
+			box-shadow 0.15s ease;
+	}
+	input:focus-visible {
+		border-color: rgb(74, 137, 107);
+		box-shadow: 0 0 0 3px rgba(74, 137, 107, 0.12);
+	}
 }
 
-.formGroup label {
-	font-size: 0.9rem;
-	font-weight: 600;
-	color: #374151;
-}
-
-.formGroup input {
-	padding: 10px 12px;
-	border: 1px solid #d1d5db;
-	border-radius: 4px;
-	transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.formGroup input:focus {
-	border-color: rgb(74, 137, 107);
-	box-shadow: 0 0 0 3px rgba(74, 137, 107, 0.12);
-}
-
-/* .formActions {
-	display: flex;
-	gap: 10px;
-}
-
-.submitButton,
-.cancelButton {
-	padding: 10px 16px;
-	border-radius: 8px;
-	font-weight: 600;
-	cursor: pointer;
-}
-
-.submitButton {
-	border: none;
-	background: rgb(74, 137, 107);
-	color: white;
-}
-
-.cancelButton {
-	border: 1px solid #d1d5db;
-	background: white;
-	color: #374151;
-} */
 
 .timetableGrid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
 	gap: 20px;
+	align-items: stretch;
 }
 
 .timetableCard {
@@ -108,74 +113,174 @@
 	flex-direction: column;
 	max-width: 450px;
 	gap: 12px;
-	padding: 16px;
-	border: 1px solid #e5e7eb;
-	border-radius: 12px;
-	background: white;
+	padding: 20px;
+	border: 1px solid #e3e8e5;
+	border-radius: 14px;
+	background: #ffffff;
 	box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
-	transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease,
+		border-color 0.2s ease;
 }
 .timetableCard:hover {
 	transform: translateY(-2px);
+	border-color: #cbdcd3;
 	box-shadow: 0 8px 22px rgba(0, 0, 0, 0.09);
 }
 
 .timetableHeader {
 	display: flex;
 	justify-content: space-between;
+	align-items: flex-start;
+	gap: 12px;
 }
 .timetableHeader h2 {
+	overflow-wrap: anywhere;
 	font-size: 1.15rem;
 	color: #1f2937;
+	line-height: 1.4;
 }
 
 .timetableCard p {
 	color: #6b7280;
 	font-size: 0.9rem;
+	line-height: 1.5;
 }
 
 .viewTimetable,
 .deleteTimetable {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	border: none;
 	border-radius: 8px;
+
+	font-weight: 600;
+
+	cursor: pointer;
+	transition:
+		background-color 0.2s ease,
+		color 0.3s ease,
+		transform 0.15s ease;
+}
+.viewTimetable:active, .deleteTimetable:active {
+	transform: scale(0.97);
+}
+.viewTimetable:focus-visible, .deleteTimetable:focus-visible {
+	outline: 3px solid rgba(74 137 107 0.3);
+	outline-offset: 2px;
 }
 
 .viewTimetable {
-	padding: 8px 12px;
 	align-self: flex-end;
-	background-color: #e0e0e0;
-	color: rgb(55, 115, 88);
-	font-size: 0.8rem;
-	font-weight: 600;
+	margin-top: auto;
+	padding: 9px 13px;
 
-
-	transition: background-color 0.15s ease-out;
+	background-color: #eaf2ed;
+	color: #376952;
+	font-size: 0.85rem;
 }
 .viewTimetable:hover {
-	background-color: #e1eee7;
+	background-color: #dcebe2;
 }
 
 .deleteTimetable {
-	padding: 6px 10px;
-	background-color: rgb(165, 30, 30);
-	color: #f0f7f3;
-	font-weight: 700;
-	font-size: 0.7rem;
-
-
-	cursor: pointer;
-	transition: background-color 0.2s ease-out;
+	padding: 7px 10px;
+	background-color: #fff0f0;
+	color: #a51e1e;
+	font-size: 0.75rem;
 }
 .deleteTimetable:hover {
-	background-color: rgb(130, 30, 30);
+	background-color: #fbe0e0;
+	color: #821e1e;
 }
 
+
 .emptyState {
-	padding: 60px 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	border: 1px dashed #cbdcd3;
+	border-radius: 14px;
+	background-color: #ffffff;
+	padding: 32px 20px;
+	
 	text-align: center;
 	color: #6b7280;
+
+
+	h2 {
+		margin: 0 0 8px;
+		color: #376952;
+		font-size: 1.2rem;
+	}
+
+	p {
+		max-width: 400px;
+		font-size: 0.9rem;
+		line-height: 1.6;
+	}
 }
-.emptyState h2 {
-	margin: 0 0 8px;
-	color: #374151;
+
+
+@media (max-width: 768px) {
+	.timetablePage {padding: 24px;}
+	.header {margin-bottom: 24px;}
+	.header h1 {font-size: 1.75rem;}
+	.timetableGrid {gap: 16px;}
+	.timetableCard {padding: 16px;}
+	.createForm {padding: 20px;}
+}
+
+@media (max-width: 600px) {
+	.timetablePage {padding: 20px 12px;}
+	.header {
+		align-items: flex-start;
+		flex-direction: column;
+		gap: 16px;
+		margin-bottom: 24px;
+
+		h1 {font-size: 1.6rem;}
+		p {font-size: 0.9rem;}
+	}
+
+	.createButton {
+		width: 100%;
+		padding: 12px 16px;
+	}
+
+	.createForm {
+		max-width: none;
+		padding: 16px;
+		margin-bottom: 24px;
+	}
+
+	.formActions {flex-direction: column;}
+
+	.submitButton,
+	.cancelButton {width: 100%;}
+
+	.timetableGrid {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 12px;
+	}
+
+	.timetableCard {padding: 16px;}
+
+	.emptyState {
+		min-height: 180px;
+		padding: 24px 16px;
+	}
+}
+
+@media (max-width: 400px) {
+	.timetablePage {padding: 16px 10px;}
+	.header h1 {font-size: 1.45rem;}
+	.timetableHeader {gap: 8px;}
+	.timetableHeader h2 {font-size: 1.05rem;}
+	.deleteTimetable {padding: 6px 8px;}
 }

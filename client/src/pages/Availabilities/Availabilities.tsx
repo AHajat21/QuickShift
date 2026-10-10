@@ -15,7 +15,6 @@ type Availability = {
 type NewAvailability = {
 	employeeId: string
 	startTime?: string
-	endTime?: string
 }
 type Employee = {
 	id: string
@@ -28,12 +27,14 @@ const Availabilities = () => {
 	const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 	const times = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
 	const [availabilities, setAvailabilities] = useState<Availability[]>([])
-	const [newAvailability, setNewAvailability] = useState<NewAvailability>()
+	const [newAvailability, setNewAvailability] = useState<NewAvailability | null>()
 	const [selectedDay, setSelectedDay] = useState("Monday")
 	const [employees, setEmployees] = useState<Employee[]>([])
+	const [startTimeIndicPos, setStartTimeIndicPos] = useState("")
+	const [showStartTimeIndic, setShowStartTimeIndic] = useState(false)
 
 	useEffect(() => {
-		const getAvilabilityData = async () => {
+		const getAvailabilityData = async () => {
 			try {
 				const [availabilitiesResponse, employeesResponse] = 
 					await Promise.all([
@@ -50,8 +51,9 @@ const Availabilities = () => {
 			}
 		}
 
-		getAvilabilityData()
+		getAvailabilityData()
 	}, [])
+
 
 	const createAvailability = async (employeeId: string, startTime: string, endTime: string, day: string) => {
 		try {
@@ -67,8 +69,7 @@ const Availabilities = () => {
 	}
 	const deleteAvailability = async (employeeId: string, availabilityId: string) => {
 		try {
-			const res = await api.delete(`/employees/${employeeId}/availabilities/${availabilityId}`)
-			console.log(res)
+			await api.delete(`/employees/${employeeId}/availabilities/${availabilityId}`)
 			setAvailabilities(prev =>
 				prev.filter(a => 
 					a.id !== availabilityId
@@ -95,19 +96,20 @@ const Availabilities = () => {
 				employeeId,
 				startTime: time
 			})
+			setShowStartTimeIndic(true)
+			setStartTimeIndicPos(String(percentage*100))
 			return
 		}
 
 		if (newAvailability.employeeId !== employeeId) {
 			setNewAvailability(undefined)
+			setShowStartTimeIndic(false)
 			return
 		}
 
 		if (!newAvailability.startTime) return
 
-		if (mins <= timeToMinutes(newAvailability.startTime)) {
-			return
-		}
+		if (mins <= timeToMinutes(newAvailability.startTime)) return
 
 		createAvailability(
 			employeeId,
@@ -117,6 +119,7 @@ const Availabilities = () => {
 		)
 
 		setNewAvailability(undefined)
+		setShowStartTimeIndic(false)
 	}
 
 
@@ -125,69 +128,74 @@ const Availabilities = () => {
 	return (
 		<div className={styles.availabilitiesPage}>
 
-			<label>Choose a day:
-				<select 
+			<div className={styles.selectDay}>
+				<label htmlFor='selectedDay'>Choose a day</label>
+				<select
+					id='selectedDay'
 					value={selectedDay}
 					onChange={e => {
 						setSelectedDay(e.target.value)
 						setNewAvailability(undefined)
+						setShowStartTimeIndic(false)
 					}}
 				>
 					{daysOfWeek.map(day =>
 						<option key={day} value={day}>{day}</option>
 					)}
 				</select>
-			</label>
-			
-			<div className={styles.availabilitiesChart}>
-				<div className={styles.corner}/>
-
-				<div className={styles.timesHeader}>
-					{times.map(t => (
-						<div key={t} className={styles.smallTime}>{t}</div>
-					))}
-				</div>
-
-				{employees.map(employee => (
-					<React.Fragment key={employee.id}>
-						<div className={styles.employeeCell}>
-							{employee.firstName}
-						</div>
-
-						<div className={styles.availabilityCell}
-							onClick={e => handleAvailabilityClick(e, employee.id)}
-						>
-							{/* ONLY this employees availabilities */}
-							{availabilities.filter(a => 
-								a.employeeId === employee.id && 
-								a.day === selectedDay.toUpperCase()
-							).map(a => (
-								<div key={a.id} className={styles.availabilityBar}
-									style={{
-										left: `${(timeToMinutes(a.startTime)/1440) * 100}%`,
-										width: `${((timeToMinutes(a.endTime) - timeToMinutes(a.startTime)) / 1440) * 100}%`
-									}}
-								>
-									<button className={styles.deleteAvailability} 
-										onClick={e => {
-											e.stopPropagation()
-											deleteAvailability(a.employeeId, a.id)}
-										}
-									>X</button>
-								</div>
-							))}
-
-							{newAvailability?.startTime && (
-								<div className={styles.startTimeIndicator} style={{left: `${(timeToMinutes(newAvailability.startTime)/1440) * 100}%`}}/>
-							)}
-						</div>
-
-					</React.Fragment>
-				))}
+				
 			</div>
+			
+			<div className={styles.chartContainer}>
+				<div className={styles.availabilitiesChart}>
+					<div className={styles.corner}/>
 
+					<div className={styles.timesHeader}>
+						{times.map(t => 
+							<div key={t} className={styles.smallTime}>{t}</div>
+						)}
+					</div>
 
+					{employees.map(employee => 
+						<React.Fragment key={employee.id}>
+							<div className={styles.employeeCell}>
+								{employee.firstName} {employee.lastName}
+							</div>
 
+							<div className={styles.availabilityCell}
+								onClick={e => handleAvailabilityClick(e, employee.id)}
+							>
+								{/* ONLY this employees availabilities */}
+								{availabilities.filter(a => 
+									a.employeeId === employee.id && 
+									a.day === selectedDay.toUpperCase()
+								).map(a =>
+									<div key={a.id} className={styles.availabilityBar}
+										style={{
+											left: `${(timeToMinutes(a.startTime)/1440) * 100}%`,
+											width: `${((timeToMinutes(a.endTime) - timeToMinutes(a.startTime)) / 1440) * 100}%`
+										}}
+									>
+										<button className={styles.deleteAvailability} 
+											onClick={e => {
+												e.stopPropagation()
+												deleteAvailability(a.employeeId, a.id)}
+											}
+										>X</button>
+									</div>
+								)}
+
+								{(showStartTimeIndic && newAvailability?.employeeId === employee.id) &&
+									<div className={styles.startTimeIndicator}
+										style={{left: `${startTimeIndicPos}%`}}
+									/>
+								}
+							</div>
+
+						</React.Fragment>
+					)}
+				</div>
+			</div>
 		</div>
 	)
 }

@@ -1,66 +1,204 @@
-.viewTimetable {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	
+.manageimetable {padding: 24px;}
+
+.timetableContainer {
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+	padding: 4px;
 }
 
 .timetable {
 	display: grid;
-	grid-template-columns: 1.5fr repeat(7, 1fr);
-	margin: 2px;
-   width: 100%;
+	grid-template-columns: 150px repeat(7, minmax(110px, 1fr));
+
+	border: 1px solid #e1e7ef;
+	border-bottom: 2px solid #e1e7ef;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.dayHeader,
-.employeeCell,
-.shiftCell {
-	border: 1px solid #ddd;
+.corner,
+.dayHeader {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	min-height: 52px;
+	padding: 10px 6px;
+	background-color: #f4f8fc;
+	border-bottom: 1px solid #e1e7ef;
+	border-right: 1px solid #e1e7ef;
+}
+
+.corner {
+	position: sticky;
+	left: 0;
+	z-index: 2;
+	background-color: #eef4fb;
 }
 
 .dayHeader {
-	text-align: center;
-	font-weight: bold;
-	font-size: 0.7rem;
+	font-weight: 700;
+	font-size: 0.8rem;
+	color: #374151;
 }
 
 .employeeCell {
-	padding: 1px 2px;
-	font-size: 0.7rem;
+	position: sticky;
+	left: 0;
+	z-index: 2;
+
+	display: flex;
+	align-items: center;
+	padding: 12px;
+
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: #374151;
+
+	background-color: #ffffff;
+	border-right: 1px solid #e1e7ef;
+	border-bottom: 1px solid #e1e7ef;
+}
+
+.emptyCell {
+	background-color: #fafcff;
+
+	font-size: 1.5rem;
+	font-weight: 400;
+	color: #9ca3af;
+	border: none;
+		border-right: 1px solid #e1e7ef;
+	border-bottom: 1px solid #e1e7ef;
+
+	transition: 
+		background-color 0.2s ease,
+		color 0.2s ease;
+}
+.emptyCell:hover {
+	color: #006cff;
+	background-color: #eef5ff;
+}
+.emptyCell:focus-visible {
+	position: relative;
+	outline: 2px solid #006cff;
+	outline-offset: -3px;
 }
 
 .shiftCell {
+	position: relative;
+
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: space-between;
-}
-input {
-	margin: 2px;
-	font-size: 0.65rem;
-}
-.deleteShift {
-	width: 100%;
-	padding: 3px;
-	font-size: 0.5rem;
-	font-weight: 700;
-	text-align: center;
+	
+	justify-content: center;
+	gap: 8px;
+	padding: 8px;
+	background-color: #ffffff;
 	border: none;
-	border-radius: 20% 20% 0 0;
-	color: #ddd;
-	background-color: rgb(165, 30, 30);
-	transform-origin: bottom;
-	transform: scaleY(0);
+	border-right: 1px solid #e1e7ef;
+	border-bottom: 1px solid #e1e7ef;
+}
 
+.shiftCell input {
+	width: 100%;
+	padding: 4px;
+	background-color: #f8fafc;
+	border: 1px solid #e1e7ef;
+	border-radius: 6px;
+
+	font-size: 0.8rem;
+	font-weight: 500;
+	color: #374151;
+
+	outline: none;
+	transition:
+		border-color 0.2s ease,
+		background-color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+.shiftCell input:hover {
+	border-color: #b8c9dd;
+	background-color: #ffffff;
+}
+.shiftCell:focus-visible {
+	background-color: #ffffff;
+	border-color: #006cff;
+	box-shadow: 0 0 0 3px rgba(0, 100, 255, 0.15);
+}
+
+.deleteShift {
+	padding: 2px;
+	font-size: 0.6rem;
+	font-weight: 600;
+	border: 1px solid #fbd5d1;;
+	border-radius: 6px;
+	color: #b42318;
+	background-color: #fff1f0;
+
+	opacity: 0;
 	
 	cursor: pointer;
 	transition:
-		transform 0.2s ease-out,
-		background-color 0.2s ease
+		opacity 0.2s ease-out,
+		background-color 0.2s ease,
+		color 0.2s ease;
 }
-.shiftCell:hover .deleteShift {
-	transform: scaleY(1);
+.shiftCell:hover .deleteShift,
+.shiftCell:focus-within .deleteShift {
+	opacity: 1;
 }
 .deleteShift:hover {
-	background-color: rgb(145, 20, 20);
+	background-color: #c9362b;
+	color: #ffffff;
+	border-color: #c9362b;
+}
+.deleteShift:focus-visible {
+	opacity: 1;
+	outline: 2px solid #c9362b;
+	outline-offset: 2px;
+}
+
+
+@media (max-width: 768px) {
+	.viewTimetable {padding: 16px;}
+
+	.timetable {
+		grid-template-columns: 90px repeat(7, minmax(90px, 1fr));
+	}
+
+	.corner, .dayHeader {min-height: 44px;}
+	.dayHeader {font-size: 0.7rem;}
+
+	.employeeCell {
+		padding: 4px;
+		font-size: 0.75rem;
+	}
+	
+	.shiftCell {gap: 4px;}
+	.shiftCell input {font-size: 0.65rem;}
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+	.viewTimetable {padding: 10px;}
+
+	.timetable {
+		grid-template-columns: 100px repeat(7, minmax(95px, 1fr));
+	}
+
+	.corner, .dayHeader {min-height: 40px;}
+	.dayHeader {font-size: 0.65rem;}
+
+	.employeeCell {
+		padding: 2px;
+		font-size: 0.7rem;
+	}
+
+	.shiftCell input {font-size: 0.6rem;}
+
+	.deleteShift {
+		opacity: 1;
+		font-size: 0.5rem;
+		padding: 2px;
+	}
 }

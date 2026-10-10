@@ -103,29 +103,36 @@ const Dashboard = () => {
 
 			<section className={styles.todayShifts}>
 				<h2>Today's shifts ({currentDate.toLocaleDateString()})</h2>
+				{!shiftsByTimetable ?
+					<div className={styles.emptyState}>
+						<p>No shifts today</p>
+					</div>
+				:
+					<div className={styles.timetableScroll}>
+						{Object.entries(shiftsByTimetable).map(([tId, t]) =>
+							<div className={styles.timetableCard} key={tId}>
+								<h3>{t.name}</h3>
 
-				<div className={styles.timetableScroll}>
-					{Object.entries(shiftsByTimetable).map(([timetableId, timetable]) => (
-						<div className={styles.timetableCard} key={timetableId}>
-							<h3>{timetable.name}</h3>
+								<div className={styles.shiftList}>
+									{t.shifts.map(s => 
+										<div className={styles.shift} key={s.id}>
+											<span>
+												{s.startTime} - {s.endTime}
+											</span>
 
-							<div className={styles.shiftList}>
-								{timetable.shifts.map(shift => (
-									<div className={styles.shift} key={shift.id}>
-										<span>
-											{shift.startTime} - {shift.endTime}
-										</span>
-
-										<span>
-											{shift.employee.firstName} {shift.employee.lastName}
-										</span>
-									</div>
-								))}
+											<span>
+												{s.employee.firstName} {s.employee.lastName}
+											</span>
+										</div>
+									)}
+								</div>
+								<Link to={`../timetables/${tId}`} className={styles.viewTimetable}>Go to timetable</Link>
 							</div>
-							<Link to={`../timetables/${timetableId}`} className={styles.viewTimetable}>Go to timetable</Link>
-						</div>
-					))}
-				</div>
+						)}
+					</div>
+				}
+
+				
 			</section>
 		</div>
 	)

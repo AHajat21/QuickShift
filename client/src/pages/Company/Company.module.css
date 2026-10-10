@@ -28,10 +28,7 @@
 
 .employeeSection h2 {
 	margin: 0 0 16px;
-
-	font-size: 1.15rem;
-	font-weight: 600;
-
+	font-size: 1.3rem;
 	color: #333;
 }
 
@@ -40,11 +37,8 @@
 	flex-direction: column;
 
 	margin-bottom: 24px;
-
 	border: 1px solid #e2e7e4;
 	border-radius: 10px;
-
-	overflow: hidden;
 }
 
 .employeeRow {
@@ -64,7 +58,6 @@
 }
 
 .employeeRow input {
-	min-width: 0;
 	width: 180px;
 
 	padding: 8px 9px;
@@ -73,7 +66,7 @@
 	background-color: transparent;
 
 	color: #333;
-	font-size: 0.9rem;
+	font-size: 0.85rem;
 	font-weight: 600;
 
 	outline: none;
@@ -83,9 +76,7 @@
 		background-color 0.2s ease,
 		box-shadow 0.2s ease;
 }
-.employeeRow input:hover {
-	background-color: #f2f5f3;
-}
+.employeeRow input:hover {background-color: #f2f5f3;}
 .employeeRow input:focus-visible {
 	background-color: #ffffff;
 	border-color: #b9d0c3;
@@ -131,6 +122,7 @@
 .employeeSection form {
 	display: flex;
 	align-items: center;
+	
 	gap: 10px;
 }
 
@@ -164,13 +156,13 @@
 		border-color 0.2s ease,
 		box-shadow 0.2s ease;
 }
-
-.formGroup input:focus {
+.formGroup input:focus-visible {
 	border-color: #4a896b;
 	box-shadow: 0 0 0 3px rgba(74, 137, 107, 0.12);
 }
 
-.formGroup button {
+.createEmployee {
+	margin-top: 12px;
 	padding: 10px 16px;
 
 	border: none;
@@ -179,21 +171,20 @@
 	background: #4a896b;
 	color: #ffffff;
 
-	font-size: 0.9rem;
+	font-size: 0.75rem;
 	font-weight: 600;
 
 	cursor: pointer;
-
 	transition:
 		background-color 0.2s ease,
 		transform 0.1s ease,
 		box-shadow 0.2s ease;
 }
-.formGroup button:hover {
+.createEmployee:hover {
 	background: #3d775b;
 	box-shadow: 0 3px 8px rgba(55, 105, 82, 0.15);
 }
-.formGroup button:active {
+.createEmployee:active {
 	transform: scale(0.97);
 }
 
@@ -229,10 +220,7 @@
 		padding: 8px;
 	}
 
-	.employeeRow input {
-		width: 0;
-		padding: 8px 6px;
-	}
+	.employeeRow input {padding: 8px 6px;}
 
 	.employeeSection form {
 		flex-direction: column;
@@ -240,26 +228,17 @@
 		gap: 10px;
 	}
 
-	.employeeSection form input {
-		width: 100%;
-	}
-
-	.employeeSection form button {
-		width: 100%;
-	}
+	.formGroup input {width: 100%;}
+	.createEmployee {width: 100%;}
 }
 
 @media (max-width: 400px) {
-	.employeeRow {
-	flex-wrap: wrap;
-	}
+	.employeeRow {flex-wrap: wrap;}
 
 	.employeeRow input {
 		width: calc(50% - 18px);
 		flex: 1 1 calc(50% - 18px);
 	}
 
-	.deleteEmployee {
-		margin-left: 0;
-	}
+	.deleteEmployee {margin-left: 0;}
 }

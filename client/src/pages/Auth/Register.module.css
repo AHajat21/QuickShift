@@ -72,7 +72,7 @@
 		box-shadow 0.2s ease;
 }
 
-.formGroup input:focus {
+.formGroup input:focus-visible {
 	border-color: rgb(74, 137, 107);
 	box-shadow: 0 0 0 3px rgba(74, 137, 107, 0.12);
 }

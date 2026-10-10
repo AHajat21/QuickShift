@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma"
+import { prisma } from "../lib/prisma.js"
 
 export const validateAvailabilityService = async ({
 	employeeId, day, startTime, endTime
@@ -15,8 +15,7 @@ export const validateAvailabilityService = async ({
 			]
 		}
 	})
-
 	if (availability) {
-		throw new Error("Availability already exists here")
+		throw new Error("Availability already exists here:", availability)
 	}
 }

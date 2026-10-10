@@ -120,14 +120,14 @@ const Company = () => {
 			<h1>{company.name}</h1>
 
 			<section className={styles.employeeSection}>
-				<h2>Employees:</h2>
+				<h2>Employees</h2>
 				<div className={styles.employeeList}>
 					{employees.length === 0 ? 
 						<div className={styles.emptyState}>
 							No employees yet. Add your first employee below.
 						</div>
 					: 
-						employees.map(employee => (
+						employees.map(employee => 
 							<div key={employee.id} className={styles.employeeRow}>
 								<input
 									type='text'
@@ -160,7 +160,7 @@ const Company = () => {
 									aria-label={`Delete ${employee.firstName} ${employee.lastName}`}
 								>X</button>
 							</div>
-						))}
+						)}
 				</div>
 
 				<form onSubmit={createEmployee}>
@@ -188,7 +188,7 @@ const Company = () => {
 						/>
 					</div>
 
-					<button type='submit'>Create employee</button>
+					<button type='submit' className={styles.createEmployee}>Create</button>
 				</form>
 			</section>
 		</div>

@@ -19,7 +19,6 @@ export const validateShiftService = async ({
 							some: {id: shiftId}}
 					})
 				}
-
 			}
 		}
 	})
