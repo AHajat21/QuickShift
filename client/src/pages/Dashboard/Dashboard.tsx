@@ -7,24 +7,6 @@ import styles from "./Dashboard.module.css"
 import { api } from '../../services/api'
 
 
-type Shift = {
-	id: string
-	employeeId: string
-	timetableId: string
-	date: string
-	day: string
-	startTime: string
-	endTime: string
-
-	employee: {
-		firstName: string
-		lastName: string
-	}
-	timetable: {
-		name: string
-	}
-}
-
 type ShiftsByTimetable = {
 	[timetableId: string]: {
 		name: string

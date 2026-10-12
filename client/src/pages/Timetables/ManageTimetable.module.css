@@ -1,4 +1,4 @@
-.manageimetable {padding: 24px;}
+.manageTimetable {padding: 24px;}
 
 .timetableContainer {
 	overflow-x: auto;
@@ -160,7 +160,7 @@
 
 
 @media (max-width: 768px) {
-	.viewTimetable {padding: 16px;}
+	.manageTimetable {padding: 16px;}
 
 	.timetable {
 		grid-template-columns: 90px repeat(7, minmax(90px, 1fr));
@@ -180,7 +180,7 @@
 
 /* Mobile */
 @media (max-width: 480px) {
-	.viewTimetable {padding: 10px;}
+	.manageTimetable {padding: 10px;}
 
 	.timetable {
 		grid-template-columns: 100px repeat(7, minmax(95px, 1fr));

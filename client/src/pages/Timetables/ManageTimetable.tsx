@@ -1,45 +1,47 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { api } from '../../services/api'
 import { useParams } from 'react-router'
 
 import styles from './ManageTimetable.module.css'
+import AvailabilityPanel from './components/AvailabilityPanel'
 
 
-type Employee = {
-	id: string
-	firstName: string
-}
-type Shift = {
-	id: string
-	employeeId: string
-	date: string
-	day: string
-	startTime: string
-	endTime: string
-}
+type SelectedCell = 
+ {name: "day-cell"; day: string} |
+ {name: "employee-cell"; employeeId: string} |
+ {name: "shift-cell"; employeeId: string; day: string}
 
 const ManageTimetable = () => {
 	const { timetableId } = useParams()
-
+	const [loading, setLoading] = useState(true)
 	const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 	const [weekCommencing, setWeekCommencing] = useState(new Date())
+
 	const [shifts, setShifts] = useState<Shift[]>([])
 	const [employees, setEmployees] = useState<Employee[]>([])
-	const [loading, setLoading] = useState(true)
+	const [availabilities, setAvailabilities] = useState<Availability[]>([])
+	
+	const [selectedCell, setSelectedCell] = useState<SelectedCell | null>(null)
+	const selectedCellStyle = {outline: '2px solid #ffffff', outlineOffset: '-2px'}
+	
+	const previousValue = useRef<string>("")
+	
 
 	useEffect(() => {
 		const getTimetableData = async () => {
 			try {
-				const [timetableResponse, shiftsResponse, employeesResponse] =
+				const [timetableResponse, shiftsResponse, employeesResponse, availabilitiesResponse] =
 					await Promise.all([
 						api.get(`/timetables/${timetableId}`),
 						api.get(`/timetables/${timetableId}/shifts`),
-						api.get("/employees")
+						api.get("/employees"),
+						api.get("/company/availabilities")
 					])
 
 				setWeekCommencing(new Date(timetableResponse.data.timetable.weekCommencing))
 				setShifts(shiftsResponse.data.shifts)
 				setEmployees(employeesResponse.data.employees)
+				setAvailabilities(availabilitiesResponse.data.availabilities)
 			} catch (error) {
 				console.error("Failed to fetch timetable data:", error)
 			} finally {
@@ -65,6 +67,11 @@ const ManageTimetable = () => {
 			})
 		} catch (error) {
 			console.error("Failed to update shift:", error)
+			setShifts(prev =>
+				prev.map(s =>
+					s.id === shiftId ? { ...s, [field]: previousValue.current } : s
+				)
+			)
 		}
 	}
 	const createShift = async (employeeId: string, day: string) => {
@@ -110,16 +117,16 @@ const ManageTimetable = () => {
 					<div className={styles.corner}/>
 
 					{daysOfWeek.map(day =>
-						<div key={day} className={styles.dayHeader}>
-							{day}
-						</div>
+						<div key={day} className={styles.dayHeader}
+							onClick={() => selectedCell ? setSelectedCell(null) : setSelectedCell({name: 'day-cell', day})}
+						> {day} </div>
 					)}
 
 					{employees.map(employee =>
 						<React.Fragment key={employee.id}>
-							<div className={styles.employeeCell}>
-								{employee.firstName}
-							</div>
+							<div className={styles.employeeCell}
+								onClick={() => selectedCell ? setSelectedCell(null) : setSelectedCell({name: 'employee-cell', employeeId: employee.id})}
+							> {employee.firstName} {employee.lastName} </div>
 
 							{daysOfWeek.map(day => {
 								const shift = shifts.find(shift => 
@@ -135,11 +142,14 @@ const ManageTimetable = () => {
 								)
 								
 								if (shift) return (
-									<div key={`${employee.id}-${day}`} className={styles.shiftCell}>
+									<div key={`${employee.id}-${day}`} className={styles.shiftCell}
+										onClick={() => selectedCell ? setSelectedCell(null) : setSelectedCell({name: 'shift-cell',employeeId: employee.id ,day})}
+									>
 										<input
 											type="time"
 											value={shift.startTime}
-											onChange={e => 
+											onFocus={() => previousValue.current = shift.startTime}
+											onChange={e =>
 												setShifts(prev =>
 													prev.map(s =>
 														s.id === shift.id ? { ...s, startTime: e.target.value } : s
@@ -153,7 +163,8 @@ const ManageTimetable = () => {
 										<input
 											type="time"
 											value={shift.endTime}
-											onChange={e => 
+											onFocus={() => previousValue.current = shift.endTime}
+											onChange={e =>
 												setShifts(prev =>
 													prev.map(s =>
 														s.id === shift.id ? { ...s, endTime: e.target.value }
@@ -174,6 +185,9 @@ const ManageTimetable = () => {
 					)}
 				</div>
 			</div>
+
+
+			<AvailabilityPanel />
 		</div>
 	)
 }

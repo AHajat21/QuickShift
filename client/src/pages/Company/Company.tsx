@@ -3,15 +3,6 @@ import { api } from '../../services/api'
 
 import styles from "./Company.module.css"
 
-type Company = {
-	id: string
-	name: string
-}
-type Employee = {
-	id: string
-	firstName: string
-	lastName: string
-}
 
 const Company = () => {
 	const [company, setCompany] = useState<Company>()

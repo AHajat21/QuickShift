@@ -5,30 +5,18 @@ import { api } from '../../services/api'
 import { timeToMinutes } from '../../utils/time'
 
 
-type Availability = {
-	id: string
-	employeeId: string
-	startTime: string
-	endTime: string
-	day: string
-}
 type NewAvailability = {
 	employeeId: string
 	startTime?: string
 }
-type Employee = {
-	id: string
-	firstName: string
-	lastName: string
-}
 
 const Availabilities = () => {
 	const [loading, setLoading] = useState(true)
-	const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+	const daysOfWeek = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
 	const times = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
 	const [availabilities, setAvailabilities] = useState<Availability[]>([])
 	const [newAvailability, setNewAvailability] = useState<NewAvailability | null>()
-	const [selectedDay, setSelectedDay] = useState("Monday")
+	const [selectedDay, setSelectedDay] = useState<DayOfWeek>("MONDAY")
 	const [employees, setEmployees] = useState<Employee[]>([])
 	const [startTimeIndicPos, setStartTimeIndicPos] = useState("")
 	const [showStartTimeIndic, setShowStartTimeIndic] = useState(false)
@@ -134,7 +122,7 @@ const Availabilities = () => {
 					id='selectedDay'
 					value={selectedDay}
 					onChange={e => {
-						setSelectedDay(e.target.value)
+						setSelectedDay(e.target.value as DayOfWeek)
 						setNewAvailability(undefined)
 						setShowStartTimeIndic(false)
 					}}

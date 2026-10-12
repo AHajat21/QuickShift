@@ -4,11 +4,6 @@ import { api } from '../../services/api'
 import styles from './Timetables.module.css'
 import { Link } from 'react-router'
 
-type Timetable = {
-	id: string
-	name: string
-	weekCommencing: Date
-}
 
 const Timetables = () => {
 	const [timetables, setTimetables] = useState<Timetable[]>([])
