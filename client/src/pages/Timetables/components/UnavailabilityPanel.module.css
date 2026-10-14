@@ -1,0 +1,112 @@
+.chartContainer {
+	width: 100%;
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+}
+
+.unavailabilitiesChart {
+	display: grid;
+	grid-template-columns: 120px 1fr;
+	min-width: 900px;
+
+	border: 1px solid #dddddd;
+	border-radius: 12px;
+	background-color: #ffffff;
+}
+:nth-last-child(2) {
+	border-bottom-left-radius: 12px;
+}
+:last-child {
+	border-bottom-right-radius: 12px;
+}
+
+
+.corner {
+	position: sticky;
+	left: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	font-size: 0.7rem;
+	font-weight: 600;
+	
+	padding: 2px 6px;
+	background-color: #eef4fb;
+	border-right: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+	border-top-left-radius: 12px;
+	overflow-y: hidden;
+
+	z-index: 2;
+}
+
+.timesHeader {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-evenly;
+	height: 36px;
+	padding: 0 4px;
+	border-top-right-radius: 12px;
+	
+	background-color: #f8fafc;
+	border-bottom: 1px solid #dddddd;
+
+
+	.smallTime {
+		font-size: 0.65rem;
+		font-weight: 600;
+		color: #6b7280;
+		text-align: center;
+	}
+}
+
+.rowHeader {
+	position: sticky;
+	left: 0;
+
+	display: flex;
+	align-items: center;
+
+	font-size: 0.75rem;
+	font-weight: 900;
+	color: #374151;
+
+	border-right: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+	background-color: #ffffff;
+	padding: 2px 10px;
+
+	z-index: 2;
+}
+
+.unavailabilityCell {
+	position: relative;
+	min-height: 42px;
+
+	background-color: #ffffff;
+	border-bottom: 1px solid #dddddd;
+
+	background-image: linear-gradient(
+		to right,
+		transparent calc(100% - 1px),
+		#f1f1f1bb calc(100% - 1px)
+	);
+	background-size: calc(100% / 24) 100%;
+}
+.unavailabilityCell:hover {
+	background-color: #fafafa;
+}
+
+.unavailabilityBar {
+	position: absolute;
+
+	top: 5px;
+	bottom: 5px;
+	background-color: rgb(137, 74, 74);
+	border-radius: 5px;
+
+	transition: 
+		filter 0.15s ease,
+		transform 0.15s ease;
+}

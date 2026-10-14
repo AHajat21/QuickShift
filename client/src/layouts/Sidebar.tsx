@@ -40,7 +40,7 @@ const Sidebar = () => {
 					onClick={() => setOpen(prev => prev === true && false)}
 				>
 					{({ isActive }) => 
-   					<span className={isActive ? styles.active : ""}>Availabilities</span>
+   					<span className={isActive ? styles.active : ""}>Unavailabilities</span>
 					}
 				</NavLink>
 

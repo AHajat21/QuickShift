@@ -1,9 +1,15 @@
-.manageTimetable {padding: 24px;}
+.manageTimetable {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 24px;
+	padding: 24px;
+}
 
 .timetableContainer {
 	overflow-x: auto;
 	overscroll-behavior-x: contain;
-	padding: 4px;
+	border-radius: 12px;
 }
 
 .timetable {
@@ -34,12 +40,14 @@
 	left: 0;
 	z-index: 2;
 	background-color: #eef4fb;
+	border-top-left-radius: 12px;
 }
 
 .dayHeader {
 	font-weight: 700;
 	font-size: 0.8rem;
 	color: #374151;
+	border-top-right-radius: 12px;
 }
 
 .employeeCell {
@@ -58,6 +66,7 @@
 	background-color: #ffffff;
 	border-right: 1px solid #e1e7ef;
 	border-bottom: 1px solid #e1e7ef;
+	border-bottom-left-radius: 12px;
 }
 
 .emptyCell {

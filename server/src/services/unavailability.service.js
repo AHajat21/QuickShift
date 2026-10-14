@@ -1,9 +1,9 @@
 import { prisma } from "../lib/prisma.js"
 
-export const validateAvailabilityService = async ({
+export const validateUnavailabilityService = async ({
 	employeeId, day, startTime, endTime
 }) => {
-	const availability = await prisma.availabilities.findFirst({
+	const unavailability = await prisma.unavailabilities.findFirst({
 		where: {
 			employeeId,
 			day,
@@ -15,7 +15,7 @@ export const validateAvailabilityService = async ({
 			]
 		}
 	})
-	if (availability) {
-		throw new Error("Availability already exists here:", availability)
+	if (unavailability) {
+		throw new Error("Unavailability already exists here:", unavailability)
 	}
 }

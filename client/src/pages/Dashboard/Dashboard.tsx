@@ -70,7 +70,7 @@ const Dashboard = () => {
 				</article>
 
 				<article className={styles.availableCard}>
-					<h2>Availabilities</h2>
+					<h2>Unavailabilities</h2>
 
 					<Link to="/availabilities">See all</Link>
 				</article>

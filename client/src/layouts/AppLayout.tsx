@@ -14,7 +14,7 @@ const AppLayout = () => {
 		"/dashboard": "Dashboard",
 		"/company": "Company",
 		"/timetables": "Timetables",
-		"/availabilities": "Employee availabilities",
+		"/availabilities": "Employee unavailabilities",
 		"/time-offs": "Time Offs",
 		"/settings": "Settings"
 	}

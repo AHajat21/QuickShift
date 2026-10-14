@@ -1,7 +1,7 @@
 import express from "express"
 import {  requireCompanyMembership, requireNoCompanyMembership } from "../middleware/auth.middleware.js"
 import { createCompany, getCompany, deleteCompany } from "../controllers/company.controller.js"
-import { getAllAvailabilities } from "../controllers/availability.controller.js"
+import { getAllUnavailabilities } from "../controllers/unavailability.controller.js"
 import { getAllTimeOffs } from "../controllers/timeOff.controller.js"
 
 const router = express.Router()
@@ -27,7 +27,7 @@ router.delete(
 router.get(
 	"/availabilities",
 	requireCompanyMembership,
-	getAllAvailabilities
+	getAllUnavailabilities
 )
 
 router.get(

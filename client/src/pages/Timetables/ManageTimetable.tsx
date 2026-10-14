@@ -3,13 +3,13 @@ import { api } from '../../services/api'
 import { useParams } from 'react-router'
 
 import styles from './ManageTimetable.module.css'
-import AvailabilityPanel from './components/AvailabilityPanel'
+import UnavailabilityPanel from './components/UnavailabilityPanel.tsx'
 
 
 type SelectedCell = 
  {name: "day-cell"; day: string} |
- {name: "employee-cell"; employeeId: string} |
- {name: "shift-cell"; employeeId: string; day: string}
+ {name: "employee-cell"; employeeId: string; eName: string} |
+ {name: "shift-cell"; employeeId: string; eName: string; day: string}
 
 const ManageTimetable = () => {
 	const { timetableId } = useParams()
@@ -19,7 +19,7 @@ const ManageTimetable = () => {
 
 	const [shifts, setShifts] = useState<Shift[]>([])
 	const [employees, setEmployees] = useState<Employee[]>([])
-	const [availabilities, setAvailabilities] = useState<Availability[]>([])
+	const [unavailabilities, setUnavailabilities] = useState<Unavailability[]>([])
 	
 	const [selectedCell, setSelectedCell] = useState<SelectedCell | null>(null)
 	const selectedCellStyle = {outline: '2px solid #ffffff', outlineOffset: '-2px'}
@@ -30,18 +30,18 @@ const ManageTimetable = () => {
 	useEffect(() => {
 		const getTimetableData = async () => {
 			try {
-				const [timetableResponse, shiftsResponse, employeesResponse, availabilitiesResponse] =
+				const [timetableResponse, shiftsResponse, employeesResponse, unavailabilitiesResponse] =
 					await Promise.all([
 						api.get(`/timetables/${timetableId}`),
 						api.get(`/timetables/${timetableId}/shifts`),
 						api.get("/employees"),
-						api.get("/company/availabilities")
+						api.get("/companies/availabilities")
 					])
 
 				setWeekCommencing(new Date(timetableResponse.data.timetable.weekCommencing))
 				setShifts(shiftsResponse.data.shifts)
 				setEmployees(employeesResponse.data.employees)
-				setAvailabilities(availabilitiesResponse.data.availabilities)
+				setUnavailabilities(unavailabilitiesResponse.data.unavailabilities)
 			} catch (error) {
 				console.error("Failed to fetch timetable data:", error)
 			} finally {
@@ -107,9 +107,6 @@ const ManageTimetable = () => {
 
 
 	if (loading) return <p>Fetching timetable data...</p>
-
-	if (employees.length === 0) return <p>You have no employees. Please add some first.</p>
-
 	return (
 		<div className={styles.manageTimetable}>
 			<div className={styles.timetableContainer}>
@@ -118,14 +115,14 @@ const ManageTimetable = () => {
 
 					{daysOfWeek.map(day =>
 						<div key={day} className={styles.dayHeader}
-							onClick={() => selectedCell ? setSelectedCell(null) : setSelectedCell({name: 'day-cell', day})}
+							onClick={() => setSelectedCell({name: 'day-cell', day})}
 						> {day} </div>
 					)}
 
 					{employees.map(employee =>
 						<React.Fragment key={employee.id}>
 							<div className={styles.employeeCell}
-								onClick={() => selectedCell ? setSelectedCell(null) : setSelectedCell({name: 'employee-cell', employeeId: employee.id})}
+								onClick={() => setSelectedCell({name: 'employee-cell', employeeId: employee.id, eName: employee.firstName})}
 							> {employee.firstName} {employee.lastName} </div>
 
 							{daysOfWeek.map(day => {
@@ -143,7 +140,7 @@ const ManageTimetable = () => {
 								
 								if (shift) return (
 									<div key={`${employee.id}-${day}`} className={styles.shiftCell}
-										onClick={() => selectedCell ? setSelectedCell(null) : setSelectedCell({name: 'shift-cell',employeeId: employee.id ,day})}
+										onClick={() => setSelectedCell({name: 'shift-cell', employeeId: employee.id, eName: employee.firstName, day})}
 									>
 										<input
 											type="time"
@@ -187,7 +184,7 @@ const ManageTimetable = () => {
 			</div>
 
 
-			<AvailabilityPanel />
+			<UnavailabilityPanel selectedCell={selectedCell} employees={employees} shifts={shifts} unavailabilities={unavailabilities}/>
 		</div>
 	)
 }

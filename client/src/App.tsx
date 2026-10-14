@@ -7,7 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute.tsx"
 import LandingPage from "./pages/LandingPage/LandingPage.tsx"
 import Timetables from "./pages/Timetables/Timetables.tsx"
 import Company from "./pages/Company/Company.tsx"
-import Availabilities from "./pages/Availabilities/Availabilities.tsx"
+import Unavailabilities from "./pages/Unavailabilities/Unavailabilities.tsx"
 import TimeOffs from "./pages/Time-offs/TimeOffs.tsx"
 import Settings from "./pages/Settings/Settings.tsx"
 import ManageTimetable from "./pages/Timetables/ManageTimetable.tsx"
@@ -28,7 +28,7 @@ const App = () => {
 						<Route path="timetables" element={<Timetables />} />	
 						<Route path="/timetables/:timetableId" element={<ManageTimetable />} />
 						<Route path="company" element={<Company />} />
-						<Route path="availabilities" element={<Availabilities />} />
+						<Route path="availabilities" element={<Unavailabilities />} />
 						<Route path="time-offs" element={<TimeOffs />} />
 						<Route path="settings" element={<Settings />} />
 					</Route>

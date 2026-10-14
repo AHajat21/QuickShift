@@ -77,7 +77,7 @@ model employees {
    company         companies         @relation(fields: [companyId], references: [id])
 
    shifts          shifts[]
-   availabilities  availabilities[]
+   unavailabilities  unavailabilities[]
    timeOff         time_offs[]
 }
 
@@ -112,7 +112,7 @@ model shifts {
 	@@index([employeeId])
 }
 
-model availabilities {
+model unavailabilities {
 	id          String     @id @default(uuid())
 	employeeId  String
 	day         DayOfWeek

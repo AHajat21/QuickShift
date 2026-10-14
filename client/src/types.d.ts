@@ -48,7 +48,7 @@ type Shift = {
 	employee: Employee
 	timetable: Timetable
 }
-type Availability = {
+type Unavailability = {
 	id: string
 	employeeId: string
 	day: DayOfWeek

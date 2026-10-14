@@ -1,11 +1,11 @@
 import { prisma } from "../lib/prisma.js"
-import { validateAvailabilityService } from "../services/availability.service.js"
+import { validateUnavailabilityService } from "../services/unavailability.service.js"
 import { isValidTime, timeToMinutes } from "../utils/timeFormat.js"
 
 
-export const getAllAvailabilities = async (req, res, next) => {
+export const getAllUnavailabilities = async (req, res, next) => {
 	try {
-		const availabilities = await prisma.availabilities.findMany({
+		const unavailabilities = await prisma.unavailabilities.findMany({
 			where: {
 				employee: {
 					companyId: req.user.companyId
@@ -14,7 +14,7 @@ export const getAllAvailabilities = async (req, res, next) => {
 		})
 
 		return res.status(200).json({
-			message: "All availabilities fetched successfully",
+			message: "All unavailabilities fetched successfully",
 			availabilities
 		})
 	} catch(error) {
@@ -25,24 +25,24 @@ export const getAllAvailabilities = async (req, res, next) => {
 
 
 
-export const getEmployeeAvailabilities = async (req, res, next) => {
+export const getEmployeeUnavailabilities = async (req, res, next) => {
 	try {
-		const employeeAvailabilities = await prisma.availabilities.findMany({
+		const employeeUnavailabilities = await prisma.unavailabilities.findMany({
 			where: {
 				employeeId: req.params.employeeId,
 			}
 		})
 
 		return res.status(200).json({
-			message: "Employee availabilities fetched",
-			employeeAvailabilities
+			message: "Employee unavailabilities fetched",
+			employeeUnavailabilities
 		})
 	} catch(error) {
 		next(error)
 	}
 }
 
-export const createAvailability = async (req, res, next) => {
+export const createUnavailability = async (req, res, next) => {
 	const { day, startTime, endTime } = req.body
 	if (!isValidTime(startTime) || !isValidTime(endTime) || timeToMinutes(startTime) >= timeToMinutes(endTime)) {
 		return res.status(400).json({
@@ -51,11 +51,11 @@ export const createAvailability = async (req, res, next) => {
 	}
 	
 	try {
-		await validateAvailabilityService(
+		await validateUnavailabilityService(
 			{employeeId: req.params.employeeId, day, startTime, endTime}
 		)
 
-		const availability = await prisma.availabilities.create({
+		const unavailability = await prisma.unavailabilities.create({
 			data: {
 				employeeId: req.params.employeeId,
 				day,
@@ -65,25 +65,25 @@ export const createAvailability = async (req, res, next) => {
 		})
 
 		return res.status(201).json({
-			message: "Availability created",
-			availability
+			message: "Unavailability created",
+			unavailability
 		})
 	} catch(error) {
 		next(error)
 	}
 }
 
-export const deleteAvailability = async (req, res, next) => {
+export const deleteUnavailability = async (req, res, next) => {
 	try {
-		await prisma.availabilities.delete({
+		await prisma.unavailabilities.delete({
 			where: {
-				id: req.params.availabilityId,
+				id: req.params.unavailabilityId,
 				employeeId: req.params.employeeId
 			}
 		})
 
 		return res.status(200).json({
-			message: "Availability deleted successfully"
+			message: "Unavailability deleted successfully"
 		})
 	} catch(error) {
 		next(error)

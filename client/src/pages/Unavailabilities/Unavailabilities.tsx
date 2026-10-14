@@ -1,73 +1,74 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import styles from "./Availabilities.module.css"
+import styles from "./Unavailabilities.module.css"
 import { api } from '../../services/api'
 import { timeToMinutes } from '../../utils/time'
 
 
-type NewAvailability = {
+type NewUnavailability = {
 	employeeId: string
 	startTime?: string
 }
 
-const Availabilities = () => {
+const Unavailabilities = () => {
 	const [loading, setLoading] = useState(true)
 	const daysOfWeek = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
 	const times = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
-	const [availabilities, setAvailabilities] = useState<Availability[]>([])
-	const [newAvailability, setNewAvailability] = useState<NewAvailability | null>()
+	
+	const [unavailabilities, setUnavailabilities] = useState<Unavailability[]>([])
+	const [newUnavailability, setNewUnavailability] = useState<NewUnavailability | null>()
 	const [selectedDay, setSelectedDay] = useState<DayOfWeek>("MONDAY")
 	const [employees, setEmployees] = useState<Employee[]>([])
 	const [startTimeIndicPos, setStartTimeIndicPos] = useState("")
 	const [showStartTimeIndic, setShowStartTimeIndic] = useState(false)
 
 	useEffect(() => {
-		const getAvailabilityData = async () => {
+		const getUnavailabilityData = async () => {
 			try {
-				const [availabilitiesResponse, employeesResponse] = 
+				const [unavailabilitiesResponse, employeesResponse] = 
 					await Promise.all([
 						api.get("/companies/availabilities"),
 						api.get("/employees")
 					])
 
-				setAvailabilities(availabilitiesResponse.data.availabilities)
+				setUnavailabilities(unavailabilitiesResponse.data.unavailabilities)
 				setEmployees(employeesResponse.data.employees)
 			} catch (error) {
-				console.error("Failed to fetch availability data:", error)
+				console.error("Failed to fetch unavailability data:", error)
 			} finally {
 				setLoading(false)
 			}
 		}
 
-		getAvailabilityData()
+		getUnavailabilityData()
 	}, [])
 
 
-	const createAvailability = async (employeeId: string, startTime: string, endTime: string, day: string) => {
+	const createUnavailability = async (employeeId: string, startTime: string, endTime: string, day: string) => {
 		try {
 			const response = await api.post(`/employees/${employeeId}/availabilities`, {
 				startTime,
 				endTime,
 				day,
 			})
-			setAvailabilities(prev => [...prev, response.data.availability])
+			setUnavailabilities(prev => [...prev, response.data.unavailability])
 		} catch (error) {
-			console.error("Failed to create availability:", error)
+			console.error("Failed to create unavailability:", error)
 		}
 	}
-	const deleteAvailability = async (employeeId: string, availabilityId: string) => {
+	const deleteUnavailability = async (employeeId: string, unavailabilityId: string) => {
 		try {
-			await api.delete(`/employees/${employeeId}/availabilities/${availabilityId}`)
-			setAvailabilities(prev =>
+			await api.delete(`/employees/${employeeId}/availabilities/${unavailabilityId}`)
+			setUnavailabilities(prev =>
 				prev.filter(a => 
-					a.id !== availabilityId
+					a.id !== unavailabilityId
 			))
 		} catch (error) {
-			console.error("Failed to delete availability:", error)
+			console.error("Failed to delete unavailability:", error)
 		}
 	}
 
-	const handleAvailabilityClick = (e: React.MouseEvent<HTMLDivElement>, employeeId: string) => {
+	const handleUnavailabilityClick = (e: React.MouseEvent<HTMLDivElement>, employeeId: string) => {
 		const rect = e.currentTarget.getBoundingClientRect()
 		const clickX = e.clientX - rect.left
     
@@ -79,8 +80,8 @@ const Availabilities = () => {
 		const time = String(hours).padStart(2, "0") + ":" + String(minsRemainder).padStart(2, "0")
 
 
-		if (!newAvailability) {
-			setNewAvailability({
+		if (!newUnavailability) {
+			setNewUnavailability({
 				employeeId,
 				startTime: time
 			})
@@ -89,24 +90,24 @@ const Availabilities = () => {
 			return
 		}
 
-		if (newAvailability.employeeId !== employeeId) {
-			setNewAvailability(undefined)
+		if (newUnavailability.employeeId !== employeeId) {
+			setNewUnavailability(undefined)
 			setShowStartTimeIndic(false)
 			return
 		}
 
-		if (!newAvailability.startTime) return
+		if (!newUnavailability.startTime) return
 
-		if (mins <= timeToMinutes(newAvailability.startTime)) return
+		if (mins <= timeToMinutes(newUnavailability.startTime)) return
 
-		createAvailability(
+		createUnavailability(
 			employeeId,
-			newAvailability.startTime,
+			newUnavailability.startTime,
 			time,
 			selectedDay.toUpperCase()
 		)
 
-		setNewAvailability(undefined)
+		setNewUnavailability(undefined)
 		setShowStartTimeIndic(false)
 	}
 
@@ -114,7 +115,7 @@ const Availabilities = () => {
 	if (loading) return <p>Loading...</p>
 
 	return (
-		<div className={styles.availabilitiesPage}>
+		<div className={styles.unavailabilitiesPage}>
 
 			<div className={styles.selectDay}>
 				<label htmlFor='selectedDay'>Choose a day</label>
@@ -123,7 +124,7 @@ const Availabilities = () => {
 					value={selectedDay}
 					onChange={e => {
 						setSelectedDay(e.target.value as DayOfWeek)
-						setNewAvailability(undefined)
+						setNewUnavailability(undefined)
 						setShowStartTimeIndic(false)
 					}}
 				>
@@ -135,7 +136,7 @@ const Availabilities = () => {
 			</div>
 			
 			<div className={styles.chartContainer}>
-				<div className={styles.availabilitiesChart}>
+				<div className={styles.unavailabilitiesChart}>
 					<div className={styles.corner}/>
 
 					<div className={styles.timesHeader}>
@@ -150,30 +151,30 @@ const Availabilities = () => {
 								{employee.firstName} {employee.lastName}
 							</div>
 
-							<div className={styles.availabilityCell}
-								onClick={e => handleAvailabilityClick(e, employee.id)}
+							<div className={styles.unavailabilityCell}
+								onClick={e => handleUnavailabilityClick(e, employee.id)}
 							>
-								{/* ONLY this employees availabilities */}
-								{availabilities.filter(a => 
+								{/* ONLY this employees unavailabilities */}
+								{unavailabilities.filter(a => 
 									a.employeeId === employee.id && 
 									a.day === selectedDay.toUpperCase()
 								).map(a =>
-									<div key={a.id} className={styles.availabilityBar}
+									<div key={a.id} className={styles.unavailabilityBar}
 										style={{
 											left: `${(timeToMinutes(a.startTime)/1440) * 100}%`,
 											width: `${((timeToMinutes(a.endTime) - timeToMinutes(a.startTime)) / 1440) * 100}%`
 										}}
 									>
-										<button className={styles.deleteAvailability} 
+										<button className={styles.deleteUnavailability} 
 											onClick={e => {
 												e.stopPropagation()
-												deleteAvailability(a.employeeId, a.id)}
+												deleteUnavailability(a.employeeId, a.id)}
 											}
 										>X</button>
 									</div>
 								)}
 
-								{(showStartTimeIndic && newAvailability?.employeeId === employee.id) &&
+								{(showStartTimeIndic && newUnavailability?.employeeId === employee.id) &&
 									<div className={styles.startTimeIndicator}
 										style={{left: `${startTimeIndicPos}%`}}
 									/>
@@ -188,4 +189,4 @@ const Availabilities = () => {
 	)
 }
 
-export default Availabilities
+export default Unavailabilities
