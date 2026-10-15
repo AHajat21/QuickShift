@@ -3,12 +3,15 @@ import { api } from '../../services/api'
 
 import styles from './Timetables.module.css'
 import { Link } from 'react-router'
+import { toast } from 'sonner'
+import ErrorPage from '../ErrorPage/ErrorPage'
 
 
 const Timetables = () => {
-	const [timetables, setTimetables] = useState<Timetable[]>([])
 	const [loading, setLoading] = useState(true)
+	const [isError, setIsError] = useState(false)
 
+	const [timetables, setTimetables] = useState<Timetable[]>([])
 	const [name, setName] = useState("")
 	const [weekDate, setWeekDate] = useState("")
 
@@ -19,6 +22,7 @@ const Timetables = () => {
 				setTimetables(response.data.timetables)
 			} catch(error) {
 				console.error("Failed to fetch timetables: ", error)
+				setIsError(true)
 			} finally {
 				setLoading(false)
 			}
@@ -40,32 +44,45 @@ const Timetables = () => {
 	const createTimetable = async (e: React.SubmitEvent) => {
 		e.preventDefault()
 		if (!name.trim() || !weekDate) return
-
 		const weekCommencing = getMonday(weekDate)
-		try {
-			const response = await api.post("/timetables", {
-				name: name.trim(),
-				weekCommencing
-			})
-			setTimetables(prev => [...prev, response.data.timetable])
 
-			setName("")
-			setWeekDate("")
-		} catch (error) {
-			console.error("Failed to create timetable")
-		}
+		const promise = api.post("/timetables", {
+			name: name.trim(),
+			weekCommencing
+		})
+		toast.promise(promise, {
+			loading: "Creating timetable...",
+			success: (response) => {
+				setTimetables(prev => [...prev, response.data.timetable])
+				setName("")
+				setWeekDate("")
+
+				return "Timetable created successfully!"
+			},
+			error:  (error) => {
+				console.error("Failed to create timetable:", error)
+				return "Failed to create timetable. Please try again."
+			} 
+		})
 	}
 	const deleteTimetable = async (timetableId: string) => {
-		try {
-			await api.delete(`/timetables/${timetableId}`)
-			setTimetables(prev => prev.filter(t => t.id !== timetableId))
-		} catch (error) {
-			console.error("Failed to create timetable")
-		}
+		const promise = api.delete(`/timetables/${timetableId}`)
+		toast.promise(promise, {
+			loading: "Deleting timetable...",
+			success: () => {
+				setTimetables(prev => prev.filter(t => t.id !== timetableId))
+				return "Timetable deleted successfully."
+			},
+			error: (error) => {
+				console.error("Failed to create timetable:", error)
+				return "Failed to create timetable. Please try again."
+			}
+		})
 	}
 
 
 	if (loading) return <p>Loading timetables</p>
+	if (isError) return <ErrorPage />
 
   	return (
 		<div className={styles.timetablePage}>

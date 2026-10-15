@@ -11,31 +11,34 @@ import Unavailabilities from "./pages/Unavailabilities/Unavailabilities.tsx"
 import TimeOffs from "./pages/Time-offs/TimeOffs.tsx"
 import Settings from "./pages/Settings/Settings.tsx"
 import ManageTimetable from "./pages/Timetables/ManageTimetable.tsx"
+import { Toaster } from "sonner"
 
 const App = () => {
 
 	return (
-		<BrowserRouter>
-			<Routes>
-				<Route index element={<LandingPage />} />
+		<>
+			<Toaster position="top-right" richColors />
+			<BrowserRouter>
+				<Routes>
+					<Route index element={<LandingPage />} />
 
-				<Route path="login" element={<Login />} />
-				<Route path="register" element={<Register />} />
+					<Route path="login" element={<Login />} />
+					<Route path="register" element={<Register />} />
 
-				<Route element={<ProtectedRoute />}>
-					<Route element={<AppLayout />}>
-						<Route path="dashboard" element={<Dashboard />} />
-						<Route path="timetables" element={<Timetables />} />	
-						<Route path="/timetables/:timetableId" element={<ManageTimetable />} />
-						<Route path="company" element={<Company />} />
-						<Route path="availabilities" element={<Unavailabilities />} />
-						<Route path="time-offs" element={<TimeOffs />} />
-						<Route path="settings" element={<Settings />} />
+					<Route element={<ProtectedRoute />}>
+						<Route element={<AppLayout />}>
+							<Route path="dashboard" element={<Dashboard />} />
+							<Route path="timetables" element={<Timetables />} />	
+							<Route path="timetables/:timetableId" element={<ManageTimetable />} />
+							<Route path="company" element={<Company />} />
+							<Route path="availabilities" element={<Unavailabilities />} />
+							<Route path="time-offs" element={<TimeOffs />} />
+							<Route path="settings" element={<Settings />} />
+						</Route>
 					</Route>
-				</Route>
-			</Routes>
-			
-		</BrowserRouter>
+				</Routes>
+			</BrowserRouter>
+		</>
 	)
 }
 

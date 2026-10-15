@@ -1,16 +1,21 @@
-import { type SubmitEvent, useEffect, useState } from 'react'
+import { type SubmitEvent, useEffect, useRef, useState } from 'react'
 import { api } from '../../services/api'
 
 import styles from "./Company.module.css"
+import { toast } from 'sonner'
+import ErrorPage from '../ErrorPage/ErrorPage'
 
 
 const Company = () => {
+	const [loading, setLoading] = useState(true)
+	const [isError, setIsError] = useState(false)
 	const [company, setCompany] = useState<Company>()
 	const [employees, setEmployees] = useState<Employee[]>([])
 	const [employeeFirstName, setEmployeeFirstName] = useState("")
 	const [employeeLastName, setEmployeeLastName] = useState("")
 	const [companyName, setCompanyName] = useState("")
-	const [loading, setLoading] = useState(true)
+	const previousValue = useRef<string>("")
+	
 
 	useEffect(() => {
 		const getCompanyData = async () => {
@@ -25,6 +30,7 @@ const Company = () => {
 				setEmployees(employeeResponse.data.employees)
 			} catch (error) {
 				console.error("Failed to fetch data:", error)
+				setIsError(true)
 			} finally {
 				setLoading(false)
 			}
@@ -36,57 +42,80 @@ const Company = () => {
 
 	const createCompany = async (e: SubmitEvent) => {
 		e.preventDefault()
-		try {
-			const response = await api.post("/companies", {
-				name: companyName
-			})
-			setCompany(response.data.company)
-			setCompanyName("")
-		} catch (error) {
-			console.error("Failed to create a company:", error)
-		}
+		const promise = api.post("/companies", {
+			name: companyName
+		})
+		toast.promise(promise, {
+			loading: "Creating company...",
+			success: (response) => {
+				setCompany(response.data.company)
+				setCompanyName("")
+				return "Company created successfully!"
+			},
+			error: (error) => {
+				console.error("Failed to create a company:", error)
+				return "Failed to create company. Please try again."
+			}
+		})
 	}
 	const createEmployee = async (e: SubmitEvent) => {
 		e.preventDefault()
-		try {
-			const response = await api.post("/employees", {
-				firstName: employeeFirstName,
-				lastName: employeeLastName
-			})
-			setEmployees(prev => [...prev, response.data.employee])
 
-		} catch (error) {
-			console.error("Failed to create employee:", error)
-		} finally {
-			setEmployeeFirstName("")
-			setEmployeeLastName("")
-		}
+		const promise = api.post("/employees", {
+			firstName: employeeFirstName,
+			lastName: employeeLastName
+		})
+		toast.promise(promise, {
+			loading: "Creating employee...",
+			success: (response) => {
+				setEmployees(prev => [...prev, response.data.employee])
+				return "Employee created successfully!"
+			},
+			error: (error) => {
+				console.error("Failed to create employee:", error)
+				return "Failed to create employee. Please try again."
+			}
+		})
+
+		setEmployeeFirstName("")
+		setEmployeeLastName("")
 	}
 	const deleteEmployee = async (employeeId: string) => {
-		try {
-			await api.delete(`/employees/${employeeId}`)
-			setEmployees(prev =>
-				prev.filter(e =>
-					e.id !== employeeId
-				)
-			)
-		} catch (error) {
-			console.error("Failed to remove employee:", error)
-		}
+		const promise = api.delete(`/employees/${employeeId}`)
+		toast.promise(promise, {
+			loading: "Deleting employee...",
+			success: () => {
+				setEmployees(prev => prev.filter(emp =>
+					emp.id !== employeeId
+				))
+				return "Employee deleted successfully."
+			},
+			error: (error) => {
+				console.error("Failed to remove employee:", error)
+				return "Failed to delete employee. Please try again"
+			}
+		})
 	}
 	const updateEmployee = async (employeeId: string, field: "firstName" | "lastName", value: string) => {
-		try {
-			await api.patch(`/employees/${employeeId}`, {
-				employeeId, field, value
-			})
-		} catch (error) {
-			console.error("Failed to update employee")
-		}
+		const promise = api.patch(`/employees/${employeeId}`, {
+			employeeId, field, value
+		})
+		toast.promise(promise, {
+			loading: "Updating employee data...",
+			success: "Employee updated successfully!",
+			error: (error) => {
+				setEmployees(prev => prev.map(emp => 
+					emp.id === employeeId ? {...emp, [field]: previousValue.current} : emp
+				))
+				console.error("Failed to update employee:", error)
+				return "Failed to update employee. Please try again"
+			}
+		})
 	}
 
 
 	if (loading) return <p>Loading...</p>
-	
+	if (isError) return <ErrorPage/>
 	if (!company) return (
 		<div className={styles.companyPage}>
 			<h1>Create your company</h1>
@@ -122,25 +151,23 @@ const Company = () => {
 							<div key={employee.id} className={styles.employeeRow}>
 								<input
 									type='text'
-									value={employee.firstName ?? ""}
+									value={employee.firstName}
+									onFocus={() => previousValue.current = employee.firstName}
 									onChange={e => 
-										setEmployees(prev =>
-											prev.map(emp =>
-												emp.id === employee.id ? { ...emp, firstName: e.target.value } : emp
-											)
-										)
+										setEmployees(prev => prev.map(emp =>
+											emp.id === employee.id ? { ...emp, firstName: e.target.value } : emp
+										))
 									}
 									onBlur={e => updateEmployee(employee.id, "firstName", e.target.value)}
 								/>
 								<input
 									type='text'
 									value={employee.lastName ?? ""}
+									onFocus={() => previousValue.current = employee.lastName}
 									onChange={e => 
-										setEmployees(prev =>
-											prev.map(emp =>
-												emp.id === employee.id ? { ...emp, lastName: e.target.value } : emp
-											)
-										)
+										setEmployees(prev => prev.map(emp =>
+											emp.id === employee.id ? { ...emp, lastName: e.target.value } : emp
+										))
 									}
 									onBlur={e => updateEmployee(employee.id, "lastName", e.target.value)}
 								/>

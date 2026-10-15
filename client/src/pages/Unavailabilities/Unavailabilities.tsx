@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import styles from "./Unavailabilities.module.css"
 import { api } from '../../services/api'
 import { timeToMinutes } from '../../utils/time'
+import { toast } from 'sonner'
+import ErrorPage from '../ErrorPage/ErrorPage'
 
 
 type NewUnavailability = {
@@ -12,6 +14,7 @@ type NewUnavailability = {
 
 const Unavailabilities = () => {
 	const [loading, setLoading] = useState(true)
+	const [isError, setIsError] = useState(false)
 	const daysOfWeek = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
 	const times = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
 	
@@ -35,6 +38,7 @@ const Unavailabilities = () => {
 				setEmployees(employeesResponse.data.employees)
 			} catch (error) {
 				console.error("Failed to fetch unavailability data:", error)
+				setIsError(true)
 			} finally {
 				setLoading(false)
 			}
@@ -45,27 +49,36 @@ const Unavailabilities = () => {
 
 
 	const createUnavailability = async (employeeId: string, startTime: string, endTime: string, day: string) => {
-		try {
-			const response = await api.post(`/employees/${employeeId}/availabilities`, {
-				startTime,
-				endTime,
-				day,
-			})
-			setUnavailabilities(prev => [...prev, response.data.unavailability])
-		} catch (error) {
-			console.error("Failed to create unavailability:", error)
-		}
+		const promise = api.post(`/employees/${employeeId}/availabilities`, {
+			startTime, endTime, day,
+		})
+		toast.promise(promise, {
+			loading: "Creating availability...",
+			success: (response) => {
+				setUnavailabilities(prev => [...prev, response.data.unavailability])
+				return "Availability created successfully!"
+			},
+			error: (error) => {
+				console.error("Failed to create unavailability:", error)
+				return "Failed to create availability. Please try again."
+			}
+		})
 	}
 	const deleteUnavailability = async (employeeId: string, unavailabilityId: string) => {
-		try {
-			await api.delete(`/employees/${employeeId}/availabilities/${unavailabilityId}`)
-			setUnavailabilities(prev =>
-				prev.filter(a => 
+		const promise = api.delete(`/employees/${employeeId}/availabilities/${unavailabilityId}`)
+		toast.promise(promise, {
+			loading: "Deleting availability...",
+			success: () => {
+				setUnavailabilities(prev => prev.filter(a => 
 					a.id !== unavailabilityId
-			))
-		} catch (error) {
-			console.error("Failed to delete unavailability:", error)
-		}
+				))
+				return "Availability deleted successfully."
+			},
+			error: (error) => {
+				console.error("Failed to delete unavailability:", error)
+				return "Failed to delete availability. Please try again."
+			}
+		})
 	}
 
 	const handleUnavailabilityClick = (e: React.MouseEvent<HTMLDivElement>, employeeId: string) => {
@@ -113,6 +126,7 @@ const Unavailabilities = () => {
 
 
 	if (loading) return <p>Loading...</p>
+	if (isError) return <ErrorPage />
 
 	return (
 		<div className={styles.unavailabilitiesPage}>

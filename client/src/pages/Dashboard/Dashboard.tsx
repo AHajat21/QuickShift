@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/AuthContext.tsx'
+import { api } from '../../services/api.js'
 
 import styles from "./Dashboard.module.css"
-import { api } from '../../services/api'
+import ErrorPage from '../ErrorPage/ErrorPage.tsx'
 
 
 type ShiftsByTimetable = {
@@ -16,8 +17,9 @@ type ShiftsByTimetable = {
 
 const Dashboard = () => {
 	const { user } = useAuth()
-	const currentDate = new Date()
 	const [loading, setLoading] = useState(true)
+	const [isError, setIsError] = useState(false)
+	const currentDate = new Date()
 	const [shiftsByTimetable, setShiftsByTimetable] = useState<ShiftsByTimetable>({})
 	
 	useEffect(() => {
@@ -41,6 +43,7 @@ const Dashboard = () => {
 				}, {}))
 			} catch (error) {
 				console.error("Failed to fetch dashboard data:", error)
+				setIsError(true)
 			} finally {
 				setLoading(false)
 			}
@@ -53,6 +56,7 @@ const Dashboard = () => {
 
 
 	if (loading) return <p>Loading...</p>
+	if (isError) return <ErrorPage/>
 
 	return (
 		<div className={styles.dashboard}>

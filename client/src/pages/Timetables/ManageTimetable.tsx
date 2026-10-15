@@ -4,6 +4,8 @@ import { useParams } from 'react-router'
 
 import styles from './ManageTimetable.module.css'
 import UnavailabilityPanel from './components/UnavailabilityPanel.tsx'
+import { toast } from 'sonner'
+import ErrorPage from '../ErrorPage/ErrorPage.tsx'
 
 
 type SelectedCell = 
@@ -14,6 +16,7 @@ type SelectedCell =
 const ManageTimetable = () => {
 	const { timetableId } = useParams()
 	const [loading, setLoading] = useState(true)
+	const [isError, setIsError] = useState(false)
 	const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 	const [weekCommencing, setWeekCommencing] = useState(new Date())
 
@@ -44,6 +47,7 @@ const ManageTimetable = () => {
 				setUnavailabilities(unavailabilitiesResponse.data.unavailabilities)
 			} catch (error) {
 				console.error("Failed to fetch timetable data:", error)
+				setIsError(true)
 			} finally {
 				setLoading(false)
 			}
@@ -55,58 +59,65 @@ const ManageTimetable = () => {
 
 	const updateShift = async (shiftId: string, employeeId: string, day: string, field: "startTime" | "endTime", value: string) => {
 		const date = new Date(weekCommencing)
-		date.setDate(
-			date.getDate() + daysOfWeek.indexOf(day)
-		)
-		try {
-			await api.patch(`/timetables/${timetableId}/shifts/${shiftId}`, {
-				date,
-				employeeId,
-				field,
-				value
-			})
-		} catch (error) {
-			console.error("Failed to update shift:", error)
-			setShifts(prev =>
-				prev.map(s =>
-					s.id === shiftId ? { ...s, [field]: previousValue.current } : s
+		date.setDate(date.getDate() + daysOfWeek.indexOf(day))
+
+		const promise = api.patch(`/timetables/${timetableId}/shifts/${shiftId}`, {
+			date, employeeId, field, value
+		})
+		toast.promise(promise, {
+			loading: "Updating shift...",
+			success: "Shift updated successfully!",
+			error: (error) => {
+				setShifts(prev =>
+					prev.map(s =>
+						s.id === shiftId ? { ...s, [field]: previousValue.current } : s
+					)
 				)
-			)
-		}
+				console.error("Failed to update shift:", error)
+				return "Failed to update shift. Please try again."
+			}
+		})
 	}
 	const createShift = async (employeeId: string, day: string) => {
 		const date = new Date(weekCommencing)
-		date.setDate(
-			date.getDate() + daysOfWeek.indexOf(day)
-		)
-		try {
-			const response = await api.post(`/timetables/${timetableId}/shifts`, {
-				employeeId,
-				day: day.toUpperCase(),
-				date
-			})
+		date.setDate(date.getDate() + daysOfWeek.indexOf(day))
 
-			setShifts(prev => [...prev, response.data.shift])
-		} catch (error) {
-			console.error("Failed to create shift:", error)
-		}
+		const promise = api.post(`/timetables/${timetableId}/shifts`, {
+			employeeId, day, date
+		})
+		toast.promise(promise, {
+			loading: "Creating shift...",
+			success: (response) => {
+				setShifts(prev => [...prev, response.data.shift])
+				return "Shift created successfully!"
+			},
+			error: (error) => {
+				console.error("Failed to create shift:", error)
+				return "Failed to create shift. Please try again"
+			}
+		})
 	}
 	const deleteShift = async (shiftId: string) => {
-		try {
-			await api.delete(`/timetables/${timetableId}/shifts/${shiftId}`)
-			setShifts(prev =>
-				prev.filter(s =>
+		const promise = api.delete(`/timetables/${timetableId}/shifts/${shiftId}`)
+		toast.promise(promise, {
+			loading: "Deleting shift...",
+			success: () => {
+				setShifts(prev =>prev.filter(s =>
 					s.id !== shiftId
-				)
-			)
-		} catch (error) {
-			console.error("Failed to remove shift:", error)
-		}
+				))
+				return "Shift deleted successfully."
+			},
+			error: (error) => {
+				console.error("Failed to remove shift:", error)
+				return "Failed to delete shift. Please try again"
+			}
+		})
 	}
-
 
 
 	if (loading) return <p>Fetching timetable data...</p>
+	if (isError) return <ErrorPage />
+
 	return (
 		<div className={styles.manageTimetable}>
 			<div className={styles.timetableContainer}>
@@ -134,7 +145,7 @@ const ManageTimetable = () => {
 								if (!shift) return (
 									<button key={`${employee.id}-${day}`}
 										className={styles.emptyCell}
-										onClick={() => createShift(employee.id, day)}
+										onClick={() => createShift(employee.id, day.toUpperCase())}
 									> + </button>
 								)
 								
@@ -147,11 +158,9 @@ const ManageTimetable = () => {
 											value={shift.startTime}
 											onFocus={() => previousValue.current = shift.startTime}
 											onChange={e =>
-												setShifts(prev =>
-													prev.map(s =>
-														s.id === shift.id ? { ...s, startTime: e.target.value } : s
-													)
-												)
+												setShifts(prev => prev.map(s =>
+													s.id === shift.id ? { ...s, startTime: e.target.value } : s
+												))
 											}
 											onBlur={e => updateShift(shift.id, employee.id, day, "startTime", e.target.value)}
 											title='startTime'
@@ -162,12 +171,9 @@ const ManageTimetable = () => {
 											value={shift.endTime}
 											onFocus={() => previousValue.current = shift.endTime}
 											onChange={e =>
-												setShifts(prev =>
-													prev.map(s =>
-														s.id === shift.id ? { ...s, endTime: e.target.value }
-														: s
-													)
-												)
+												setShifts(prev => prev.map(s =>
+													s.id === shift.id ? { ...s, endTime: e.target.value } : s
+												))
 											}
 											onBlur={e => updateShift(shift.id, employee.id, day, "endTime", e.target.value)}
 											title='endTime'
