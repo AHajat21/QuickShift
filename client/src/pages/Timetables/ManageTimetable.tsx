@@ -6,6 +6,7 @@ import styles from './ManageTimetable.module.css'
 import UnavailabilityPanel from './components/UnavailabilityPanel.tsx'
 import { toast } from 'sonner'
 import ErrorPage from '../ErrorPage/ErrorPage.tsx'
+import LoadingPage from '../LoadingPage/LoadingPage.tsx'
 
 
 type SelectedCell = 
@@ -17,7 +18,7 @@ const ManageTimetable = () => {
 	const { timetableId } = useParams()
 	const [loading, setLoading] = useState(true)
 	const [isError, setIsError] = useState(false)
-	const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+	const daysOfWeek = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
 	const [weekCommencing, setWeekCommencing] = useState(new Date())
 
 	const [shifts, setShifts] = useState<Shift[]>([])
@@ -57,7 +58,7 @@ const ManageTimetable = () => {
 	}, [timetableId])
 
 
-	const updateShift = async (shiftId: string, employeeId: string, day: string, field: "startTime" | "endTime", value: string) => {
+	const updateShift = async (shiftId: number, employeeId: string, day: string, field: "startTime" | "endTime", value: string) => {
 		const date = new Date(weekCommencing)
 		date.setDate(date.getDate() + daysOfWeek.indexOf(day))
 
@@ -81,7 +82,7 @@ const ManageTimetable = () => {
 	const createShift = async (employeeId: string, day: string) => {
 		const date = new Date(weekCommencing)
 		date.setDate(date.getDate() + daysOfWeek.indexOf(day))
-
+		
 		const promise = api.post(`/timetables/${timetableId}/shifts`, {
 			employeeId, day, date
 		})
@@ -97,7 +98,7 @@ const ManageTimetable = () => {
 			}
 		})
 	}
-	const deleteShift = async (shiftId: string) => {
+	const deleteShift = async (shiftId: number) => {
 		const promise = api.delete(`/timetables/${timetableId}/shifts/${shiftId}`)
 		toast.promise(promise, {
 			loading: "Deleting shift...",
@@ -115,7 +116,7 @@ const ManageTimetable = () => {
 	}
 
 
-	if (loading) return <p>Fetching timetable data...</p>
+	if (loading) return <LoadingPage />
 	if (isError) return <ErrorPage />
 
 	return (
@@ -190,7 +191,9 @@ const ManageTimetable = () => {
 			</div>
 
 
+
 			<UnavailabilityPanel selectedCell={selectedCell} employees={employees} shifts={shifts} unavailabilities={unavailabilities}/>
+
 		</div>
 	)
 }

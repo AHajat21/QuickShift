@@ -4,6 +4,7 @@ import { api } from '../../services/api'
 import styles from "./Company.module.css"
 import { toast } from 'sonner'
 import ErrorPage from '../ErrorPage/ErrorPage'
+import LoadingPage from '../LoadingPage/LoadingPage'
 
 
 const Company = () => {
@@ -114,8 +115,8 @@ const Company = () => {
 	}
 
 
-	if (loading) return <p>Loading...</p>
-	if (isError) return <ErrorPage/>
+	if (loading) return <LoadingPage />
+	if (isError) return <ErrorPage />
 	if (!company) return (
 		<div className={styles.companyPage}>
 			<h1>Create your company</h1>

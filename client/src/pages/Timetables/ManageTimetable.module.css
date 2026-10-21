@@ -7,6 +7,7 @@
 }
 
 .timetableContainer {
+	width: 100%;
 	overflow-x: auto;
 	overscroll-behavior-x: contain;
 	border-radius: 12px;
@@ -48,6 +49,7 @@
 	font-size: 0.8rem;
 	color: #374151;
 	border-top-right-radius: 12px;
+	letter-spacing: 0.5px;
 }
 
 .employeeCell {
@@ -176,7 +178,7 @@
 	}
 
 	.corner, .dayHeader {min-height: 44px;}
-	.dayHeader {font-size: 0.7rem;}
+	.dayHeader {font-size: 0.65rem;}
 
 	.employeeCell {
 		padding: 4px;
@@ -196,7 +198,7 @@
 	}
 
 	.corner, .dayHeader {min-height: 40px;}
-	.dayHeader {font-size: 0.65rem;}
+	.dayHeader {font-size: 0.6rem;}
 
 	.employeeCell {
 		padding: 2px;

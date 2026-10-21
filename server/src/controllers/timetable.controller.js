@@ -1,4 +1,6 @@
 import { prisma } from "../lib/prisma.js"
+import { getMonday } from "../utils/Date&Time.js"
+
 
 export const getAllTimetables = async (req, res, next) => {
 	try {
@@ -37,7 +39,7 @@ export const getTimetable = async (req, res, next) => {
 export const createTimetable = async (req, res, next) => {
 	let { name, weekCommencing } = req.body
 	if (!name) {
-		name = weekCommencing
+		name = getMonday(weekCommencing)
 	}
 
 	try {
@@ -45,7 +47,7 @@ export const createTimetable = async (req, res, next) => {
 			data: {
 				companyId: req.user.companyId,
 				name,
-				weekCommencing: new Date(weekCommencing)
+				weekCommencing: getMonday(new Date(weekCommencing))
 			}
 		})
 
@@ -54,6 +56,55 @@ export const createTimetable = async (req, res, next) => {
 			timetable
 		})
 	} catch(error) {
+		next(error)
+	}
+}
+
+export const duplicateTimetable = async (req, res, next) => {
+	const daysOfWeek = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
+	const thisMonday = getMonday(new Date())
+	const dayToDate = new Date(thisMonday)
+	try {
+		// ORIGINAL TIMETABLE
+		const originalTimetable = await prisma.timetables.findFirstOrThrow({
+			where: {
+				id: req.params.timetableId,
+				companyId: req.user.companyId
+			}
+		})
+		// ORIGINAL SHIFTS
+		const originalShifts = await prisma.shifts.findMany({
+			where: {
+				timetableId: originalTimetable.id,
+			}
+		})
+		originalShifts.forEach(s => {delete s.id; delete s.createdAt; delete s.timetableId})
+		const newShiftData = originalShifts.map(s => ({
+				...s,
+				date: new Date(dayToDate.setDate(
+					dayToDate.getDate() + daysOfWeek.indexOf(s.day)
+				)),
+				day: s.day,
+		}))
+
+		// CREATING NESTED
+		const timetable = await prisma.timetables.create({
+			data: {
+				companyId: req.user.companyId,
+				name: originalTimetable.name,
+				weekCommencing: thisMonday,
+
+				shifts: {
+					create: newShiftData
+				}
+			}
+		})
+
+		return res.status(201).json({
+			message: "Timetable duplicated successfully!",
+			timetable
+		})
+	} catch (error) {
 		next(error)
 	}
 }

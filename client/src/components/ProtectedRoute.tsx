@@ -1,11 +1,12 @@
 import { Navigate, Outlet } from "react-router"
 import { useAuth } from "../context/AuthContext"
+import LoadingPage from "../pages/LoadingPage/LoadingPage"
 
 const ProtectedRoute = () => {
 	const { user, loading } = useAuth()
 
 	if (loading) {
-		return <div>Loading...</div>
+		return <LoadingPage />
 	}
 
 	if (!user) {

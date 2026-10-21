@@ -7,10 +7,11 @@ import { timeToMinutes } from '../../../utils/time';
 type SelectedCell = 
  {name: "day-cell"; day: string} |
  {name: "employee-cell"; employeeId: string; eName: string} |
- {name: "shift-cell"; employeeId: string; eName: string; day: string}
+ {name: "shift-cell"; employeeId: string; eName: string; day: string} |
+ null
 
 type UnavailabilityPanelProps = {
-	selectedCell: SelectedCell | null
+	selectedCell: SelectedCell
 	employees: Employee[]
 	unavailabilities: Unavailability[]
 	shifts: Shift[]
@@ -46,7 +47,9 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 										a.employeeId === employee.id && 
 										a.day === selectedCell.day.toUpperCase()
 									).map(a =>
-										<div key={a.id} className={styles.unavailabilityBar}
+										<div key={a.id}
+											className={styles.unavailabilityBar}
+											title={`${a.startTime}-${a.endTime}`}
 											style={{
 												left: `${(timeToMinutes(a.startTime)/1440) * 100}%`,
 												width: `${((timeToMinutes(a.endTime) - timeToMinutes(a.startTime)) / 1440) * 100}%`

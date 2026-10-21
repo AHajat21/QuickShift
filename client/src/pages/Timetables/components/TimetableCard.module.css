@@ -1,0 +1,176 @@
+.timetableCard {
+	display: flex;
+	flex-direction: column;
+	max-width: 450px;
+	gap: 12px;
+	padding: 20px;
+	border: 1px solid #e3e8e5;
+	border-radius: 14px;
+	background: #ffffff;
+	box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+	overflow: visible;
+
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease,
+		border-color 0.2s ease;
+}
+.timetableCard:hover {
+	transform: translateY(-2px);
+	border-color: #cbdcd3;
+	box-shadow: 0 8px 22px rgba(0, 0, 0, 0.09);
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.header h2 {
+	overflow-wrap: anywhere;
+	margin: 0;
+	font-size: 1.15rem;
+	color: #1f2937;
+	line-height: 1.4;
+}
+
+.viewTimetable,
+.deleteTimetable {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border-radius: 8px;
+
+	font-weight: 600;
+
+	cursor: pointer;
+	transition:
+		background-color 0.2s ease,
+		color 0.3s ease,
+		transform 0.15s ease;
+}
+.viewTimetable:active, .deleteTimetable:active {
+	transform: scale(0.97);
+}
+.viewTimetable:focus-visible, .deleteTimetable:focus-visible {
+	outline: 3px solid rgba(74 137 107 0.3);
+	outline-offset: 2px;
+}
+
+.deleteTimetable {
+	padding: 7px 10px;
+	background-color: #fff0f0;
+	color: #a51e1e;
+	font-size: 0.75rem;
+}
+.deleteTimetable:hover {
+	background-color: #fbe0e0;
+	color: #821e1e;
+}
+
+.timetableCard p {
+	color: #6b7280;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	margin-left: 4px;
+}
+
+.footer {
+	display: flex;
+	justify-content: space-between;
+	padding: 3px;
+	margin-top: auto;
+}
+
+.viewTimetable {
+	padding: 8px 12px;
+
+	background-color: #eaf2ed;
+	color: #376952;
+	font-size: 0.85rem;
+}
+.viewTimetable:hover {
+	background-color: #dcebe2;
+}
+
+
+.menuWrapper {
+	position: relative;
+	flex-shrink: 0;
+}
+
+.menuButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+
+	border: none;
+	border-radius: 8px;
+	background-color: transparent;
+	padding: 4px 8px;
+
+	color: #4b5563;
+	font-size: 16px;
+	font-weight: 900;
+
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+.menuButton:hover {
+	background-color: #f3f4f6;
+}
+
+.dropdown {
+	position: absolute;
+	top: calc(100% + 6px);
+	right: 0;
+
+	z-index: 50;
+
+	display: flex;
+	flex-direction: column;
+
+	width: 150px;
+	padding: 4px;
+
+	background-color: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.dropdown button {
+	padding: 4px 6px;
+	border: none;
+	border-radius: 6px;
+	background-color: transparent;
+
+	text-align: left;
+	font-size: 14px;
+	color: #374151;
+
+	cursor: pointer;
+}
+.dropdown button:hover {
+	background-color: #f3f4f6;
+}
+
+
+@media (max-width: 768px) {
+	.timetableCard {padding: 16px;}
+}
+
+@media (max-width: 600px) {
+	.viewTimetable {
+		padding: 6px 10px;
+		font-size: 0.75rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.header h2 {font-size: 1rem;}
+}

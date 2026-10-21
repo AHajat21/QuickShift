@@ -36,7 +36,7 @@ type Timetable = {
 	createdAt: Date
 }
 type Shift = {
-	id: string
+	id: number
 	employeeId: string
 	timetableId: string
 	date: Date
@@ -49,14 +49,14 @@ type Shift = {
 	timetable: Timetable
 }
 type Unavailability = {
-	id: string
+	id: number
 	employeeId: string
 	day: DayOfWeek
 	startTime: string
 	endTime: string
 }
 type timeOff = {
-	id: string
+	id: number
 	employeeId: string
 	startDate: Date
 	endDate: Date

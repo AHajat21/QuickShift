@@ -1,9 +1,32 @@
 import { prisma } from "../lib/prisma.js"
 import { validateShiftService } from "../services/shift.service.js"
-import { isValidTime, timeToMinutes } from "../utils/timeFormat.js"
+import { isValidTime, timeToMinutes } from "../utils/Date&Time.js"
 
 
 export const getAllShifts = async (req, res, next) => {
+	try {
+		const shifts = await prisma.shifts.findMany({
+			orderBy: [
+				{employee: {firstName: "asc"}},
+				{day: "asc"	}
+			],
+			where: {
+				timetable: {
+					companyId: req.user.companyId
+				}
+			}
+		})
+
+		return res.status(200).json({
+			message: "All shifts fetched successfully!",
+			shifts
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
+export const getTimetableShifts = async (req, res, next) => {
 	try {
 		const shifts = await prisma.shifts.findMany({
 			orderBy: [
@@ -146,14 +169,14 @@ export const updateShift = async (req, res, next) => {
 		await validateShiftService({
 			employeeId,
 			timetableId: req.params.timetableId,
-			shiftId: req.params.shiftId,
+			shiftId: Number(req.params.shiftId),
 			companyId: req.user.companyId,
 			shiftDate
 		})
 
 		const newShift = await prisma.shifts.update({
 			where: {
-				id: req.params.shiftId
+				id: Number(req.params.shiftId)
 			},
 			data: {
 				[field]: value
@@ -174,7 +197,7 @@ export const deleteShift = async (req, res, next) => {
 	try {
 		await prisma.shifts.findFirstOrThrow({
 			where: {
-				id: req.params.shiftId,
+				id: Number(req.params.shiftId),
 				timetableId: req.params.timetableId,
 				timetable: {
 					companyId: req.user.companyId
@@ -184,7 +207,7 @@ export const deleteShift = async (req, res, next) => {
 
 		await prisma.shifts.delete({
 			where: {
-				id: req.params.shiftId
+				id: Number(req.params.shiftId)
 			}
 		})
 

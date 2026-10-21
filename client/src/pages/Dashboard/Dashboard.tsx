@@ -6,6 +6,7 @@ import { api } from '../../services/api.js'
 
 import styles from "./Dashboard.module.css"
 import ErrorPage from '../ErrorPage/ErrorPage.tsx'
+import LoadingPage from '../LoadingPage/LoadingPage.tsx'
 
 
 type ShiftsByTimetable = {
@@ -55,8 +56,8 @@ const Dashboard = () => {
 
 
 
-	if (loading) return <p>Loading...</p>
-	if (isError) return <ErrorPage/>
+	if (loading) return <LoadingPage />
+	if (isError) return <ErrorPage />
 
 	return (
 		<div className={styles.dashboard}>
@@ -74,7 +75,7 @@ const Dashboard = () => {
 				</article>
 
 				<article className={styles.availableCard}>
-					<h2>Unavailabilities</h2>
+					<h2>Availabilities</h2>
 
 					<Link to="/availabilities">See all</Link>
 				</article>
@@ -89,7 +90,7 @@ const Dashboard = () => {
 
 			<section className={styles.todayShifts}>
 				<h2>Today's shifts ({currentDate.toLocaleDateString()})</h2>
-				{!shiftsByTimetable ?
+				{Object.keys(shiftsByTimetable).length === 0 ?
 					<div className={styles.emptyState}>
 						<p>No shifts today</p>
 					</div>

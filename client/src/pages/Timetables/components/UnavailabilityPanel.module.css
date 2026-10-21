@@ -12,12 +12,13 @@
 	border: 1px solid #dddddd;
 	border-radius: 12px;
 	background-color: #ffffff;
-}
-:nth-last-child(2) {
-	border-bottom-left-radius: 12px;
-}
-:last-child {
-	border-bottom-right-radius: 12px;
+
+	:nth-last-child(2) {
+		border-bottom-left-radius: 12px;
+	}
+	:last-child {
+		border-bottom-right-radius: 12px;
+	}
 }
 
 

@@ -1,5 +1,5 @@
 .timetablePage {
-	min-height: 100%;
+	min-height: 100vh;
 	padding: 32px;
 	color: #222222;
 }
@@ -100,103 +100,12 @@
 	}
 }
 
-
 .timetableGrid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
 	gap: 20px;
 	align-items: stretch;
 }
-
-.timetableCard {
-	display: flex;
-	flex-direction: column;
-	max-width: 450px;
-	gap: 12px;
-	padding: 20px;
-	border: 1px solid #e3e8e5;
-	border-radius: 14px;
-	background: #ffffff;
-	box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
-
-	transition:
-		transform 0.2s ease,
-		box-shadow 0.2s ease,
-		border-color 0.2s ease;
-}
-.timetableCard:hover {
-	transform: translateY(-2px);
-	border-color: #cbdcd3;
-	box-shadow: 0 8px 22px rgba(0, 0, 0, 0.09);
-}
-
-.timetableHeader {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	gap: 12px;
-}
-.timetableHeader h2 {
-	overflow-wrap: anywhere;
-	font-size: 1.15rem;
-	color: #1f2937;
-	line-height: 1.4;
-}
-
-.timetableCard p {
-	color: #6b7280;
-	font-size: 0.9rem;
-	line-height: 1.5;
-}
-
-.viewTimetable,
-.deleteTimetable {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: none;
-	border-radius: 8px;
-
-	font-weight: 600;
-
-	cursor: pointer;
-	transition:
-		background-color 0.2s ease,
-		color 0.3s ease,
-		transform 0.15s ease;
-}
-.viewTimetable:active, .deleteTimetable:active {
-	transform: scale(0.97);
-}
-.viewTimetable:focus-visible, .deleteTimetable:focus-visible {
-	outline: 3px solid rgba(74 137 107 0.3);
-	outline-offset: 2px;
-}
-
-.viewTimetable {
-	align-self: flex-end;
-	margin-top: auto;
-	padding: 9px 13px;
-
-	background-color: #eaf2ed;
-	color: #376952;
-	font-size: 0.85rem;
-}
-.viewTimetable:hover {
-	background-color: #dcebe2;
-}
-
-.deleteTimetable {
-	padding: 7px 10px;
-	background-color: #fff0f0;
-	color: #a51e1e;
-	font-size: 0.75rem;
-}
-.deleteTimetable:hover {
-	background-color: #fbe0e0;
-	color: #821e1e;
-}
-
 
 .emptyState {
 	display: flex;
@@ -232,7 +141,6 @@
 	.header {margin-bottom: 24px;}
 	.header h1 {font-size: 1.75rem;}
 	.timetableGrid {gap: 16px;}
-	.timetableCard {padding: 16px;}
 	.createForm {padding: 20px;}
 }
 
@@ -259,17 +167,10 @@
 		margin-bottom: 24px;
 	}
 
-	.formActions {flex-direction: column;}
-
-	.submitButton,
-	.cancelButton {width: 100%;}
-
 	.timetableGrid {
 		grid-template-columns: minmax(0, 1fr);
 		gap: 12px;
 	}
-
-	.timetableCard {padding: 16px;}
 
 	.emptyState {
 		min-height: 180px;
@@ -280,7 +181,4 @@
 @media (max-width: 400px) {
 	.timetablePage {padding: 16px 10px;}
 	.header h1 {font-size: 1.45rem;}
-	.timetableHeader {gap: 8px;}
-	.timetableHeader h2 {font-size: 1.05rem;}
-	.deleteTimetable {padding: 6px 8px;}
 }

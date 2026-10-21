@@ -5,6 +5,7 @@ import { api } from '../../services/api'
 import { timeToMinutes } from '../../utils/time'
 import { toast } from 'sonner'
 import ErrorPage from '../ErrorPage/ErrorPage'
+import LoadingPage from '../LoadingPage/LoadingPage'
 
 
 type NewUnavailability = {
@@ -19,7 +20,7 @@ const Unavailabilities = () => {
 	const times = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
 	
 	const [unavailabilities, setUnavailabilities] = useState<Unavailability[]>([])
-	const [newUnavailability, setNewUnavailability] = useState<NewUnavailability | null>()
+	const [newUnavailability, setNewUnavailability] = useState<NewUnavailability>()
 	const [selectedDay, setSelectedDay] = useState<DayOfWeek>("MONDAY")
 	const [employees, setEmployees] = useState<Employee[]>([])
 	const [startTimeIndicPos, setStartTimeIndicPos] = useState("")
@@ -64,7 +65,7 @@ const Unavailabilities = () => {
 			}
 		})
 	}
-	const deleteUnavailability = async (employeeId: string, unavailabilityId: string) => {
+	const deleteUnavailability = async (employeeId: string, unavailabilityId: number) => {
 		const promise = api.delete(`/employees/${employeeId}/availabilities/${unavailabilityId}`)
 		toast.promise(promise, {
 			loading: "Deleting availability...",
@@ -125,7 +126,7 @@ const Unavailabilities = () => {
 	}
 
 
-	if (loading) return <p>Loading...</p>
+	if (loading) return <LoadingPage />
 	if (isError) return <ErrorPage />
 
 	return (
@@ -173,7 +174,9 @@ const Unavailabilities = () => {
 									a.employeeId === employee.id && 
 									a.day === selectedDay.toUpperCase()
 								).map(a =>
-									<div key={a.id} className={styles.unavailabilityBar}
+									<div key={a.id} 
+										className={styles.unavailabilityBar}
+										title={`${a.startTime}-${a.endTime}`}
 										style={{
 											left: `${(timeToMinutes(a.startTime)/1440) * 100}%`,
 											width: `${((timeToMinutes(a.endTime) - timeToMinutes(a.startTime)) / 1440) * 100}%`

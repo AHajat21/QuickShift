@@ -1,6 +1,6 @@
 import { prisma } from "../lib/prisma.js"
 import { validateUnavailabilityService } from "../services/unavailability.service.js"
-import { isValidTime, timeToMinutes } from "../utils/timeFormat.js"
+import { isValidTime, timeToMinutes } from "../utils/Date&Time.js"
 
 
 export const getAllUnavailabilities = async (req, res, next) => {
@@ -15,7 +15,7 @@ export const getAllUnavailabilities = async (req, res, next) => {
 
 		return res.status(200).json({
 			message: "All unavailabilities fetched successfully",
-			availabilities
+			unavailabilities
 		})
 	} catch(error) {
 		next(error)
@@ -77,7 +77,7 @@ export const deleteUnavailability = async (req, res, next) => {
 	try {
 		await prisma.unavailabilities.delete({
 			where: {
-				id: req.params.unavailabilityId,
+				id: Number(req.params.unavailabilityId),
 				employeeId: req.params.employeeId
 			}
 		})

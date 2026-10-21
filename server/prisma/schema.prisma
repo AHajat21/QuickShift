@@ -66,19 +66,19 @@ model companies {
 }
 
 model employees {
-	id              String            @id @default(uuid())
-   companyId       String
-   firstName       String
-   lastName        String?
-   email           String?
-   phone           String?
-   createdAt       DateTime          @default(now())
+	id                String              @id @default(uuid())
+   companyId         String
+   firstName         String
+   lastName          String?
+   email             String?
+   phone             String?
+   createdAt         DateTime            @default(now())
 
-   company         companies         @relation(fields: [companyId], references: [id])
+   company           companies           @relation(fields: [companyId], references: [id])
 
-   shifts          shifts[]
+   shifts            shifts[]
    unavailabilities  unavailabilities[]
-   timeOff         time_offs[]
+   timeOff           time_offs[]
 }
 
 model timetables {
@@ -96,24 +96,24 @@ model timetables {
 }
 
 model shifts {
-	id                String                 @id @default(uuid())
-	employeeId        String
-	timetableId       String
-	date              DateTime
-	day               String
-	startTime         String
-	endTime           String
-	createdAt         DateTime               @default(now())
+	id           Int         @id @default(autoincrement())
+	employeeId   String
+	timetableId  String
+	date         DateTime
+	day          DayOfWeek
+	startTime    String
+	endTime      String
+	createdAt    DateTime    @default(now())
 
-	employee          employees              @relation(fields: [employeeId], references: [id], onDelete: Cascade)
-	timetable         timetables             @relation(fields: [timetableId], references: [id], onDelete: Cascade) 
+	employee     employees   @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+	timetable    timetables  @relation(fields: [timetableId], references: [id], onDelete: Cascade) 
 
 	@@index([timetableId])
 	@@index([employeeId])
 }
 
 model unavailabilities {
-	id          String     @id @default(uuid())
+	id          Int        @id @default(autoincrement())
 	employeeId  String
 	day         DayOfWeek
 	startTime   String
@@ -126,7 +126,7 @@ model unavailabilities {
 }
 
 model time_offs {
-	id          String     @id @default(uuid())
+	id          Int        @id @default(autoincrement())
 	employeeId  String
 	startDate   DateTime
 	endDate     DateTime
