@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import styles from "./Unavailabilities.module.css"
 import { api } from '../../services/api'
-import { timeToMinutes } from '../../utils/time'
+import { timeToMinutes } from '../../utils/helper'
 import { toast } from 'sonner'
 import ErrorPage from '../ErrorPage/ErrorPage'
 import LoadingPage from '../LoadingPage/LoadingPage'

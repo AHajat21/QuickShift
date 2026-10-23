@@ -7,6 +7,7 @@ import UnavailabilityPanel from './components/UnavailabilityPanel.tsx'
 import { toast } from 'sonner'
 import ErrorPage from '../ErrorPage/ErrorPage.tsx'
 import LoadingPage from '../LoadingPage/LoadingPage.tsx'
+import { dateToDay, getShiftColour } from '../../utils/helper.ts'
 
 
 type SelectedCell = 
@@ -16,17 +17,31 @@ type SelectedCell =
 
 const ManageTimetable = () => {
 	const { timetableId } = useParams()
+	const daysOfWeek = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
+
 	const [loading, setLoading] = useState(true)
 	const [isError, setIsError] = useState(false)
-	const daysOfWeek = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
-	const [weekCommencing, setWeekCommencing] = useState(new Date())
 
+	const [weekCommencing, setWeekCommencing] = useState(new Date())
 	const [shifts, setShifts] = useState<Shift[]>([])
 	const [employees, setEmployees] = useState<Employee[]>([])
 	const [unavailabilities, setUnavailabilities] = useState<Unavailability[]>([])
 	
 	const [selectedCell, setSelectedCell] = useState<SelectedCell | null>(null)
-	const selectedCellStyle = {outline: '2px solid #ffffff', outlineOffset: '-2px'}
+	const isSelected = (cell: SelectedCell) => {
+		if (!selectedCell) return false
+
+		if (selectedCell.name === "day-cell" && cell.name === "day-cell") {
+			return selectedCell.day === cell.day
+		}
+		if (selectedCell.name === "employee-cell" && cell.name === "employee-cell") {
+			return selectedCell.employeeId === cell.employeeId
+		}
+		if (selectedCell.name === "shift-cell" && cell.name === "shift-cell") {
+			return selectedCell.employeeId === cell.employeeId && selectedCell.day === cell.day
+		}
+		return false
+	}
 	
 	const previousValue = useRef<string>("")
 	
@@ -59,8 +74,7 @@ const ManageTimetable = () => {
 
 
 	const updateShift = async (shiftId: number, employeeId: string, day: string, field: "startTime" | "endTime", value: string) => {
-		const date = new Date(weekCommencing)
-		date.setDate(date.getDate() + daysOfWeek.indexOf(day))
+		const date = dateToDay(day, weekCommencing)
 
 		const promise = api.patch(`/timetables/${timetableId}/shifts/${shiftId}`, {
 			date, employeeId, field, value
@@ -80,8 +94,7 @@ const ManageTimetable = () => {
 		})
 	}
 	const createShift = async (employeeId: string, day: string) => {
-		const date = new Date(weekCommencing)
-		date.setDate(date.getDate() + daysOfWeek.indexOf(day))
+		const date = dateToDay(day, weekCommencing)
 		
 		const promise = api.post(`/timetables/${timetableId}/shifts`, {
 			employeeId, day, date
@@ -126,16 +139,34 @@ const ManageTimetable = () => {
 					<div className={styles.corner}/>
 
 					{daysOfWeek.map(day =>
-						<div key={day} className={styles.dayHeader}
+						<div key={day}
+							className={`${styles.dayHeader} ${
+								isSelected({ name: "day-cell", day }) && styles.selectedCell
+							}`}
 							onClick={() => setSelectedCell({name: 'day-cell', day})}
-						> {day} </div>
+						>
+							<span>{day}</span>
+							<span>{dateToDay(day, weekCommencing).toLocaleDateString()}</span>
+						
+						</div>
 					)}
 
 					{employees.map(employee =>
 						<React.Fragment key={employee.id}>
-							<div className={styles.employeeCell}
-								onClick={() => setSelectedCell({name: 'employee-cell', employeeId: employee.id, eName: employee.firstName})}
-							> {employee.firstName} {employee.lastName} </div>
+							<div
+								className={`${styles.employeeCell} ${
+									isSelected({
+										name: "employee-cell",
+										employeeId: employee.id,
+										eName: employee.firstName
+									}) && styles.selectedCell
+								}`}
+								onClick={() => setSelectedCell({
+									name: 'employee-cell',
+									employeeId: employee.id,
+									eName: employee.firstName
+								})}
+							>{employee.firstName} {employee.lastName}</div>
 
 							{daysOfWeek.map(day => {
 								const shift = shifts.find(shift => 
@@ -147,14 +178,28 @@ const ManageTimetable = () => {
 									<button key={`${employee.id}-${day}`}
 										className={styles.emptyCell}
 										onClick={() => createShift(employee.id, day.toUpperCase())}
-									> + </button>
+									>+</button>
 								)
-								
+								const color = getShiftColour(shift)
 								if (shift) return (
-									<div key={`${employee.id}-${day}`} className={styles.shiftCell}
-										onClick={() => setSelectedCell({name: 'shift-cell', employeeId: employee.id, eName: employee.firstName, day})}
+									<div key={`${employee.id}-${day}`}
+										className={`${styles.shiftCell} ${styles[color]} ${
+											isSelected({
+												name: "shift-cell",
+												employeeId: employee.id,
+												eName: employee.firstName,
+												day
+											}) && styles.selectedCell
+										}`}
+										onClick={() => setSelectedCell({
+											name: 'shift-cell',
+											employeeId: employee.id,
+											eName: employee.firstName,
+											day
+										})}
 									>
 										<input
+											className={styles[color]}
 											type="time"
 											value={shift.startTime}
 											onFocus={() => previousValue.current = shift.startTime}

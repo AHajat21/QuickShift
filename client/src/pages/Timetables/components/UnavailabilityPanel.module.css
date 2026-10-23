@@ -2,6 +2,7 @@
 	width: 100%;
 	overflow-x: auto;
 	overscroll-behavior-x: contain;
+	padding: 4px;
 }
 
 .unavailabilitiesChart {
@@ -20,7 +21,6 @@
 		border-bottom-right-radius: 12px;
 	}
 }
-
 
 .corner {
 	position: sticky;

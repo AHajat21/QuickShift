@@ -4,6 +4,7 @@ import { api } from '../../services/api.ts'
 import { useAuth } from '../../context/AuthContext.tsx'
 
 import styles from './Login.module.css'
+import { toast } from 'sonner'
 
 const Login = () => {
 	const { user, setUser } = useAuth()
@@ -18,16 +19,22 @@ const Login = () => {
 
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
-		try {
-			const response = await api.post("/auth/login", {
-				email,
-				password
-			})
-			setUser(response.data.user)
-			navigate("/dashboard", { replace: true })
-		} catch (error) {
-			console.error("Login failed: " + error)
-		}
+
+		const promise = api.post("/auth/login", {
+			email,
+			password
+		})
+		toast.promise(promise, {
+			loading: "Please wait...",
+			success: (response) => {
+				setUser(response.data.user)
+				navigate("/dashboard", { replace: true })
+			},
+			error: (error) => {
+				console.error("Login failed: " + error)
+				return "Login failed. Please try again"
+			}
+		})
 	}
 
 	return (

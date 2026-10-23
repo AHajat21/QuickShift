@@ -1,7 +1,7 @@
 import React from 'react'
 
 import styles from "./UnavailabilityPanel.module.css"
-import { timeToMinutes } from '../../../utils/time';
+import { timeToMinutes } from '../../../utils/helper';
 
 
 type SelectedCell = 
@@ -28,7 +28,7 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 			return (
 				<div className={styles.chartContainer}>
 					<div className={styles.unavailabilitiesChart}>
-						<div className={styles.corner}>{selectedCell.day}'s unavailability</div>
+						<div className={styles.corner}>{selectedCell.day}'s Availability</div>
 
 						<div className={styles.timesHeader}>
 							{times.map(t => 
@@ -67,7 +67,7 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 			return (
 				<div className={styles.chartContainer}>
 					<div className={styles.unavailabilitiesChart}>
-						<div className={styles.corner}>{selectedCell.eName}'s unavailability</div>
+						<div className={styles.corner}>{selectedCell.eName}'s Availability</div>
 
 						<div className={styles.timesHeader}>
 							{times.map(t => 
@@ -108,7 +108,7 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 			return (
 				<div className={styles.chartContainer}>
 					<div className={styles.unavailabilitiesChart}>
-						<div className={styles.corner}>{selectedCell.eName}'s {selectedCell.day} unavailability</div>
+						<div className={styles.corner}>{selectedCell.eName}'s {selectedCell.day} Availability</div>
 
 						<div className={styles.timesHeader}>
 							{times.map(t => 
@@ -117,7 +117,7 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 						</div>
 
 
-						<div className={styles.rowHeader}>Unavailability</div>
+						<div className={styles.rowHeader}>Availability</div>
 						<div className={styles.unavailabilityCell}>
 							{unavailabilities.filter(a => 
 								a.employeeId === selectedCell.employeeId && 
@@ -137,7 +137,8 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 							<div className={styles.unavailabilityBar}
 								style={{
 									left: `${(shiftStart / 1440) * 100}%`,
-									width: `${((shiftEnd - shiftStart) / 1440) * 100}%`
+									width: `${((shiftEnd - shiftStart) / 1440) * 100}%`,
+									backgroundColor: "rgb(74, 137, 107)"
 								}}
 							/>
 						</div>
