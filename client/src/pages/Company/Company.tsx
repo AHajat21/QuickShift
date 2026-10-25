@@ -5,9 +5,11 @@ import styles from "./Company.module.css"
 import { toast } from 'sonner'
 import ErrorPage from '../ErrorPage/ErrorPage'
 import LoadingPage from '../LoadingPage/LoadingPage'
+import { useAuth } from '../../context/AuthContext'
 
 
 const Company = () => {
+	const { user } = useAuth()
 	const [loading, setLoading] = useState(true)
 	const [isError, setIsError] = useState(false)
 	const [company, setCompany] = useState<Company>()
@@ -21,12 +23,12 @@ const Company = () => {
 	useEffect(() => {
 		const getCompanyData = async () => {
 			try {
+				if (!user?.companyId) return
 				const [companyResponse, employeeResponse] =
 					await Promise.all([
 						api.get("/companies"),
 						api.get("/employees")
-					]) 
-
+					])
 				setCompany(companyResponse.data.company)
 				setEmployees(employeeResponse.data.employees)
 			} catch (error) {
@@ -93,7 +95,7 @@ const Company = () => {
 			},
 			error: (error) => {
 				console.error("Failed to remove employee:", error)
-				return "Failed to delete employee. Please try again"
+				return "Failed to delete employee. Please try again."
 			}
 		})
 	}
@@ -109,7 +111,7 @@ const Company = () => {
 					emp.id === employeeId ? {...emp, [field]: previousValue.current} : emp
 				))
 				console.error("Failed to update employee:", error)
-				return "Failed to update employee. Please try again"
+				return "Failed to update employee. Please try again."
 			}
 		})
 	}
@@ -117,34 +119,36 @@ const Company = () => {
 
 	if (loading) return <LoadingPage />
 	if (isError) return <ErrorPage />
-	if (!company) return (
-		<div className={styles.companyPage}>
+	if (!user?.companyId && !company) return (
+		<div className={styles.emptyState}>
 			<h1>Create your company</h1>
 
 			<form onSubmit={createCompany}>
 				<label htmlFor="name">Company name: </label>
-				<input
-					id='name'
-					name='name'
-					type='text'
-					value={companyName}
-					onChange={e => setCompanyName(e.target.value)}
-					required
-				/>
-				<button type='submit'>Create</button>
+				<div className={styles.formGroup}>
+					<input
+						id='name'
+						name='name'
+						type='text'
+						value={companyName}
+						onChange={e => setCompanyName(e.target.value)}
+						required
+					/>
+					<button type='submit' className={styles.createCompany}>Create</button>
+				</div>
 			</form>
 		</div>
 	)
 
 	return (
 		<div className={styles.companyPage}>
-			<h1>{company.name}</h1>
+			<h1>{company?.name}</h1>
 
 			<section className={styles.employeeSection}>
 				<h2>Employees</h2>
 				<div className={styles.employeeList}>
 					{employees.length === 0 ? 
-						<div className={styles.emptyState}>
+						<div className={styles.employeeEmptyState}>
 							No employees yet. Add your first employee below.
 						</div>
 					: 

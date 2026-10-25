@@ -148,7 +148,7 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 	
 		default:
 			return (
-				<div className={styles.emptyState}>Select a cell for more unavailability information</div>
+				<div className={styles.emptyState}>Select a cell for more availability information</div>
 			)
 	}
 }

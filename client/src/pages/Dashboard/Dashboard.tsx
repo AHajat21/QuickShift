@@ -26,6 +26,7 @@ const Dashboard = () => {
 	useEffect(() => {
 		const getDashboardData = async () => {
 			try {
+				if (!user?.companyId) return
 				const todayShiftsResponse = await api.get("/timetables/shifts/today")
 				const todayShifts = todayShiftsResponse.data.todayShifts
 

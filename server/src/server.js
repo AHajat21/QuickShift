@@ -6,5 +6,3 @@ app.listen(PORT, (error) => {
 	if (error) throw error
 	console.error(`Express app working on port: ${PORT}`)
 })
-
-// Connect database function call here

@@ -1,5 +1,5 @@
 import {type SubmitEvent , useState, useEffect } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { api } from '../../services/api.ts'
 import { useAuth } from '../../context/AuthContext.tsx'
 
@@ -14,25 +14,36 @@ const Login = () => {
 	const [password, setPassword] = useState("")
 
 	useEffect(() => {
-		if (user) navigate("/dashboard", {replace: true})
+		if (user?.isGuest === false) navigate("/dashboard", {replace: true})
 	}, [user, navigate])
 
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 
+		if (user?.isGuest) {
+			try {
+				api.post("/auth/logout")
+				setUser(null)
+				navigate("/login")
+			} catch (error) {
+				console.error("Failed to logout: ", error)
+			}
+		}
+		
 		const promise = api.post("/auth/login", {
 			email,
 			password
 		})
 		toast.promise(promise, {
-			loading: "Please wait...",
+			loading: "Logging in...",
 			success: (response) => {
 				setUser(response.data.user)
 				navigate("/dashboard", { replace: true })
+				return "Login successfull!"
 			},
 			error: (error) => {
 				console.error("Login failed: " + error)
-				return "Login failed. Please try again"
+				return "Login failed. Please try again."
 			}
 		})
 	}
@@ -41,7 +52,11 @@ const Login = () => {
 		<main className={styles.loginPage}>
 			<h1 className={styles.logo}>QuickShift</h1>
 			<section className={styles.loginBox}>
-				<h2>Login</h2>
+				<div className={styles.header}>
+					<h2>Login</h2>
+					<Link to="/register">Register Instead</Link>
+				</div>
+				
 				<form onSubmit={handleSubmit}>
 					<div className={styles.formGroup}>
 						<label htmlFor='email'>Email</label>

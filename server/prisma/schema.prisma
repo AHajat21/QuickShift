@@ -29,17 +29,18 @@ enum DayOfWeek {
 
 // MODELS
 model users {
-	id         String      @id @default(uuid())
-	companyId  String?     @unique
-	email      String      @unique
-	password   String?
-	googleId   String?     @unique
-	firstName  String
-	lastName   String?
-	createdAt  DateTime    @default(now())
+	id           String      @id @default(uuid())
+	companyId    String?     @unique
+	email        String?     @unique
+	password     String?
+	googleId     String?     @unique
+	isGuest  Boolean     @default(false)
+	firstName    String      @default("Guest")
+	lastName     String?
+	createdAt    DateTime    @default(now())
 
-   company    companies?  @relation(fields: [companyId], references: [id])
-	sessions   sessions[]
+   company      companies?  @relation(fields: [companyId], references: [id])
+	sessions     sessions[]
 }
 
 model sessions {

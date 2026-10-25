@@ -432,4 +432,4 @@ When a CLI failure survives the checks above, or a command crashes with `UNEXPEC
 bunx @prisma/cli@latest feedback "app deploy crashed: <first error line>"
 ```
 
-Prefer the pre-filled command from a `--json` crash envelope's `nextActions` verbatim. Anonymous; never put secrets, connection URLs, or tokens in the message.
+Prefer the pre-filled command from a `--json` crash envelope's `nextActions` verbatim. Guest; never put secrets, connection URLs, or tokens in the message.

@@ -1,10 +1,10 @@
-.companyPage {
+.companyPage, .emptyState {
 	min-height: 100%;
 	padding: 32px;
 	color: #222;
 }
 
-.companyPage > h1 {
+.companyPage h1, .emptyState h1 {
 	margin: 0 0 28px;
 
 	font-size: 2rem;
@@ -12,6 +12,18 @@
 	letter-spacing: -0.5px;
 
 	color: #376952;
+}
+
+.emptyState {
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		input, button {
+			margin-left: 8px;
+		}
+	}
 }
 
 .employeeSection {
@@ -139,11 +151,11 @@
 .formGroup input {
 	width: 240px;
 
-	padding: 10px 12px;
+	padding: 8px 10px;
 	box-sizing: border-box;
 
 	border: 1px solid #d5dcd8;
-	border-radius: 8px;
+	border-radius: 6px;
 
 	background: #ffffff;
 	color: #222;
@@ -161,7 +173,7 @@
 	box-shadow: 0 0 0 3px rgba(74, 137, 107, 0.12);
 }
 
-.createEmployee {
+.createEmployee, .createCompany {
 	margin-top: 12px;
 	padding: 10px 16px;
 
@@ -180,15 +192,15 @@
 		transform 0.1s ease,
 		box-shadow 0.2s ease;
 }
-.createEmployee:hover {
+.createEmployee:hover, .createCompany:hover {
 	background: #3d775b;
 	box-shadow: 0 3px 8px rgba(55, 105, 82, 0.15);
 }
-.createEmployee:active {
+.createEmployee:active, .createCompany:active {
 	transform: scale(0.97);
 }
 
-.emptyState {
+.employeeEmptyState {
 	padding: 28px 16px;
 
 	text-align: center;

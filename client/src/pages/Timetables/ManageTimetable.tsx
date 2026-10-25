@@ -107,7 +107,7 @@ const ManageTimetable = () => {
 			},
 			error: (error) => {
 				console.error("Failed to create shift:", error)
-				return "Failed to create shift. Please try again"
+				return "Failed to create shift. Please try again."
 			}
 		})
 	}
@@ -123,7 +123,7 @@ const ManageTimetable = () => {
 			},
 			error: (error) => {
 				console.error("Failed to remove shift:", error)
-				return "Failed to delete shift. Please try again"
+				return "Failed to delete shift. Please try again."
 			}
 		})
 	}

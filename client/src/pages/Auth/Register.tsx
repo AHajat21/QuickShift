@@ -1,9 +1,10 @@
 import {type SubmitEvent, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { api } from '../../services/api.ts'
 import { useAuth } from '../../context/AuthContext.tsx'
 
 import styles from './Register.module.css'
+import { toast } from 'sonner'
 
 const Register = () => {
 	const { user, setUser } = useAuth()
@@ -15,31 +16,59 @@ const Register = () => {
 	const [lastName, setLastName] = useState("")
 
 	useEffect(() => {
-		if (user) navigate("/dashboard", {replace: true})
+		if (user?.isGuest === false) navigate("/dashboard", {replace: true})
 	}, [user, navigate])
 
 
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
-		try {
-			const response = await api.post("/auth/register", {
-				firstName,
-				lastName,
-				email,
-				password
-			})
-			setUser(response.data.user)
-			navigate("/dashboard", { replace: true })
-		} catch (error) {
-			console.error("Login failed: " + error)
-		}
+		const endpoint = user?.isGuest ? "/auth/guest/convert" : "/auth/register"
+		const outcome = user?.isGuest ? "Link" : "Register"
+		
+		const promise = api.post(endpoint, {
+			firstName,
+			lastName,
+			email,
+			password
+		})
+
+		toast.promise(promise, {
+			loading: "Registering...",
+			success: (response) => {
+				setUser(response.data.user)
+				navigate("/dashboard", { replace: true })
+				return outcome + "ed successfully!"
+			},
+			error: (error) => {
+				console.error("Register failed:", error)
+				return "Failed to " + outcome.toLowerCase() + ". Please try again."
+			}
+		})
+	}
+	const registerGuest = async () => {
+		const promise = api.post("/auth/guest")
+		toast.promise(promise, {
+			loading: "Continuing as guest...",
+			success: (response) => {
+				setUser(response.data.user)
+				navigate("/dashboard", { replace: true })
+				return ""
+			},
+			error: (error) => {
+				console.error("Guest register failed:", error)
+				return "Failed to continue as guest. Please try again."
+			}
+		})
 	}
 
 	return (
 		<main className={styles.registerPage}>
 			<h1 className={styles.logo}>QuickShift</h1>
 			<section className={styles.registerBox}>
-				<h2>Register</h2>
+				<div className={styles.header}>
+					<h2>Register</h2>
+					<Link to="/login">Login Instead</Link>
+				</div>
 				<form onSubmit={handleSubmit}>
 					<div className={styles.formGroup}>
 						<label htmlFor='firstName'>First name</label>
@@ -94,6 +123,9 @@ const Register = () => {
 					<button type='submit'>Register</button>
 				</form>
 			</section>
+			<button className={styles.guestButton}
+				onClick={registerGuest}
+			>Continue as guest -{'>'}</button>
 		</main>
 	)
 }

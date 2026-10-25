@@ -40,7 +40,7 @@ header {
 	cursor: pointer;
 }
 
-.logoutButton {
+.logoutButton, .guestButton {
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	background-color: rgba(255, 255, 255, 0.12);
 	backdrop-filter: blur(2px);
@@ -58,18 +58,21 @@ header {
 		transform 0.15s ease,
 		box-shadow 0.2s ease;
 }
-.logoutButton:hover {
+.logoutButton:hover, .guestButton:hover {
 	background-color: rgba(255, 255, 255, 0.2);
 	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
 }
-.logoutButton:active {
+.logoutButton:active, .guestButton:active {
 	transform: scale(0.96);
 }
-
-.logoutButton:focus-visible {
+.logoutButton:focus-visible, .guestButton:focus-visible {
 	outline: 2px solid #ffffff;
 	outline-offset: 2px;
 }
+
+.guestButton {background: #864747}
+.guestButton:hover {background: #653535;}
+.guestButton:focus-visible {outline-color:rgba(137, 74, 74, 0.25);}
 
 
 @media (max-width: 768px) {

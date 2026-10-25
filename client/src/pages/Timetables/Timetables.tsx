@@ -6,9 +6,11 @@ import { toast } from 'sonner'
 import ErrorPage from '../ErrorPage/ErrorPage'
 import LoadingPage from '../LoadingPage/LoadingPage'
 import TimetableCard from './components/TimetableCard'
+import { useAuth } from '../../context/AuthContext'
 
 
 const Timetables = () => {
+	const { user } = useAuth()
 	const [loading, setLoading] = useState(true)
 	const [isError, setIsError] = useState(false)
 
@@ -19,6 +21,7 @@ const Timetables = () => {
 	useEffect(() => {
 		const fetchTimetables = async () => {
 			try {
+				if (!user?.companyId) return
 				const response = await api.get("/timetables")
 				setTimetables(response.data.timetables)
 			} catch(error) {
@@ -66,7 +69,7 @@ const Timetables = () => {
 			},
 			error: (error) => {
 				console.error("Failed to duplicate timetable:", error)
-				return "Failed to duplicate timetable. Please try again"
+				return "Failed to duplicate timetable. Please try again."
 			}
 		})
 	}
@@ -88,6 +91,7 @@ const Timetables = () => {
 
 	if (loading) return <LoadingPage />
 	if (isError) return <ErrorPage />
+	if (!user?.companyId) return <div className={styles.emptyState}>Please create a company first</div>
 
   	return (
 		<div className={styles.timetablePage}>
@@ -134,7 +138,7 @@ const Timetables = () => {
 
 			<div className={styles.timetableGrid}>
 				{timetables.length === 0 ? 
-					<div className={styles.emptyState}>
+					<div className={styles.timetableEmptyState}>
 						<h2>No timetables yet</h2>
 						<p>Create your first timetable to get started.</p>
 					</div>

@@ -6,6 +6,7 @@ import { timeToMinutes } from '../../utils/helper'
 import { toast } from 'sonner'
 import ErrorPage from '../ErrorPage/ErrorPage'
 import LoadingPage from '../LoadingPage/LoadingPage'
+import { useAuth } from '../../context/AuthContext'
 
 
 type NewUnavailability = {
@@ -14,6 +15,7 @@ type NewUnavailability = {
 }
 
 const Unavailabilities = () => {
+	const { user } = useAuth()
 	const [loading, setLoading] = useState(true)
 	const [isError, setIsError] = useState(false)
 	const daysOfWeek = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
@@ -29,6 +31,7 @@ const Unavailabilities = () => {
 	useEffect(() => {
 		const getUnavailabilityData = async () => {
 			try {
+				if (!user?.companyId) return
 				const [unavailabilitiesResponse, employeesResponse] = 
 					await Promise.all([
 						api.get("/companies/availabilities"),
@@ -128,6 +131,7 @@ const Unavailabilities = () => {
 
 	if (loading) return <LoadingPage />
 	if (isError) return <ErrorPage />
+	if (!user?.companyId) return <div className={styles.emptyState}>Please create a company first</div>
 
 	return (
 		<div className={styles.unavailabilitiesPage}>

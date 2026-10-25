@@ -18,7 +18,6 @@ const App = () => {
 			<BrowserRouter>
 				<Routes>
 					{/* <Route index element={<LandingPage />} /> */}
-
 					<Route path="login" element={<Login />} />
 					<Route path="register" element={<Register />} />
 

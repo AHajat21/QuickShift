@@ -6,6 +6,7 @@ type User = {
 	googleId: string
 	firstName: string
 	lastName: string
+	isGuest: boolean
 	createdAt: Date
 }
 type Session = {
