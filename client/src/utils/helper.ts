@@ -16,3 +16,25 @@ export const getShiftColour = (shift: Shift | undefined) => {
     if (shift.startTime >= "17:00") return "shiftBlue"
     return "shiftGreen"
 }
+
+export const loginValidator = (email: string, password: string): string | null => {
+	if (!email.trim()) return "Email is required."
+	if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+		return "Please enter a valid email address."
+	}
+	if (!password) return "Password is required."
+	if (password.length < 8) return "Password is incorrect"
+
+	return null
+}
+export const registrationValidator = (email: string, password: string, firstName: string): string | null => {
+	if (!email.trim()) return "Email is required."
+	if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+		return "Please enter a valid email address."
+	}
+	if (!password) return "Password is required."
+	if (password.length < 8) return "Password is incorrect"
+	if (!firstName) return "First name is required"
+
+	return null
+}

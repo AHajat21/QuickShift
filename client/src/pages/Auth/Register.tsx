@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext.tsx'
 
 import styles from './Register.module.css'
 import { toast } from 'sonner'
+import { registrationValidator } from '../../utils/helper.ts'
 
 const Register = () => {
 	const { user, setUser } = useAuth()
@@ -22,6 +23,13 @@ const Register = () => {
 
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
+
+		const validationError = registrationValidator(email, password, firstName)
+		if (validationError) {
+			toast.error(validationError)
+			return
+		}
+
 		const endpoint = user?.isGuest ? "/auth/guest/convert" : "/auth/register"
 		const outcome = user?.isGuest ? "Link" : "Register"
 		
@@ -52,7 +60,7 @@ const Register = () => {
 			success: (response) => {
 				setUser(response.data.user)
 				navigate("/dashboard", { replace: true })
-				return ""
+				return "Continuing as guest."
 			},
 			error: (error) => {
 				console.error("Guest register failed:", error)

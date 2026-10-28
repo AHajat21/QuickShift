@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import styles from "./Unavailabilities.module.css"
 import { api } from '../../services/api'
@@ -27,6 +27,7 @@ const Unavailabilities = () => {
 	const [employees, setEmployees] = useState<Employee[]>([])
 	const [startTimeIndicPos, setStartTimeIndicPos] = useState("")
 	const [showStartTimeIndic, setShowStartTimeIndic] = useState(false)
+	const selectedCellRef = useRef<HTMLDivElement | null>(null)
 
 	useEffect(() => {
 		const getUnavailabilityData = async () => {
@@ -48,7 +49,23 @@ const Unavailabilities = () => {
 			}
 		}
 
+
+		function handleClickOutside(event: MouseEvent) {
+			if (
+				selectedCellRef.current &&
+				!selectedCellRef.current.contains(event.target as Node)
+			) {
+				setShowStartTimeIndic(false)
+				setNewUnavailability(undefined)
+			}
+		}
+
+		document.addEventListener("mousedown", handleClickOutside);
 		getUnavailabilityData()
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		}
 	}, [])
 
 
@@ -171,6 +188,7 @@ const Unavailabilities = () => {
 							</div>
 
 							<div className={styles.unavailabilityCell}
+								ref={newUnavailability?.employeeId === employee.id ? selectedCellRef : null}
 								onClick={e => handleUnavailabilityClick(e, employee.id)}
 							>
 								{/* ONLY this employees unavailabilities */}

@@ -34,14 +34,13 @@
 }
 
 .loadingTitle {
-	margin: 0 0 12px;
+	margin-bottom: 12px;
 	color: #1f2937;
 	font-size: 1.5rem;
 	font-weight: 700;
 }
 
 .loadingMessage {
-	margin: 0;
 	color: #6b7280;
 	font-size: 0.95rem;
 }

@@ -5,7 +5,7 @@
 }
 
 .companyPage h1, .emptyState h1 {
-	margin: 0 0 28px;
+	margin-bottom: 28px;
 
 	font-size: 2rem;
 	font-weight: 650;

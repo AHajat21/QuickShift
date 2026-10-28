@@ -2,6 +2,7 @@
 	width: 100%;
 	overflow-x: auto;
 	overscroll-behavior-x: contain;
+	scrollbar-width: thin;
 	padding: 4px;
 }
 
@@ -14,12 +15,6 @@
 	border-radius: 12px;
 	background-color: #ffffff;
 
-	:nth-last-child(2) {
-		border-bottom-left-radius: 12px;
-	}
-	:last-child {
-		border-bottom-right-radius: 12px;
-	}
 }
 
 .corner {

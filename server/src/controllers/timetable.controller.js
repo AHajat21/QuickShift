@@ -7,7 +7,11 @@ export const getAllTimetables = async (req, res, next) => {
 		const timetables = await prisma.timetables.findMany({
 			where: {
 				companyId: req.user.companyId
-			}
+			},
+			orderBy: [
+				{weekCommencing: "desc"},
+				{createdAt: "desc"}
+			]
 		})
 
 		return res.status(200).json({
@@ -102,6 +106,28 @@ export const duplicateTimetable = async (req, res, next) => {
 
 		return res.status(201).json({
 			message: "Timetable duplicated successfully!",
+			timetable
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
+export const updateTimetable = async (req, res, next) => {
+	const {field, value} = req.body
+	try {
+		const timetable = await prisma.timetables.update({
+			where: {
+				id: req.params.timetableId,
+				companyId: req.user.companyId
+			},
+			data: {
+				[field]: value
+			}
+		})
+
+		return res.status(200).json({
+			message: "Timetable renamed successfully!",
 			timetable
 		})
 	} catch (error) {

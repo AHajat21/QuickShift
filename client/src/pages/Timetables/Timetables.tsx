@@ -73,17 +73,36 @@ const Timetables = () => {
 			}
 		})
 	}
-	const deleteTimetable = async (timetableId: string) => {
-		const promise = api.delete(`/timetables/${timetableId}`)
+	const deleteTimetable = async (tId: string) => {
+		const promise = api.delete(`/timetables/${tId}`)
 		toast.promise(promise, {
 			loading: "Deleting timetable...",
 			success: () => {
-				setTimetables(prev => prev.filter(t => t.id !== timetableId))
+				setTimetables(prev => prev.filter(t => t.id !== tId))
 				return "Timetable deleted successfully."
 			},
 			error: (error) => {
 				console.error("Failed to create timetable:", error)
 				return "Failed to create timetable. Please try again."
+			}
+		})
+	}
+	const renameTimetable = async (tId: string, name: string, previousValue: string) => {
+		const promise = api.patch(`/timetables/${tId}`, {
+			field: "name",
+			value: name
+		})
+		console.log(name)
+		toast.promise(promise, {
+			loading: "Renaming timetable...",
+			success: () => {
+				setTimetables(prev => prev.map(t => t.id === tId ? {...t, name} : t))
+				return "Timetable renamed successfully!"
+			},
+			error: (error) => {
+				console.error("Failed to update timetable:", error)
+				setTimetables(prev => prev.map(t => t.id === tId ? {...t, name: previousValue} : t))
+				return "Failed to update timetable. Please try again."
 			}
 		})
 	}
@@ -144,7 +163,13 @@ const Timetables = () => {
 					</div>
 				: 
 				timetables.map(t =>
-					<TimetableCard key={t.id} t={t} deleteTimetable={deleteTimetable} duplicateTimetable={duplicateTimetable} />
+					<TimetableCard key={t.id}
+						t={t}
+						setTimetables={setTimetables}
+						deleteTimetable={deleteTimetable}
+						duplicateTimetable={duplicateTimetable} 
+						renameTimetable={renameTimetable}
+					/>
 				)}
 			</div>
 		</div>

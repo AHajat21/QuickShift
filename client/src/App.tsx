@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router"
+import { Toaster } from "sonner"
 import Login from "./pages/Auth/Login.tsx"
 import Register from "./pages/Auth/Register.tsx"
 import AppLayout from "./layouts/AppLayout.tsx"
@@ -8,7 +9,8 @@ import Timetables from "./pages/Timetables/Timetables.tsx"
 import Company from "./pages/Company/Company.tsx"
 import Unavailabilities from "./pages/Unavailabilities/Unavailabilities.tsx"
 import ManageTimetable from "./pages/Timetables/ManageTimetable.tsx"
-import { Toaster } from "sonner"
+import LandingPage from "./pages/LandingPage/LandingPage.tsx"
+
 
 const App = () => {
 
@@ -16,8 +18,9 @@ const App = () => {
 		<>
 			<Toaster position="top-right" richColors />
 			<BrowserRouter>
+			
 				<Routes>
-					{/* <Route index element={<LandingPage />} /> */}
+					<Route index element={<LandingPage />} />
 					<Route path="login" element={<Login />} />
 					<Route path="register" element={<Register />} />
 

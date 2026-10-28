@@ -81,10 +81,10 @@ const Dashboard = () => {
 					<Link to="/availabilities">See all</Link>
 				</article>
 
-				<article className={styles.timeOffCard}>
-					<h2>Time off</h2>
+				<article className={styles.timetablesCard}>
+					<h2>Timetables</h2>
 
-					<Link to="/time-offs">See all</Link>
+					<Link to="/timetables">See all</Link>
 				</article>
 			</section>
 

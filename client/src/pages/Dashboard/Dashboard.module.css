@@ -83,6 +83,7 @@
 	display: flex;
 	gap: 12px;
 	overflow-x: auto;
+	overscroll-behavior: contain;
 	padding: 4px 8px 12px;
 
 	scrollbar-width: thin;

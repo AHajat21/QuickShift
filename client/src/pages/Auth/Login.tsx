@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext.tsx'
 
 import styles from './Login.module.css'
 import { toast } from 'sonner'
+import { loginValidator } from '../../utils/helper.ts'
 
 const Login = () => {
 	const { user, setUser } = useAuth()
@@ -20,13 +21,19 @@ const Login = () => {
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 
+		const validationError = loginValidator(email, password)
+		if (validationError) {
+			toast.error(validationError)
+			return
+		}
+
 		if (user?.isGuest) {
 			try {
 				api.post("/auth/logout")
 				setUser(null)
 				navigate("/login")
 			} catch (error) {
-				console.error("Failed to logout: ", error)
+				console.error("Failed to logout:", error)
 			}
 		}
 		
@@ -42,7 +49,7 @@ const Login = () => {
 				return "Login successfull!"
 			},
 			error: (error) => {
-				console.error("Login failed: " + error)
+				console.error("Login failed:", error)
 				return "Login failed. Please try again."
 			}
 		})

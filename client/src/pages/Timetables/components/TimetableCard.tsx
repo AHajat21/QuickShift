@@ -5,12 +5,15 @@ import { Link } from 'react-router'
 
 type TimetableCardProps = {
 	t: Timetable
+	setTimetables: (updater: (prev: Timetable[]) => Timetable[]) => void
 	deleteTimetable: (id: string) => void
-	duplicateTimetable: (tID: string) => void
+	duplicateTimetable: (tId: string) => void
+	renameTimetable: (tId: string, name: string, previousValue: string) => void
 }
-const TimetableCard = ({t, deleteTimetable, duplicateTimetable}: TimetableCardProps) => {
+const TimetableCard = ({t, setTimetables, deleteTimetable, duplicateTimetable, renameTimetable}: TimetableCardProps) => {
 	const [openMenu, setOpenMenu] = useState<boolean>(false)
 	const menuContainerRef = useRef<HTMLDivElement>(null)
+	const previousValue = useRef("")
 
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
@@ -30,13 +33,21 @@ const TimetableCard = ({t, deleteTimetable, duplicateTimetable}: TimetableCardPr
 	return (
 		<div key={t.id} className={styles.timetableCard} ref={menuContainerRef}>
 			<div className={styles.header}>
-				<h2>{t.name}</h2>
-				<button className={styles.deleteTimetable} onClick={() => deleteTimetable(t.id)}>X</button>
+				<input 
+					type="text"
+					className={styles.timetableName}
+					value={t.name}
+					onChange={e => 
+						setTimetables(prev => prev.map(timetable =>
+							timetable.id === t.id ? { ...timetable, name: e.target.value } : timetable
+						))
+					}
+					onFocus={e => previousValue.current = e.target.value}
+					onBlur={e => renameTimetable(t.id, e.target.value, previousValue.current)}
+				/>
 			</div>
 
-			<p>
-				Week commencing: {new Date(t.weekCommencing).toLocaleDateString()}
-			</p>
+			<p>Week commencing: {new Date(t.weekCommencing).toLocaleDateString()}</p>
 
 			<div className={styles.footer}>
 				<Link to={`/timetables/${t.id}`} className={styles.viewTimetable}
@@ -61,17 +72,18 @@ const TimetableCard = ({t, deleteTimetable, duplicateTimetable}: TimetableCardPr
 								role="menuitem"
 								onClick={() => {
 									setOpenMenu(false);
+									duplicateTimetable(t.id)
 								}}
-							>Rename</button>
+							>Duplicate</button>
 
 							<button
 								type="button"
 								role="menuitem"
 								onClick={() => {
 									setOpenMenu(false);
-									duplicateTimetable(t.id)
+									deleteTimetable(t.id)
 								}}
-							>Duplicate</button>
+							>Delete</button>
 						</div>
 					)}
 				</div>

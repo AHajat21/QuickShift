@@ -27,16 +27,14 @@
 	align-items: center;
 }
 
-.header h2 {
+.timetableName {
 	overflow-wrap: anywhere;
-	margin: 0;
 	font-size: 1.15rem;
 	color: #1f2937;
 	line-height: 1.4;
 }
 
-.viewTimetable,
-.deleteTimetable {
+.viewTimetable{
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -51,23 +49,12 @@
 		color 0.3s ease,
 		transform 0.15s ease;
 }
-.viewTimetable:active, .deleteTimetable:active {
+.viewTimetable:active {
 	transform: scale(0.97);
 }
-.viewTimetable:focus-visible, .deleteTimetable:focus-visible {
+.viewTimetable:focus-visible{
 	outline: 3px solid rgba(74 137 107 0.3);
 	outline-offset: 2px;
-}
-
-.deleteTimetable {
-	padding: 7px 10px;
-	background-color: #fff0f0;
-	color: #a51e1e;
-	font-size: 0.75rem;
-}
-.deleteTimetable:hover {
-	background-color: #fbe0e0;
-	color: #821e1e;
 }
 
 .timetableCard p {
@@ -159,6 +146,10 @@
 	background-color: #f3f4f6;
 }
 
+.dropdown:last-child {
+	color: red;
+}
+
 
 @media (max-width: 768px) {
 	.timetableCard {padding: 16px;}
@@ -172,5 +163,5 @@
 }
 
 @media (max-width: 480px) {
-	.header h2 {font-size: 1rem;}
+	.timetableName {font-size: 1rem;}
 }
