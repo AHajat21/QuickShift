@@ -114,7 +114,7 @@ const Dashboard = () => {
 										</div>
 									)}
 								</div>
-								<Link to={`../timetables/${tId}`} className={styles.viewTimetable}>Go to timetable</Link>
+								<Link to={`../timetables/${tId}`} className={styles.viewTimetable}>Go to timetable →</Link>
 							</div>
 						)}
 					</div>

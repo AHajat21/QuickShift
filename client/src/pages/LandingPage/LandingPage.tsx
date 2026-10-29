@@ -4,7 +4,7 @@ import styles from './LandingPage.module.css'
 const LandingPage = () => {
 	return (
 		<main className={styles.landingPage}>
-			<header className={styles.navbar}>
+			<header className={styles.navBar}>
 				<Link to="/" className={styles.logo}>QuickShift</Link>
 				<nav className={styles.navLinks}>
 					<a href="#how-it-works">How it works</a>
@@ -121,7 +121,7 @@ const LandingPage = () => {
 
 					<article className={styles.featureCard}>
 						<div className={styles.featureIcon}>📅</div>
-						<h3><span>✓ Create your timetables intuitively</span> </h3>
+						<h3><span>✓</span> Create your timetables intuitively</h3>
 						<p>
 							using your employee availabilities.
 						</p>

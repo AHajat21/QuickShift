@@ -20,41 +20,6 @@
 	z-index: 100;
 }
 
-.pullTab {
-	position: absolute;
-	display: none;
-	align-items: center;
-	justify-content: center;
-	
-	height: 32px;
-	width: 20px;
-
-	right: -20px;
-	top: calc(50% - 16px);
-
-	border: 1px solid #d5dcd840;
-	border-left: none;
-	border-radius: 0 6px 6px 0;
-
-	background-color: #ffffff20;
-	color: #4a896b80;
-
-	transform-origin: left;
-	cursor: pointer;
-	transition: 
-		background-color 0.2s ease,
-		color 0.15s ease-out,
-		transform 0.1s;
-}
-.pullTab:hover {
-	background-color: #ffffff;
-	color: #4a896b;
-}
-.pullTab:active {
-	transform: scale(0.98);
-}
-
-
 .logo {
 	color: #376952;
 	margin: 8px;

@@ -15,7 +15,7 @@ const Sidebar = () => {
 				<NavLink to="/dashboard" className={styles.navLink}
 					onClick={() => setOpen(prev => prev === true && false)}
 				>
-					{({ isActive }) => 
+					{({ isActive }) =>
     					<span className={isActive ? styles.active : ""}>Dashboard</span>
  					}
 				</NavLink>
@@ -23,7 +23,7 @@ const Sidebar = () => {
 				<NavLink to="/timetables" className={styles.navLink}
 					onClick={() => setOpen(prev => prev === true && false)}
 				>
-					{({ isActive }) => 
+					{({ isActive }) =>
    					<span className={isActive ? styles.active : ""}>Timetables</span>
 					}
 				</NavLink>
@@ -31,7 +31,7 @@ const Sidebar = () => {
 				<NavLink to="/company" className={styles.navLink}
 					onClick={() => setOpen(prev => prev === true && false)}
 				>
-					{({ isActive }) => 
+					{({ isActive }) =>
    					<span className={isActive ? styles.active : ""}>Company</span>
 					}
 				</NavLink>
@@ -39,7 +39,7 @@ const Sidebar = () => {
 				<NavLink to="/availabilities" className={styles.navLink}
 					onClick={() => setOpen(prev => prev === true && false)}
 				>
-					{({ isActive }) => 
+					{({ isActive }) =>
    					<span className={isActive ? styles.active : ""}>Availabilities</span>
 					}
 				</NavLink>
@@ -47,7 +47,7 @@ const Sidebar = () => {
 				{/* <NavLink to="/time-offs" className={styles.navLink}
 					onClick={() => setOpen(prev => prev === true && false)}
 				>
-					{({ isActive }) => 
+					{({ isActive }) =>
    					<span className={isActive ? styles.active : ""}>Time Offs</span>
 					}
 				</NavLink>
@@ -55,18 +55,11 @@ const Sidebar = () => {
 				<NavLink to="/settings" className={styles.navLink}
 					onClick={() => setOpen(prev => prev === true && false)}
 				>
-					{({ isActive }) => 
+					{({ isActive }) =>
    					<span className={isActive ? styles.active : ""}>Settings</span>
 					}
 				</NavLink> */}
 			</nav>
-
-			<div 
-				className={styles.pullTab}
-				onClick={() => setOpen(prev => !prev)}
-			>
-   			<span>{open ? "<" : ">"}</span>
-			</div>
 		</aside>
 	)
 }

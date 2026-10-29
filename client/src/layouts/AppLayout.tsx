@@ -42,7 +42,7 @@ const AppLayout = () => {
 			<Sidebar />
 
 			<div className={styles.mainContent}>
-				<header>
+				<header className={styles.navBar}>
 					<h2 className={styles.pageName} onClick={() => navigate("/dashboard")}>{pageName}</h2>
 					{user?.isGuest ? 
 						<Link to="/register" className={styles.guestButton}>

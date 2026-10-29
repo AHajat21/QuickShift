@@ -77,11 +77,12 @@ const Company = () => {
 			error: (error) => {
 				console.error("Failed to create employee:", error)
 				return "Failed to create employee. Please try again."
+			},
+			finally: () => {
+				setEmployeeFirstName("")
+				setEmployeeLastName("")
 			}
 		})
-
-		setEmployeeFirstName("")
-		setEmployeeLastName("")
 	}
 	const deleteEmployee = async (employeeId: string) => {
 		const promise = api.delete(`/employees/${employeeId}`)
