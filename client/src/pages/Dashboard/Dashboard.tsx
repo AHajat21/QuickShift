@@ -63,27 +63,49 @@ const Dashboard = () => {
 	return (
 		<div className={styles.dashboard}>
 			<section className={styles.welcome}>
-				<h1>Hello {user?.firstName}!</h1>
-				<p>What would you like to do?</p>
+				{user?.isGuest &&
+				<div className={styles.guestNotice}>
+					<h2>Notice!</h2>
+					<p>
+						As a guest user your data is not saved. 
+						Please register to keep your data.
+					</p>
+				</div>
+				}
+
+				<div className={styles.greeting}>
+					<h2>Hello {user?.firstName}!</h2>
+					<p>What would you like to do?</p>
+				</div>
+
+				<div className={styles.generalNotice}>
+					<h2>Beta version</h2>
+					<p>
+						Please note that this is a beta version and may contain bugs.
+						I would appreciate any feedback you may have. 
+						You can reach me at <a href="mailto:ahajat60@gmail.com">ahajat60@gmail.com</a>
+					</p>
+				</div>
+
 			</section>
 			
 
 			<section className={styles.summaryCards}>
-				<article className={styles.employeeCard}>
-					<h2>Employees</h2>
-					
+				<article className={styles.companyCard}>
+					<h2>Company {!user?.companyId && <span> - Start here!</span>}</h2>
+					<p>Manage company and employees</p>
 					<Link to="/company">See all</Link>
 				</article>
 
 				<article className={styles.availableCard}>
 					<h2>Availabilities</h2>
-
+					<p>Set individual employee availabilities</p>
 					<Link to="/availabilities">See all</Link>
 				</article>
 
 				<article className={styles.timetablesCard}>
 					<h2>Timetables</h2>
-
+					<p>Manage weekly rotas and shifts</p>
 					<Link to="/timetables">See all</Link>
 				</article>
 			</section>

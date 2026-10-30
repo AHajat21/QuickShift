@@ -111,7 +111,8 @@ const ManageTimetable = () => {
 			}
 		})
 	}
-	const deleteShift = async (shiftId: number) => {
+	const deleteShift = async (shiftId: number, e: React.MouseEvent<HTMLButtonElement>) => {
+		e.stopPropagation()
 		const promise = api.delete(`/timetables/${timetableId}/shifts/${shiftId}`)
 		toast.promise(promise, {
 			loading: "Deleting shift...",
@@ -136,7 +137,9 @@ const ManageTimetable = () => {
 		<div className={styles.manageTimetable}>
 			<div className={styles.timetableContainer}>
 				<div className={styles.timetable}>
-					<div className={styles.corner}/>
+					<div className={styles.corner}
+						onClick={() => setSelectedCell(null)}
+					/>
 
 					{daysOfWeek.map(day =>
 						<div key={day}
@@ -145,8 +148,8 @@ const ManageTimetable = () => {
 							}`}
 							onClick={() => setSelectedCell({name: 'day-cell', day})}
 						>
-							<span>{day}</span>
-							<span>{dateToDay(day, weekCommencing).toLocaleDateString()}</span>
+							<span>{day.substring(0, 3)}</span>
+							<span>{dateToDay(day, weekCommencing).toLocaleDateString().substring(0, 5)}</span>
 						
 						</div>
 					)}
@@ -225,7 +228,7 @@ const ManageTimetable = () => {
 											title='endTime'
 										/>
 
-										<button className={styles.deleteShift} onClick={() => deleteShift(shift.id)}>X</button>
+										<button className={styles.deleteShift} onClick={e => deleteShift(shift.id, e)}>X</button>
 									</div>
 								)
 

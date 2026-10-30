@@ -16,7 +16,7 @@ const TimetableCard = ({t, setTimetables, deleteTimetable, duplicateTimetable, r
 	const previousValue = useRef("")
 
 	useEffect(() => {
-		function handleClickOutside(event: MouseEvent) {
+		const handleClickOutside = (event: MouseEvent) => {
 			if (
 				menuContainerRef.current &&
 				!menuContainerRef.current.contains(event.target as Node)
@@ -32,22 +32,24 @@ const TimetableCard = ({t, setTimetables, deleteTimetable, duplicateTimetable, r
 
 	return (
 		<div key={t.id} className={styles.timetableCard} ref={menuContainerRef}>
-			<div className={styles.header}>
-				<input 
-					type="text"
-					className={styles.timetableName}
-					value={t.name}
-					onChange={e => 
-						setTimetables(prev => prev.map(timetable =>
-							timetable.id === t.id ? { ...timetable, name: e.target.value } : timetable
-						))
-					}
-					onFocus={e => previousValue.current = e.target.value}
-					onBlur={e => renameTimetable(t.id, e.target.value, previousValue.current)}
-				/>
+			<input 
+				type="text"
+				className={styles.timetableName}
+				value={t.name}
+				onChange={e => 
+					setTimetables(prev => prev.map(timetable =>
+						timetable.id === t.id ? { ...timetable, name: e.target.value } : timetable
+					))
+				}
+				onFocus={e => previousValue.current = e.target.value}
+				onBlur={e => renameTimetable(t.id, e.target.value, previousValue.current)}
+			/>
+			
+			<div>
+				<p>Week commencing: {new Date(t.weekCommencing).toLocaleDateString()}</p>
+				<p>Created at: {new Date(t.createdAt).toLocaleDateString()}</p>
 			</div>
 
-			<p>Week commencing: {new Date(t.weekCommencing).toLocaleDateString()}</p>
 
 			<div className={styles.footer}>
 				<Link to={`/timetables/${t.id}`} className={styles.viewTimetable}

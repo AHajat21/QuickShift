@@ -26,13 +26,14 @@ const Login = () => {
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 		if (isSubmitting) return
-		setIsSubmitting(true)
 
 		const validationError = loginValidator(email, password)
 		if (validationError) {
 			toast.error(validationError)
 			return
 		}
+
+		setIsSubmitting(true)
 
 		if (user?.isGuest) await api.post('/auth/logout')
 
@@ -52,18 +53,21 @@ const Login = () => {
 				console.error('Login failed:', error)
 				return 'Login failed. Please check your details and try again.'
 			},
+			finally: () => setIsSubmitting(false)
 		})
 	}
 
 	const continueAsGuest = async () => {
+		if (isSubmitting) return
 		if (user?.isGuest) {
 			navigate('/dashboard', { replace: true })
 			return
 		}
+		setIsSubmitting(true)
 
 		const promise = api.post('/auth/guest')
 		toast.promise(promise, {
-			loading: 'Preparing your workspace...',
+			loading: 'Continuing as guest...',
 			success: (response) => {
 				setUser(response.data.user)
 				navigate('/dashboard', { replace: true })
@@ -73,6 +77,7 @@ const Login = () => {
 				console.error('Guest registration failed:', error)
 				return 'Failed to continue as a guest. Please try again.'
 			},
+			finally: () => setIsSubmitting(false)
 		})
 	}
 

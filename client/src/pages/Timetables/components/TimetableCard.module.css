@@ -2,7 +2,7 @@
 	display: flex;
 	flex-direction: column;
 	max-width: 450px;
-	gap: 12px;
+	gap: 8px;
 	padding: 20px;
 	border: 1px solid #e3e8e5;
 	border-radius: 14px;
@@ -18,20 +18,30 @@
 .timetableCard:hover {
 	transform: translateY(-2px);
 	border-color: #cbdcd3;
-	box-shadow: 0 8px 22px rgba(0, 0, 0, 0.09);
-}
-
-.header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
 }
 
 .timetableName {
-	overflow-wrap: anywhere;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	background-color: transparent;
+	padding: 4px;
+
 	font-size: 1.15rem;
 	color: #1f2937;
 	line-height: 1.4;
+
+	outline: none;
+	transition: 
+		border-color 0.2s ease,
+		background-color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+.timetableName:hover {background-color: #fbfcec;}
+.timetableName:focus-visible {
+	background-color: #ffffff;
+	border-color: #b9d0c3;
+	box-shadow: 0 0 0 3px rgba(74, 137, 107, 0.1);
 }
 
 .viewTimetable{
@@ -145,8 +155,7 @@
 .dropdown button:hover {
 	background-color: #f3f4f6;
 }
-
-.dropdown:last-child {
+.dropdown button:last-child {
 	color: red;
 }
 

@@ -3,7 +3,8 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 24px;
-	padding: 24px;
+	padding: 4px;
+	margin-top: 16px;
 }
 
 .timetableContainer {
@@ -16,12 +17,16 @@
 
 .timetable {
 	display: grid;
-	grid-template-columns: 150px repeat(7, minmax(110px, 1fr));
+	grid-template-columns: 115px repeat(7, 1fr);
 
 	border: 1px solid #e1e7ef;
 	border-bottom: 2px solid #e1e7ef;
 	border-radius: 12px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	overflow-x: auto;
+	div:last-child {
+		border-bottom-right-radius: 12px;
+	}
 }
 
 .selectedCell {
@@ -36,8 +41,7 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-
-	min-height: 52px;
+	min-width: 50px;
 	padding: 10px 6px;
 	background-color: #f4f8fc;
 	border-bottom: 1px solid #e1e7ef;
@@ -55,13 +59,13 @@
 .dayHeader {
 	gap: 2px;
 	font-weight: 700;
-	font-size: 0.85rem;
+	font-size: 0.75rem;
 	color: #374151;
 	border-top-right-radius: 12px;
 	letter-spacing: 0.5px;
 	overflow: hidden;
 
-	:last-child {
+	span:last-child {
 		font-size: 0.7rem;
 	}
 }
@@ -73,7 +77,8 @@
 
 	display: flex;
 	align-items: center;
-	padding: 12px;
+	padding: 6px;
+	overflow-x: auto;
 
 	font-size: 0.85rem;
 	font-weight: 600;
@@ -85,7 +90,7 @@
 }
 
 .emptyCell {
-	background-color: #b30000;
+	background-color: #c51313;
 
 	font-size: 1.5rem;
 	font-weight: 400;
@@ -100,7 +105,7 @@
 }
 .emptyCell:hover {
 	color: #006cff;
-	background-color: #eef5ff;
+	background-color: #df8f8f;
 }
 .emptyCell:focus-visible {
 	position: relative;
@@ -139,11 +144,12 @@
 	border: 1px solid #e1e7ef;
 	border-radius: 6px;
 
-	font-size: 0.8rem;
+	font-size: 0.67rem;
 	font-weight: 500;
 	color: #374151;
 
 	outline: none;
+	cursor: pointer;
 	transition:
 		border-color 0.2s ease,
 		background-color 0.2s ease,
@@ -195,43 +201,14 @@
 	outline: 2px solid #c9362b;
 	outline-offset: 2px;
 }
-
-
-@media (max-width: 768px) {
-	.manageTimetable {padding: 16px;}
-
-	.timetable {
-		grid-template-columns: 90px repeat(7, minmax(90px, 1fr));
-	}
-
-	.dayHeader {
-		font-size: 0.65rem;
-		:last-child {
-			font-size: 0.6rem;
-		}
-	}
-
-	.employeeCell {
-		padding: 4px;
-		font-size: 0.75rem;
-	}
-	
-	.shiftCell {gap: 4px;}
-	.shiftCell input {font-size: 0.65rem;}
+.deleteShift:active {
+	transform: scale(0.98)
 }
 
+
 @media (max-width: 480px) {
-	.manageTimetable {padding: 10px;}
-
-	.timetable {
-		grid-template-columns: 100px repeat(7, minmax(95px, 1fr));
-	}
-
 	.dayHeader {
 		font-size: 0.6rem;
-		:last-child {
-			font-size: 0.55rem;
-		}
 	}
 
 	.employeeCell {

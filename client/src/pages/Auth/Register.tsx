@@ -26,15 +26,16 @@ const Register = () => {
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 		if (isSubmitting) return
-		setIsSubmitting(true)
 
-		const validationError = registrationValidator(
-			email, password, firstName
-		)
+		const validationError = registrationValidator(email, password, firstName)
 		if (validationError) {
 			toast.error(validationError)
 			return
 		}
+
+		setIsSubmitting(true)
+
+
 
 		const isGuest = user?.isGuest === true
 		const endpoint = isGuest
@@ -71,10 +72,15 @@ const Register = () => {
 
 	const registerGuest = async () => {
 		if (isSubmitting) return
+		if (user?.isGuest) {
+			navigate('/dashboard', { replace: true })
+			return
+		}
 		setIsSubmitting(true)
+		
 		const promise = api.post('/auth/guest')
 		toast.promise(promise, {
-			loading: 'Creating a guest account...',
+			loading: 'Continuing as guest...',
 			success: (response) => {
 				setUser(response.data.user)
 				navigate('/dashboard', { replace: true })

@@ -50,7 +50,7 @@ const Unavailabilities = () => {
 		}
 
 
-		function handleClickOutside(event: MouseEvent) {
+		const handleClickOutside = (event: MouseEvent) => {
 			if (
 				selectedCellRef.current &&
 				!selectedCellRef.current.contains(event.target as Node)
@@ -149,6 +149,7 @@ const Unavailabilities = () => {
 	if (loading) return <LoadingPage />
 	if (isError) return <ErrorPage />
 	if (!user?.companyId) return <div className={styles.emptyState}>Please create a company first</div>
+	if (employees.length === 0) return <div className={styles.noEmployees}>You have no employees yet. Please add employees to your company first.</div>
 
 	return (
 		<div className={styles.unavailabilitiesPage}>
@@ -170,7 +171,8 @@ const Unavailabilities = () => {
 				</select>
 				
 			</div>
-			
+			{
+			}
 			<div className={styles.chartContainer}>
 				<div className={styles.unavailabilitiesChart}>
 					<div className={styles.corner}/>
@@ -223,6 +225,13 @@ const Unavailabilities = () => {
 						</React.Fragment>
 					)}
 				</div>
+			</div>
+			
+			<div >
+				<p>
+					Press 2 points on an employee's cell to add a time when they are unavailable. <br />
+					Click the 'X' on an unavailability bar to delete it.
+				</p>
 			</div>
 		</div>
 	)

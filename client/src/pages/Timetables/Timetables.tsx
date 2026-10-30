@@ -130,7 +130,7 @@ const Timetables = () => {
 						type="text"
 						value={name}
 						onChange={e => setName(e.target.value)}
-						placeholder="e.g. Weekly rota"
+						placeholder="e.g. Weekly kitchen staff rota"
 						required
 					/>
 				</div>
