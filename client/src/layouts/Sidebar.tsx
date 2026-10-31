@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate, NavLink } from 'react-router'
 
 import styles from './Sidebar.module.css'
