@@ -24,9 +24,8 @@
 	border-radius: 12px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 	overflow-x: auto;
-	div:last-child {
-		border-bottom-right-radius: 12px;
-	}
+	overscroll-behavior-x: contain;
+	scrollbar-width: thin;
 }
 
 .selectedCell {
@@ -79,6 +78,7 @@
 	align-items: center;
 	padding: 6px;
 	overflow-x: auto;
+	scrollbar-width: thin;
 
 	font-size: 0.85rem;
 	font-weight: 600;
@@ -118,7 +118,6 @@
 
 	display: flex;
 	flex-direction: column;
-	
 	justify-content: center;
 	background-color: #ffffff;
 	border: none;
@@ -131,12 +130,22 @@
 .shiftYellow {background-color: #fff3b0}
 .shiftBlue {background-color: #61a5ff}
 .shiftGreen {background-color: #77ffa6}
-.shiftCell.shiftYellow input {background-color: #fff8cf}
-.shiftCell.shiftBlue input {background-color: #bbd8ff}
-.shiftCell.shiftGreen input {background-color: #ccffde}
+.shiftCell.shiftYellow div {background-color: #fff8cf}
+.shiftCell.shiftBlue div {background-color: #bbd8ff}
+.shiftCell.shiftGreen div {background-color: #ccffde}
 
-.shiftCell input {
-	padding: 4px;
+
+.startTime,
+.endTime {
+	select {
+		appearance: none;
+		font-size: 0.5rem;
+		padding: 0;
+	}
+	div {
+		border: none;
+		border-radius: 6px;
+	}
 	margin: 8px;
 	margin-bottom: 0;
 	background-color: #f8fafc;
@@ -144,7 +153,7 @@
 	border: 1px solid #e1e7ef;
 	border-radius: 6px;
 
-	font-size: 0.67rem;
+	font-size: 0.7rem;
 	font-weight: 500;
 	color: #374151;
 
@@ -155,7 +164,8 @@
 		background-color 0.2s ease,
 		box-shadow 0.2s ease;
 }
-.shiftCell input:hover {
+.startTime:hover,
+.endTime:hover {
 	border-color: #b8c9dd;
 	background-color: #ffffff;
 }
@@ -167,6 +177,7 @@
 
 .deleteShift {
 	padding: 2px;
+	margin-top: 3px;
 	font-size: 0.6rem;
 	font-weight: 600;
 	border: 1px solid #fbd5d1;;
@@ -216,7 +227,12 @@
 		font-size: 0.7rem;
 	}
 
-	.shiftCell input {font-size: 0.6rem;}
+	.startTime,
+	.endTime {
+		font-size: 0.6rem;
+		border-radius: 3px;
+		margin: 4px;
+	}
 
 	.deleteShift {
 		opacity: 1;

@@ -8,7 +8,8 @@ import { toast } from 'sonner'
 import ErrorPage from '../ErrorPage/ErrorPage.tsx'
 import LoadingPage from '../LoadingPage/LoadingPage.tsx'
 import { dateToDay, getShiftColour } from '../../utils/helper.ts'
-
+import TimePicker from 'react-time-picker'
+import 'react-time-picker/dist/TimePicker.css'
 
 type SelectedCell = 
  {name: "day-cell"; day: string} |
@@ -201,31 +202,34 @@ const ManageTimetable = () => {
 											day
 										})}
 									>
-										<input
-											className={styles[color]}
-											type="time"
+										<TimePicker
+											className={styles.startTime}
 											value={shift.startTime}
-											onFocus={() => previousValue.current = shift.startTime}
-											onChange={e =>
+											onFocus={() => {previousValue.current = shift.startTime; console.log(shift.startTime, shift.endTime)}}
+											onChange={value =>
 												setShifts(prev => prev.map(s =>
-													s.id === shift.id ? { ...s, startTime: e.target.value } : s
+													s.id === shift.id ? { ...s, startTime: value ?? ""} : s
 												))
 											}
-											onBlur={e => updateShift(shift.id, employee.id, day, "startTime", e.target.value)}
-											title='startTime'
+											onBlur={() => updateShift(shift.id, employee.id, day, "startTime", shift.startTime)}
+											disableClock
+											clearIcon={null}
+											format='hh:mma'
 										/>
 
-										<input
-											type="time"
+										<TimePicker
+											className={styles.endTime}
 											value={shift.endTime}
 											onFocus={() => previousValue.current = shift.endTime}
-											onChange={e =>
+											onChange={value =>
 												setShifts(prev => prev.map(s =>
-													s.id === shift.id ? { ...s, endTime: e.target.value } : s
+													s.id === shift.id ? { ...s, endTime: value ?? "" } : s
 												))
 											}
-											onBlur={e => updateShift(shift.id, employee.id, day, "endTime", e.target.value)}
-											title='endTime'
+											onBlur={() => updateShift(shift.id, employee.id, day, "endTime", shift.endTime)}
+											disableClock
+											clearIcon={null}
+											format='hh:mma'
 										/>
 
 										<button className={styles.deleteShift} onClick={e => deleteShift(shift.id, e)}>X</button>

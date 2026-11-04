@@ -105,6 +105,8 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 			)
 			const shiftStart = shift ? timeToMinutes(shift.startTime) : 0
 			const shiftEnd = shift ? timeToMinutes(shift.endTime) : 0
+			let shiftWidth = ((shiftEnd - shiftStart) / 1440) * 100
+			if (shiftWidth < 0) shiftWidth = 100 - (shiftStart / 1440) * 100
 			return (
 				<div className={styles.chartContainer}>
 					<div className={styles.unavailabilitiesChart}>
@@ -137,7 +139,7 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 							<div className={styles.unavailabilityBar}
 								style={{
 									left: `${(shiftStart / 1440) * 100}%`,
-									width: `${((shiftEnd - shiftStart) / 1440) * 100}%`,
+									width: `${shiftWidth}%`,
 									backgroundColor: "rgb(74, 137, 107)"
 								}}
 							/>

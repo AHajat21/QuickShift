@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, NavLink } from 'react-router'
+import { useNavigate, NavLink, Link } from 'react-router'
 
 import styles from './Sidebar.module.css'
 
@@ -9,7 +9,7 @@ const Sidebar = () => {
 
 	return (
 		<aside className={`${styles.sidebar} ${open && styles.open}`}>
-			<h1 className={styles.logo} onClick={() => navigate("/")}>QuickShift</h1>
+			<Link to="/" className={styles.logo}>QuickShift</Link>
 
 			<nav>
 				<NavLink to="/dashboard" className={styles.navLink}

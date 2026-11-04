@@ -11,10 +11,10 @@ export const dateToDay = (day: string, date: Date) => {
 }
 
 export const getShiftColour = (shift: Shift | undefined) => {
-    if (!shift) return "shiftRed"
-    if (shift.endTime <= "17:00" && shift.endTime !== "00:00") return "shiftYellow"
-    if (shift.startTime >= "17:00") return "shiftBlue"
-    return "shiftGreen"
+	if (!shift) return "shiftRed"
+	if (shift.endTime <= "17:00" && shift.endTime > shift.startTime) return "shiftYellow"
+	if (shift.startTime >= "17:00") return "shiftBlue"
+	return "shiftGreen"
 }
 
 export const loginValidator = (email: string, password: string): string | null => {

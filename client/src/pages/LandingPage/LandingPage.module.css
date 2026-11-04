@@ -267,13 +267,15 @@
 }
 
 .stepsGrid {
+	width: 100%;
 	display: flex;
 	justify-content: space-between;
 	gap: 35px;
 }
 .stepCard {
-	padding: 25px;
+	margin-top: 20px;
 	flex: 1;
+	text-align: center;
 }
 
 .stepNumber {
@@ -310,6 +312,7 @@
 	scrollbar-width: thin;
 	display: flex;
 	gap: 25px;
+	margin-top: 20px;
 }
 
 .featureCard {
