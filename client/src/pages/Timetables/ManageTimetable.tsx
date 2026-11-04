@@ -243,7 +243,6 @@ const ManageTimetable = () => {
 			</div>
 
 
-
 			<UnavailabilityPanel selectedCell={selectedCell} employees={employees} shifts={shifts} unavailabilities={unavailabilities}/>
 
 		</div>

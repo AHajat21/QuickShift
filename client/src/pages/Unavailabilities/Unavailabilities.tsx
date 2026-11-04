@@ -229,7 +229,7 @@ const Unavailabilities = () => {
 			
 			<div >
 				<p>
-					Press 2 points on an employee's cell to add a time when they are unavailable. <br />
+					Press 2 points on an employee's cell to add a time when they are UNAVAILABLE. <br />
 					Click the 'X' on an unavailability bar to delete it.
 				</p>
 			</div>

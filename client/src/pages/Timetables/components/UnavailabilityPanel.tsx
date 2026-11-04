@@ -136,11 +136,10 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 
 						<div className={styles.rowHeader}>Shift</div>
 						<div className={styles.unavailabilityCell}>
-							<div className={styles.unavailabilityBar}
+							<div className={styles.shiftBar}
 								style={{
 									left: `${(shiftStart / 1440) * 100}%`,
-									width: `${shiftWidth}%`,
-									backgroundColor: "rgb(74, 137, 107)"
+									width: `${shiftWidth}%`
 								}}
 							/>
 						</div>

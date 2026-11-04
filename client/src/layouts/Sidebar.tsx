@@ -1,10 +1,9 @@
 import { useState } from 'react'
-import { useNavigate, NavLink, Link } from 'react-router'
+import { NavLink, Link } from 'react-router'
 
 import styles from './Sidebar.module.css'
 
 const Sidebar = () => {
-	const navigate = useNavigate()
 	const [open, setOpen] = useState(false)
 
 	return (

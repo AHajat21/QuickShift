@@ -8,11 +8,11 @@ import LoadingPage from "../LoadingPage/LoadingPage";
 import { useAuth } from "../../context/AuthContext";
 
 
-const getInitials = (employee: Employee) => {
-	const first = employee.firstName?.trim().charAt(0) ?? "";
-	const last = employee.lastName?.trim().charAt(0) ?? "";
-	return `${first}${last}`.toUpperCase() || "?";
-};
+// const getInitials = (employee: Employee) => {
+// 	const first = employee.firstName?.trim().charAt(0) ?? "";
+// 	const last = employee.lastName?.trim().charAt(0) ?? "";
+// 	return `${first}${last}`.toUpperCase() || "?";
+// };
 
 const Company = () => {
 	const { user } = useAuth();
