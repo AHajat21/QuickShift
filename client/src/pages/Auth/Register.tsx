@@ -135,6 +135,7 @@ const Register = () => {
 									onChange={(e) => setFirstName(e.target.value)}
 									autoComplete="given-name"
 									placeholder="Your first name"
+									maxLength={50}
 									required
 								/>
 							</div>
@@ -151,6 +152,7 @@ const Register = () => {
 									onChange={(e) => setLastName(e.target.value)}
 									autoComplete="family-name"
 									placeholder="Your last name"
+									maxLength={50}
 								/>
 							</div>
 						</div>

@@ -154,7 +154,6 @@ export const updateShift = async (req, res, next) => {
 	const { employeeId, date, field, value} = req.body
 	const shiftDate = new Date(date)
 	if (isNaN(shiftDate.getTime())) {
-		console.log(date)
 		return res.status(400).json({
 			message: "Date is invalid"
 		})

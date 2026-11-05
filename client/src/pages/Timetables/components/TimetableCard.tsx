@@ -43,6 +43,8 @@ const TimetableCard = ({t, setTimetables, deleteTimetable, duplicateTimetable, r
 				}
 				onFocus={e => previousValue.current = e.target.value}
 				onBlur={e => renameTimetable(t.id, e.target.value, previousValue.current)}
+				maxLength={100}
+				required
 			/>
 			
 			<div>

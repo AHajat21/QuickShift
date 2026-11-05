@@ -15,22 +15,22 @@ import { useAuth } from "../../context/AuthContext";
 // };
 
 const Company = () => {
-	const { user } = useAuth();
+	const { user } = useAuth()
 
-	const [loading, setLoading] = useState(true);
-	const [isError, setIsError] = useState(false);
-	const [company, setCompany] = useState<Company | null>(null);
-	const [employees, setEmployees] = useState<Employee[]>([]);
+	const [loading, setLoading] = useState(true)
+	const [isError, setIsError] = useState(false)
+	const [company, setCompany] = useState<Company | null>(null)
+	const [employees, setEmployees] = useState<Employee[]>([])
 
-	const [companyName, setCompanyName] = useState("");
-	const [employeeFirstName, setEmployeeFirstName] = useState("");
-	const [employeeLastName, setEmployeeLastName] = useState("");
+	const [companyName, setCompanyName] = useState("")
+	const [employeeFirstName, setEmployeeFirstName] = useState("")
+	const [employeeLastName, setEmployeeLastName] = useState("")
 
-	const [editingEmployeeId, setEditingEmployeeId] = useState<string | null>(null);
-	const [editFirstName, setEditFirstName] = useState("");
-	const [editLastName, setEditLastName] = useState("");
-	const [savingEmployee, setSavingEmployee] = useState(false);
-	const [creatingEmployee, setCreatingEmployee] = useState(false);
+	const [editingEmployeeId, setEditingEmployeeId] = useState<string | null>(null)
+	const [editFirstName, setEditFirstName] = useState("")
+	const [editLastName, setEditLastName] = useState("")
+	const [savingEmployee, setSavingEmployee] = useState(false)
+	const [creatingEmployee, setCreatingEmployee] = useState(false)
 
 	useEffect(() => {
 		let isMounted = true
@@ -86,11 +86,11 @@ const Company = () => {
 	}
 
 	const createEmployee = async (e: SubmitEvent) => {
-		e.preventDefault();
+		e.preventDefault()
 
 		if (!employeeFirstName.trim()) {
-			toast.error("Please enter an employee's first name.");
-			return;
+			toast.error("Please enter an employee's first name.")
+			return
 		}
 
 		setCreatingEmployee(true);
@@ -116,15 +116,15 @@ const Company = () => {
 	}
 
 	const startEditing = (employee: Employee) => {
-		setEditingEmployeeId(employee.id);
-		setEditFirstName(employee.firstName);
-		setEditLastName(employee.lastName ?? "");
+		setEditingEmployeeId(employee.id)
+		setEditFirstName(employee.firstName)
+		setEditLastName(employee.lastName ?? "")
 	};
 
 	const cancelEditing = () => {
-		setEditingEmployeeId(null);
-		setEditFirstName("");
-		setEditLastName("");
+		setEditingEmployeeId(null)
+		setEditFirstName("")
+		setEditLastName("")
 	};
 
 	const saveEmployee = async (employee: Employee) => {
@@ -145,7 +145,7 @@ const Company = () => {
 					field: "firstName",
 					value: firstName,
 				}),
-			);
+			)
 		}
 
 		if (lastName !== (employee.lastName ?? "")) {
@@ -155,15 +155,15 @@ const Company = () => {
 					field: "lastName",
 					value: lastName,
 				}),
-			);
+			)
 		}
 
 		if (updates.length === 0) {
-			cancelEditing();
-			return;
+			cancelEditing()
+			return
 		}
 
-		setSavingEmployee(true);
+		setSavingEmployee(true)
 
 		try {
 			await Promise.all(updates);
@@ -173,21 +173,21 @@ const Company = () => {
 						? { ...e, firstName, lastName: lastName ?? null }
 						: e,
 				),
-			);
-			cancelEditing();
-			toast.success("Employee updated successfully.");
+			)
+			cancelEditing()
+			toast.success("Employee updated successfully.")
 		} catch (error) {
-			console.error("Failed to update employee:", error);
+			console.error("Failed to update employee:", error)
 
 			// Re-fetch in case one of the two field updates succeeded.
 			try {
-				const response = await api.get("/employees");
-				setEmployees(response.data.employees);
+				const response = await api.get("/employees")
+				setEmployees(response.data.employees)
 			} catch (refreshError) {
-				console.error("Failed to refresh employees:", refreshError);
+				console.error("Failed to refresh employees:", refreshError)
 			}
 
-			toast.error("Couldn't update the employee. Please try again.");
+			toast.error("Couldn't update the employee. Please try again.")
 		} finally {
 			setSavingEmployee(false);
 		}
@@ -196,9 +196,9 @@ const Company = () => {
 	const deleteEmployee = async (employee: Employee) => {
 		const confirmed = window.confirm(
 			`Delete ${employee.firstName} ${employee.lastName ?? ""}? This will remove their shifts and availability.`,
-		);
+		)
 
-		if (!confirmed) return;
+		if (!confirmed) return
 
 		const promise = api.delete(`/employees/${employee.id}`);
 		toast.promise(promise, {

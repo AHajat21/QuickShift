@@ -16,7 +16,7 @@ const Timetables = () => {
 
 	const [timetables, setTimetables] = useState<Timetable[]>([])
 	const [name, setName] = useState("")
-	const [weekDate, setWeekDate] = useState("")
+	const [weekDate, setWeekDate] = useState(new Date().toISOString().substring(0, 10))
 
 	useEffect(() => {
 		const fetchTimetables = async () => {
@@ -74,6 +74,11 @@ const Timetables = () => {
 		})
 	}
 	const deleteTimetable = async (tId: string) => {
+		const confirmed = window.confirm(
+			`Delete this timetable? This action is irreversible`,
+		)
+		if (!confirmed) return
+
 		const promise = api.delete(`/timetables/${tId}`)
 		toast.promise(promise, {
 			loading: "Deleting timetable...",
@@ -92,7 +97,6 @@ const Timetables = () => {
 			field: "name",
 			value: name
 		})
-		console.log(name)
 		toast.promise(promise, {
 			loading: "Renaming timetable...",
 			success: () => {
@@ -131,6 +135,7 @@ const Timetables = () => {
 						value={name}
 						onChange={e => setName(e.target.value)}
 						placeholder="e.g. Weekly kitchen staff rota"
+						maxLength={100}
 						required
 					/>
 				</div>

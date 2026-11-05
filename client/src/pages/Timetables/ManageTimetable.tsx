@@ -76,23 +76,19 @@ const ManageTimetable = () => {
 
 	const updateShift = async (shiftId: number, employeeId: string, day: string, field: "startTime" | "endTime", value: string) => {
 		const date = dateToDay(day, weekCommencing)
-
-		const promise = api.patch(`/timetables/${timetableId}/shifts/${shiftId}`, {
-			date, employeeId, field, value
-		})
-		toast.promise(promise, {
-			loading: "Updating shift...",
-			success: "Shift updated successfully!",
-			error: (error) => {
-				setShifts(prev =>
-					prev.map(s =>
-						s.id === shiftId ? { ...s, [field]: previousValue.current } : s
-					)
+		try {
+			api.patch(`/timetables/${timetableId}/shifts/${shiftId}`, {
+				date, employeeId, field, value
+			})
+		} catch (error) {
+			console.error("Failed to update shift:", error)
+			toast.error("Failed to update shift. Please try again.")
+			setShifts(prev =>
+				prev.map(s =>
+					s.id === shiftId ? { ...s, [field]: previousValue.current } : s
 				)
-				console.error("Failed to update shift:", error)
-				return "Failed to update shift. Please try again."
-			}
-		})
+			)			
+		}
 	}
 	const createShift = async (employeeId: string, day: string) => {
 		const date = dateToDay(day, weekCommencing)
@@ -133,6 +129,7 @@ const ManageTimetable = () => {
 
 	if (loading) return <LoadingPage />
 	if (isError) return <ErrorPage />
+	if (employees.length === 0) return <div className={styles.noEmployees}>You have no employees yet. Please add employees to your company first.</div>
 
 	return (
 		<div className={styles.manageTimetable}>
@@ -151,7 +148,6 @@ const ManageTimetable = () => {
 						>
 							<span>{day.substring(0, 3)}</span>
 							<span>{dateToDay(day, weekCommencing).toLocaleDateString().substring(0, 5)}</span>
-						
 						</div>
 					)}
 
@@ -205,7 +201,7 @@ const ManageTimetable = () => {
 										<TimePicker
 											className={styles.startTime}
 											value={shift.startTime}
-											onFocus={() => {previousValue.current = shift.startTime; console.log(shift.startTime, shift.endTime)}}
+											onFocus={() => previousValue.current = shift.startTime}
 											onChange={value =>
 												setShifts(prev => prev.map(s =>
 													s.id === shift.id ? { ...s, startTime: value ?? ""} : s
@@ -214,7 +210,7 @@ const ManageTimetable = () => {
 											onBlur={() => updateShift(shift.id, employee.id, day, "startTime", shift.startTime)}
 											disableClock
 											clearIcon={null}
-											format='hh:mma'
+											format='HH:mm'
 										/>
 
 										<TimePicker
@@ -229,7 +225,7 @@ const ManageTimetable = () => {
 											onBlur={() => updateShift(shift.id, employee.id, day, "endTime", shift.endTime)}
 											disableClock
 											clearIcon={null}
-											format='hh:mma'
+											format='HH:mm'
 										/>
 
 										<button className={styles.deleteShift} onClick={e => deleteShift(shift.id, e)}>X</button>

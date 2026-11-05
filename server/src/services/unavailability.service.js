@@ -7,15 +7,13 @@ export const validateUnavailabilityService = async ({
 		where: {
 			employeeId,
 			day,
-			AND: [
-				{
-					startTime: {lt: endTime},
-					endTime: {gt: startTime}
-				}
-			]
+			AND: {
+				startTime: {lt: endTime},
+				endTime: {gt: startTime}
+			}
 		}
 	})
 	if (unavailability) {
-		throw new Error("Unavailability already exists here:", unavailability)
+		throw new Error("Availability already exists here:", unavailability)
 	}
 }

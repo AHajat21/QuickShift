@@ -200,6 +200,7 @@ const Unavailabilities = () => {
 								).map(a =>
 									<div key={a.id} 
 										className={styles.unavailabilityBar}
+										onClick={e => e.stopPropagation()}
 										title={`${a.startTime}-${a.endTime}`}
 										style={{
 											left: `${(timeToMinutes(a.startTime)/1440) * 100}%`,
