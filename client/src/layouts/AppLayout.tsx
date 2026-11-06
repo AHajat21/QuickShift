@@ -46,7 +46,7 @@ const AppLayout = () => {
 					<h2 className={styles.pageName} onClick={() => navigate("/dashboard")}>{pageName}</h2>
 					{user?.isGuest ? 
 						<Link to="/register" className={styles.guestButton}>
-							Save your data
+							Register to keep your rotas
 						</Link>
 					:
 						<button className={styles.logoutButton}

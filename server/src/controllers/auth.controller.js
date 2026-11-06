@@ -103,17 +103,17 @@ export const logout = async (req, res, next) => {
 			where: {
 				tokenHash
 			}
-		});
+		})
 
 		res.clearCookie("session", {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
-			sameSite: "none",
+			sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 			path: "/"
-		});
+		})
 
 
-		res.status(200).json({
+		return res.status(200).json({
 			message: "Logged out successfully"
 		})
 	} catch (error) {
@@ -147,7 +147,7 @@ export const guestRegister = async (req, res, next) => {
 			res.clearCookie("session", {
 				httpOnly: true,
 				secure: process.env.NODE_ENV === "production",
-				sameSite: "none",
+				sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 				path: "/"
 			})
 		}
@@ -209,7 +209,7 @@ export const guestConvert = async (req, res, next) => {
 		res.cookie("session", sessionToken, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
-			sameSite: "none",
+			sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 			path: "/",
 			maxAge: 7 * 24 * 60 * 60 * 1000
 		})

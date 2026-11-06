@@ -135,8 +135,8 @@ export const createShift = async (req, res, next) => {
 				timetableId: req.params.timetableId,
 				date: shiftDate,
 				day,
-				startTime: "00:00",
-				endTime: "00:00"
+				startTime: "09:00",
+				endTime: "17:00"
 			}
 		})
 

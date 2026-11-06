@@ -147,7 +147,7 @@ const ManageTimetable = () => {
 							onClick={() => setSelectedCell({name: 'day-cell', day})}
 						>
 							<span>{day.substring(0, 3)}</span>
-							<span>{dateToDay(day, weekCommencing).toLocaleDateString().substring(0, 5)}</span>
+							<span>{dateToDay(day, weekCommencing).getDate()}</span>
 						</div>
 					)}
 

@@ -76,6 +76,7 @@ const Company = () => {
 			success: (response) => {
 				setCompany(response.data.company)
 				setCompanyName("")
+				window.location.reload()
 				return "Company created successfully!"
 			},
 			error: (error) => {

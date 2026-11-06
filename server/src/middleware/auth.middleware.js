@@ -14,9 +14,9 @@ export const authenticate = async (req, res, next) => {
 			include: {user: true}
 		})
 
-		if (!session) return res.status(401).json({
+		if (!session) {console.log(session);return res.status(401).json({
 			message: "Authentication required"
-		})
+		})}
 
 		if (new Date() >= session.expiresAt) {
 			await prisma.sessions.delete({

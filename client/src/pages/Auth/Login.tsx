@@ -35,7 +35,11 @@ const Login = () => {
 
 		setIsSubmitting(true)
 
-		if (user?.isGuest) await api.post('/auth/logout')
+		if (user?.isGuest) {
+			// REPLACE with guest delete
+			await api.post('/auth/logout')
+
+		}
 
 		const promise = api.post('/auth/login', {
 			email: email.trim(),
@@ -140,8 +144,11 @@ const Login = () => {
 							/>
 						</div>
 
-						<button type="submit" className={styles.submitButton}>
-							Log in
+						<button type="submit"
+							className={styles.submitButton}
+							disabled={isSubmitting}
+						>
+							{isSubmitting ? "Logging in..." : "Log in"}
 							<span aria-hidden="true">→</span>
 						</button>
 					</form>
@@ -159,6 +166,7 @@ const Login = () => {
 						type="button"
 						className={styles.guestButton}
 						onClick={continueAsGuest}
+						disabled={isSubmitting}
 					>
 						Continue as a guest
 						<span aria-hidden="true">→</span>

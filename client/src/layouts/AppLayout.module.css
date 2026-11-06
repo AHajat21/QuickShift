@@ -68,8 +68,8 @@
 	outline-offset: 2px;
 }
 
-.guestButton {background: #864747}
-.guestButton:hover {background: #653535;}
+.guestButton {background: #478988;}
+.guestButton:hover {background: #47867f}
 .guestButton:focus-visible {outline-color:rgba(137, 74, 74, 0.25);}
 
 
@@ -83,9 +83,7 @@
 		margin: 4px 6px 10px;
 		padding: 7px 16px;
 
-		.pageName {
-			font-size: 1.25rem;
-		}
+		.pageName {font-size: 1.25rem;}
 	}
 
 }

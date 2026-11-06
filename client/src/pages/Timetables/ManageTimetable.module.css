@@ -90,11 +90,11 @@
 }
 
 .emptyCell {
-	background-color: #c51313;
+	background-color: #989595;
 
 	font-size: 1.5rem;
 	font-weight: 400;
-	color: #9ca3af;
+	color: #4f4f4f;
 	border: none;
 	border-right: 1px solid #e1e7ef;
 	border-bottom: 1px solid #e1e7ef;
@@ -104,8 +104,8 @@
 		color 0.2s ease;
 }
 .emptyCell:hover {
-	color: #006cff;
-	background-color: #df8f8f;
+	color: #7a0000;
+	background-color: #7d5757;
 }
 .emptyCell:focus-visible {
 	position: relative;
@@ -174,7 +174,8 @@
 }
 
 .deleteShift {
-	padding: 2px;
+	width: 100%;
+	padding: 2px 4px;
 	margin-top: 3px;
 	font-size: 0.6rem;
 	font-weight: 600;
