@@ -6,6 +6,9 @@
 }
 
 html, body, #root {
-	height: 100%;
-	overflow-y: auto;
+	min-height: 100%;
+}
+:root {
+	font-family: 'Inter', sans-serif;
+	font-synthesis: none;
 }

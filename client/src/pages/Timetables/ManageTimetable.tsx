@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { api } from '../../services/api'
-import { useParams } from 'react-router'
+import { Link, useParams } from 'react-router'
 
 import styles from './ManageTimetable.module.css'
 import UnavailabilityPanel from './components/UnavailabilityPanel.tsx'
@@ -129,7 +129,7 @@ const ManageTimetable = () => {
 
 	if (loading) return <LoadingPage />
 	if (isError) return <ErrorPage />
-	if (employees.length === 0) return <div className={styles.noEmployees}>You have no employees yet. Please add employees to your company first.</div>
+	if (employees.length === 0) return <div className={styles.noEmployees}>You have no employees yet. Please <Link to="../company">add employees</Link> to your company first.</div>
 
 	return (
 		<div className={styles.manageTimetable}>

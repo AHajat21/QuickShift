@@ -7,6 +7,7 @@ import ErrorPage from '../ErrorPage/ErrorPage'
 import LoadingPage from '../LoadingPage/LoadingPage'
 import TimetableCard from './components/TimetableCard'
 import { useAuth } from '../../context/AuthContext'
+import CreateCompanyPage from '../CreateCompanyPage/CreateCompany'
 
 
 const Timetables = () => {
@@ -114,7 +115,7 @@ const Timetables = () => {
 
 	if (loading) return <LoadingPage />
 	if (isError) return <ErrorPage />
-	if (!user?.companyId) return <div className={styles.emptyState}>Please create a company first</div>
+	if (!user?.companyId) return <CreateCompanyPage />
 
   	return (
 		<div className={styles.timetablePage}>

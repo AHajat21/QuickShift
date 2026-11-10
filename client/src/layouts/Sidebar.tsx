@@ -10,50 +10,38 @@ const Sidebar = () => {
 		<aside className={`${styles.sidebar} ${open && styles.open}`}>
 			<Link to="/" className={styles.logo}>QuickShift</Link>
 
-			<nav>
-				<NavLink to="/dashboard" className={styles.navLink}
-					onClick={() => setOpen(prev => prev === true && false)}
-				>
+			<nav className={styles.navLinks}>
+				<NavLink to="/dashboard" onClick={() => setOpen(false)}>
 					{({ isActive }) => 
     					<span className={isActive ? styles.active : ""}>Dashboard</span>
  					}
 				</NavLink>
 
-				<NavLink to="/timetables" className={styles.navLink}
-					onClick={() => setOpen(prev => prev === true && false)}
-				>
+				<NavLink to="/timetables" onClick={() => setOpen(false)}>
 					{({ isActive }) => 
    					<span className={isActive ? styles.active : ""}>Timetables</span>
 					}
 				</NavLink>
 
-				<NavLink to="/company" className={styles.navLink}
-					onClick={() => setOpen(prev => prev === true && false)}
-				>
+				<NavLink to="/company" onClick={() => setOpen(false)}>
 					{({ isActive }) => 
    					<span className={isActive ? styles.active : ""}>Company</span>
 					}
 				</NavLink>
 
-				<NavLink to="/availabilities" className={styles.navLink}
-					onClick={() => setOpen(prev => prev === true && false)}
-				>
+				<NavLink to="/availabilities" onClick={() => setOpen(false)}>
 					{({ isActive }) => 
    					<span className={isActive ? styles.active : ""}>Availabilities</span>
 					}
 				</NavLink>
 
-				{/* <NavLink to="/time-offs" className={styles.navLink}
-					onClick={() => setOpen(prev => prev === true && false)}
-				>
+				{/* <NavLink to="/time-offs" onClick={() => setOpen(false)}>
 					{({ isActive }) => 
    					<span className={isActive ? styles.active : ""}>Time Offs</span>
 					}
 				</NavLink>
 
-				<NavLink to="/settings" className={styles.navLink}
-					onClick={() => setOpen(prev => prev === true && false)}
-				>
+				<NavLink to="/settings" onClick={() => setOpen(false)}>
 					{({ isActive }) => 
    					<span className={isActive ? styles.active : ""}>Settings</span>
 					}
@@ -64,7 +52,7 @@ const Sidebar = () => {
 				className={styles.pullTab}
 				onClick={() => setOpen(prev => !prev)}
 			>
-   			<span>|</span>
+   			<span>||</span>
 			</div>
 		</aside>
 	)

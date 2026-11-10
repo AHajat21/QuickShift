@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import ErrorPage from "../ErrorPage/ErrorPage";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import { useAuth } from "../../context/AuthContext";
+import CreateCompanyPage from "../CreateCompanyPage/CreateCompany";
 
 
 // const getInitials = (employee: Employee) => {
@@ -22,7 +23,6 @@ const Company = () => {
 	const [company, setCompany] = useState<Company | null>(null)
 	const [employees, setEmployees] = useState<Employee[]>([])
 
-	const [companyName, setCompanyName] = useState("")
 	const [employeeFirstName, setEmployeeFirstName] = useState("")
 	const [employeeLastName, setEmployeeLastName] = useState("")
 
@@ -66,25 +66,6 @@ const Company = () => {
 		};
 	}, [user?.companyId])
 
-
-	const createCompany = async (e: SubmitEvent) => {
-		e.preventDefault()
-
-		const promise = api.post("/companies", { name: companyName })
-		toast.promise(promise, {
-			loading: "Creating company...",
-			success: (response) => {
-				setCompany(response.data.company)
-				setCompanyName("")
-				window.location.reload()
-				return "Company created successfully!"
-			},
-			error: (error) => {
-				console.error("Failed to create company:", error)
-				return "Failed to create company. Please try again."
-			}
-		})
-	}
 
 	const createEmployee = async (e: SubmitEvent) => {
 		e.preventDefault()
@@ -217,45 +198,10 @@ const Company = () => {
 		})
 	}
 
-	if (loading) return <LoadingPage />;
-	if (isError) return <ErrorPage />;
+	if (loading) return <LoadingPage />
+	if (isError) return <ErrorPage />
 
-	if (!company) {
-		return (
-			<main className={styles.companyPage}>
-				<section className={styles.setupCard}>
-					<div className={styles.headingIcon} aria-hidden="true">
-						<svg viewBox="0 0 24 24">
-							<path d="M3.5 20.5h17M5.5 20.5V6.8l6.5-3.3 6.5 3.3v13.7M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 20.5v-4h4v4" />
-						</svg>
-					</div>
-					<p className={styles.eyebrow}>GETTING STARTED</p>
-					<h1>Create your company</h1>
-					<p className={styles.pageDescription}>
-						Set up your company to start organising your team.
-					</p>
-
-					<form className={styles.companyForm} onSubmit={createCompany}>
-						<label htmlFor="companyName">Company name</label>
-						<input
-							id="companyName"
-							name="companyName"
-							type="text"
-							placeholder="e.g. The Corner Café"
-							value={companyName}
-							onChange={e => setCompanyName(e.target.value)}
-							required
-							maxLength={100}
-						/>
-						<button className={styles.primaryButton} type="submit">
-							Create company
-							<span aria-hidden="true">→</span>
-						</button>
-					</form>
-				</section>
-			</main>
-		)
-	}
+	if (!company) return <CreateCompanyPage />
 
 	return (
 		<main className={styles.companyPage}>

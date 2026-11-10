@@ -1,10 +1,10 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router"
-import Sidebar from "./Sidebar"
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router"
 
 import styles from './AppLayout.module.css'
 import { api } from "../services/api"
 import { useAuth } from "../context/AuthContext.tsx"
 import { toast } from "sonner"
+import Sidebar from "./Sidebar.tsx"
 
 const AppLayout = () => {
 	const navigate = useNavigate()
@@ -41,25 +41,62 @@ const AppLayout = () => {
 		<div className={styles.appLayout}>
 			<Sidebar />
 
-			<div className={styles.mainContent}>
-				<header className={styles.navBar}>
-					<h2 className={styles.pageName} onClick={() => navigate("/dashboard")}>{pageName}</h2>
-					{user?.isGuest ? 
-						<Link to="/register" className={styles.guestButton}>
-							Register to keep your rotas
-						</Link>
-					:
-						<button className={styles.logoutButton}
-							onClick={handleLogout}
-						>Logout
-						</button>
-					}
-				</header>
+			<header className={styles.navBar}>
+				<h2 className={styles.pageName} onClick={() => navigate("/")}>{pageName}</h2>
+				
+				<nav className={styles.navLinks}>
+					<NavLink to="/dashboard">
+						{({ isActive }) => 
+							<span className={isActive ? styles.active : ""}>Dashboard</span>
+						}
+					</NavLink>
+					|
+					<NavLink to="/timetables">
+						{({ isActive }) => 
+							<span className={isActive ? styles.active : ""}>Timetables</span>
+						}
+					</NavLink>
+					|
+					<NavLink to="/company">
+						{({ isActive }) => 
+							<span className={isActive ? styles.active : ""}>Company</span>
+						}
+					</NavLink>
+					|
+					<NavLink to="/availabilities">
+						{({ isActive }) => 
+							<span className={isActive ? styles.active : ""}>Availabilities</span>
+						}
+					</NavLink>
 
-				<main>
-					<Outlet />
-				</main>
-			</div>
+					{/* <NavLink to="/time-offs">
+						{({ isActive }) => 
+							<span className={isActive ? styles.active : ""}>Time Offs</span>
+						}
+					</NavLink>
+
+					<NavLink to="/settings">
+						{({ isActive }) => 
+							<span className={isActive ? styles.active : ""}>Settings</span>
+						}
+					</NavLink> */}
+				</nav>
+				
+				
+				{user?.isGuest ? 
+					<Link to="/register" className={styles.guestButton}>
+						Register!
+					</Link>
+				:
+					<button className={styles.logoutButton} onClick={handleLogout}>
+						Logout
+					</button>
+				}
+			</header>
+
+			<main>
+				<Outlet />
+			</main>
 		</div>
 	)
 }

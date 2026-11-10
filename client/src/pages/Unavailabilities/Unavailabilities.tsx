@@ -7,6 +7,8 @@ import { toast } from 'sonner'
 import ErrorPage from '../ErrorPage/ErrorPage'
 import LoadingPage from '../LoadingPage/LoadingPage'
 import { useAuth } from '../../context/AuthContext'
+import CreateCompanyPage from '../CreateCompanyPage/CreateCompany'
+import { Link } from 'react-router'
 
 
 type NewUnavailability = {
@@ -148,8 +150,8 @@ const Unavailabilities = () => {
 
 	if (loading) return <LoadingPage />
 	if (isError) return <ErrorPage />
-	if (!user?.companyId) return <div className={styles.emptyState}>Please create a company first</div>
-	if (employees.length === 0) return <div className={styles.noEmployees}>You have no employees yet. Please add employees to your company first.</div>
+	if (!user?.companyId) return <CreateCompanyPage />
+	if (employees.length === 0) return <div className={styles.noEmployees}>You have no employees yet. Please <Link to="../company">add employees</Link> to your company first.</div>
 
 	return (
 		<div className={styles.unavailabilitiesPage}>

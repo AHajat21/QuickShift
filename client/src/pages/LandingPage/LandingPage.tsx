@@ -7,8 +7,8 @@ const LandingPage = () => {
 			<header className={styles.navBar}>
 				<Link to="/" className={styles.logo}>QuickShift</Link>
 				<nav className={styles.navLinks}>
-					<a href="#how-it-works">How it works</a>
-					<a href="#features">Features</a>
+					<a href="#how-it-works">How it works</a> |
+					<a href="#features">Features</a> |
 					<a href="#about">About</a>
 				</nav>
 
@@ -36,7 +36,7 @@ const LandingPage = () => {
 
 					<div className={styles.heroActions}>
 						<Link to="/register" className={styles.primaryButton}>
-							Get Started <span aria-hidden="true">→</span>
+							Get Started for free <span aria-hidden="true">→</span>
 						</Link>
 						<a href="#features" className={styles.secondaryButton}>
 							Explore Features
