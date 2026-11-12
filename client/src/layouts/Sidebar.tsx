@@ -34,18 +34,6 @@ const Sidebar = () => {
    					<span className={isActive ? styles.active : ""}>Availabilities</span>
 					}
 				</NavLink>
-
-				{/* <NavLink to="/time-offs" onClick={() => setOpen(false)}>
-					{({ isActive }) => 
-   					<span className={isActive ? styles.active : ""}>Time Offs</span>
-					}
-				</NavLink>
-
-				<NavLink to="/settings" onClick={() => setOpen(false)}>
-					{({ isActive }) => 
-   					<span className={isActive ? styles.active : ""}>Settings</span>
-					}
-				</NavLink> */}
 			</nav>
 
 			<div 

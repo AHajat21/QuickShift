@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./TimetableCard.module.css"
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 
 type TimetableCardProps = {
@@ -11,6 +11,7 @@ type TimetableCardProps = {
 	renameTimetable: (tId: string, name: string, previousValue: string) => void
 }
 const TimetableCard = ({t, setTimetables, deleteTimetable, duplicateTimetable, renameTimetable}: TimetableCardProps) => {
+	const navigate = useNavigate()
 	const [openMenu, setOpenMenu] = useState<boolean>(false)
 	const menuContainerRef = useRef<HTMLDivElement>(null)
 	const previousValue = useRef("")
@@ -75,8 +76,8 @@ const TimetableCard = ({t, setTimetables, deleteTimetable, duplicateTimetable, r
 								type="button"
 								role="menuitem"
 								onClick={() => {
-									setOpenMenu(false);
 									duplicateTimetable(t.id)
+									setOpenMenu(false)
 								}}
 							>Duplicate</button>
 
@@ -84,8 +85,8 @@ const TimetableCard = ({t, setTimetables, deleteTimetable, duplicateTimetable, r
 								type="button"
 								role="menuitem"
 								onClick={() => {
-									setOpenMenu(false);
 									deleteTimetable(t.id)
+									setOpenMenu(false)
 								}}
 							>Delete</button>
 						</div>

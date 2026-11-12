@@ -527,7 +527,7 @@
 	}
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
 	.logo {font-size: 1.4rem;}
 	.navActions {gap: 8px;}
 
@@ -538,11 +538,7 @@
 
 	.navLinks {gap: 18px;}
 	.navLinks a {font-size: 0.7rem;}
-
-	.heroActions {
-		flex-direction: column;
-	}
-
+	.heroActions {flex-direction: column;}
 	.stepsGrid {flex-direction: column;}
 
 	/* .floatingCard {

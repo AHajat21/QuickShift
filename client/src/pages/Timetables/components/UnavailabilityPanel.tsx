@@ -26,7 +26,7 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 	switch (selectedCell?.name) {
 		case "day-cell":
 			return (
-				<div className={styles.chartContainer}>
+				<div className={`${styles.chartContainer} no-print`}>
 					<div className={styles.unavailabilitiesChart}>
 						<div className={styles.corner}>{selectedCell.day}'s Availability</div>
 
@@ -65,7 +65,7 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 
 		case "employee-cell":
 			return (
-				<div className={styles.chartContainer}>
+				<div className={`${styles.chartContainer} no-print`}>
 					<div className={styles.unavailabilitiesChart}>
 						<div className={styles.corner}>{selectedCell.eName}'s Availability</div>
 
@@ -108,7 +108,7 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 			let shiftWidth = ((shiftEnd - shiftStart) / 1440) * 100
 			if (shiftWidth < 0) shiftWidth = 100 - (shiftStart / 1440) * 100
 			return (
-				<div className={styles.chartContainer}>
+				<div className={`${styles.chartContainer} no-print`}>
 					<div className={styles.unavailabilitiesChart}>
 						<div className={styles.corner}>{selectedCell.eName}'s {selectedCell.day} Availability</div>
 
@@ -149,7 +149,7 @@ const UnavailabilityPanel = (props: UnavailabilityPanelProps) => {
 	
 		default:
 			return (
-				<div className={styles.emptyState}>Select a cell for more availability information</div>
+				<div className={`${styles.emptyState} no-print`}>Select a cell for more availability information</div>
 			)
 	}
 }

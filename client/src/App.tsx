@@ -11,7 +11,6 @@ import Unavailabilities from "./pages/Unavailabilities/Unavailabilities.tsx"
 import ManageTimetable from "./pages/Timetables/ManageTimetable.tsx"
 import LandingPage from "./pages/LandingPage/LandingPage.tsx"
 
-
 const App = () => {
 
 	return (
@@ -31,8 +30,6 @@ const App = () => {
 							<Route path="timetables/:timetableId" element={<ManageTimetable />} />
 							<Route path="company" element={<Company />} />
 							<Route path="availabilities" element={<Unavailabilities />} />
-							{/* <Route path="time-offs" element={<TimeOffs />} />
-							<Route path="settings" element={<Settings />} /> */}
 						</Route>
 					</Route>
 				</Routes>

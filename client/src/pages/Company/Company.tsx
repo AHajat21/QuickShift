@@ -224,7 +224,7 @@ const Company = () => {
 				<div className={styles.sectionHeader}>
 					<div>
 						<h2 id="employees-heading">Employees</h2>
-						<p>Keep your team details up to date.</p>
+						<p>Keep your employee's details up to date.</p>
 					</div>
 					<span className={styles.employeeCount}>
 						{employees.length} {employees.length === 1 ? "employee" : "employees"}

@@ -94,11 +94,6 @@
 		background-color 0.2s ease,
 		transform 0.1s ease;
 }
-/* .navLinks a:last-child {
-	margin-top: auto;
-	margin-bottom: 12px;
-	align-self: flex-end;
-} */
 .navLinks a:hover {
 	box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
 	background-color: #e4eee9;

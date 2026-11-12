@@ -12,3 +12,10 @@ html, body, #root {
 	font-family: 'Inter', sans-serif;
 	font-synthesis: none;
 }
+
+
+@media print {
+	.no-print {
+		display: none !important;
+	}
+}

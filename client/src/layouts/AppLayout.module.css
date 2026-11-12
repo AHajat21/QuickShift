@@ -1,6 +1,6 @@
 .appLayout {
 	min-height: 100vh;
-	background: #f5f7f6;
+	background-color: #f5f7f6;
 	color: #222;
 }
 
@@ -108,5 +108,11 @@
 	.guestButton {
 		padding: 6px 9px;
 		font-size: 0.8rem;
+	}
+}
+
+@media print {
+	.appLayout {
+		background-color: white !important;
 	}
 }

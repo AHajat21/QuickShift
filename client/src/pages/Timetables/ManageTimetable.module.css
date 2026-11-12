@@ -2,9 +2,36 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 24px;
-	padding: 4px;
-	margin-top: 16px;
+	gap: 12px;
+	padding: 8px 4px;
+}
+
+.header {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	padding: 4px 8px;
+}
+
+.header h1 {font-size: 1.2rem;}
+
+.header button {
+	border: none;
+	background-color: #40b18f;
+	padding: 2px 4px;
+	border-radius: 5px;
+
+	cursor: pointer;
+	transition: 
+		background-color 0.2s ease,
+		transform 0.2s ease;
+}
+.header button:hover {
+	background-color: #309b75;
+	transform: translateY(-1px);
+}
+.header button:active {
+	transform: scale(0.97);
 }
 
 .timetableContainer {
@@ -20,7 +47,6 @@
 	grid-template-columns: 80px repeat(7, 1fr);
 
 	border: 1px solid #e1e7ef;
-	border-bottom: 2px solid #e1e7ef;
 	border-radius: 12px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 	overflow-x: auto;
@@ -237,5 +263,29 @@
 		border-radius: 12px 12px 0 0;
 		font-size: 0.5rem;
 		padding: 2px;
+	}
+}
+
+@media print {
+	@page {
+		margin: 10mm;
+	}
+
+	* {
+		print-color-adjust: exact !important;
+		box-shadow: none;
+	}
+	.header button {display: none;}
+
+	.manageTimetable {
+		padding: 0;
+	}
+
+	.timetableContainer {
+		overflow: visible !important;
+	}
+
+	.timetable {
+		min-width: 0 !important;
 	}
 }

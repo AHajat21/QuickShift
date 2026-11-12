@@ -16,8 +16,6 @@ const AppLayout = () => {
 		"/company": "Company",
 		"/timetables": "Timetables",
 		"/availabilities": "Employee availabilities",
-		"/time-offs": "Time Offs",
-		"/settings": "Settings"
 	}
 	const pageName = pageNames[location.pathname] ?? "QuickShift"
 
@@ -41,7 +39,7 @@ const AppLayout = () => {
 		<div className={styles.appLayout}>
 			<Sidebar />
 
-			<header className={styles.navBar}>
+			<header className={`${styles.navBar} no-print`}>
 				<h2 className={styles.pageName} onClick={() => navigate("/")}>{pageName}</h2>
 				
 				<nav className={styles.navLinks}>
@@ -68,18 +66,6 @@ const AppLayout = () => {
 							<span className={isActive ? styles.active : ""}>Availabilities</span>
 						}
 					</NavLink>
-
-					{/* <NavLink to="/time-offs">
-						{({ isActive }) => 
-							<span className={isActive ? styles.active : ""}>Time Offs</span>
-						}
-					</NavLink>
-
-					<NavLink to="/settings">
-						{({ isActive }) => 
-							<span className={isActive ? styles.active : ""}>Settings</span>
-						}
-					</NavLink> */}
 				</nav>
 				
 				
