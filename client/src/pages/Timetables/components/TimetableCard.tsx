@@ -11,7 +11,6 @@ type TimetableCardProps = {
 	renameTimetable: (tId: string, name: string, previousValue: string) => void
 }
 const TimetableCard = ({t, setTimetables, deleteTimetable, duplicateTimetable, renameTimetable}: TimetableCardProps) => {
-	const navigate = useNavigate()
 	const [openMenu, setOpenMenu] = useState<boolean>(false)
 	const menuContainerRef = useRef<HTMLDivElement>(null)
 	const previousValue = useRef("")
@@ -80,6 +79,15 @@ const TimetableCard = ({t, setTimetables, deleteTimetable, duplicateTimetable, r
 									setOpenMenu(false)
 								}}
 							>Duplicate</button>
+
+							<button
+								type="button"
+								role="menuitem"
+								onClick={() => {
+									
+									setOpenMenu(false)
+								}}
+							>Share link</button>
 
 							<button
 								type="button"
