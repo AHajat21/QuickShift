@@ -177,7 +177,7 @@ const Company = () => {
 
 	const deleteEmployee = async (employee: Employee) => {
 		const confirmed = window.confirm(
-			`Delete ${employee.firstName} ${employee.lastName ?? ""}? This will remove their shifts and availability.`,
+			`Delete ${employee.firstName} ${employee.lastName ?? ""}? This will remove this person's shifts and availability.`,
 		)
 
 		if (!confirmed) return

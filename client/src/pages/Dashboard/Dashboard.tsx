@@ -73,17 +73,12 @@ const Dashboard = () => {
 				</div>
 				}
 
-				<div className={styles.greeting}>
-					<h2>Hello {user?.firstName}!</h2>
-					<p>What would you like to do?</p>
-				</div>
-
 				<div className={styles.generalNotice}>
 					<h2>Beta version</h2>
 					<p>
 						Please note that this is a beta version and may contain bugs.
-						I would appreciate any feedback you may have. 
-						You can reach me at <a href="mailto:ahajat60@gmail.com">ahajat60@gmail.com</a>
+						Any feedback you may have would be appreciated. 
+						You can reach me at <a href="mailto:quickshiftsupport@gmail.com">quickshiftsupport@gmail.com</a>
 					</p>
 				</div>
 

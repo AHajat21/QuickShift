@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./TimetableCard.module.css"
-import { Link, useNavigate } from 'react-router'
+import { Link } from 'react-router'
 
 
 type TimetableCardProps = {
@@ -80,14 +80,14 @@ const TimetableCard = ({t, setTimetables, deleteTimetable, duplicateTimetable, r
 								}}
 							>Duplicate</button>
 
-							<button
+							{/* <button
 								type="button"
 								role="menuitem"
 								onClick={() => {
 									
 									setOpenMenu(false)
 								}}
-							>Share link</button>
+							>Share link</button> */}
 
 							<button
 								type="button"

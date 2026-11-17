@@ -5,19 +5,39 @@ import { api } from "../services/api"
 import { useAuth } from "../context/AuthContext.tsx"
 import { toast } from "sonner"
 import Sidebar from "./Sidebar.tsx"
+import { useEffect, useRef, useState } from "react"
 
 const AppLayout = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
 	const { user, setUser } = useAuth()
+	const menuContainerRef = useRef<HTMLDivElement>(null)
+
+	const [openMenu, setOpenMenu] = useState(false)
 
 	const pageNames: Record<string, string> = {
 		"/dashboard": "Dashboard",
 		"/company": "Company",
 		"/timetables": "Timetables",
-		"/availabilities": "Employee availabilities",
+		"/availabilities": "Availabilities",
+		"/settings": "Settings"
 	}
 	const pageName = pageNames[location.pathname] ?? "QuickShift"
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				menuContainerRef.current &&
+				!menuContainerRef.current.contains(event.target as Node)
+			) setOpenMenu(false)
+		}
+
+		document.addEventListener("mousedown", handleClickOutside);
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		}
+	}, []);
 
 	const handleLogout = () => {
 		const promise = api.post("/auth/logout")
@@ -74,9 +94,41 @@ const AppLayout = () => {
 						Register!
 					</Link>
 				:
-					<button className={styles.logoutButton} onClick={handleLogout}>
-						Logout
-					</button>
+					<div className={styles.accountWrapper} ref={menuContainerRef}>
+						<button
+							type="button"
+							className={styles.menuButton}
+							aria-label={`Options for user`}
+							aria-haspopup="menu"
+							aria-expanded={openMenu}
+							onClick={() =>
+								setOpenMenu(openMenu ? false : true)
+							}
+						>👤</button>
+						{openMenu && (
+						<div className={styles.dropdown} role="menu">
+							<button
+								type="button"
+								role="menuitem"
+								onClick={() => {
+									navigate("/settings")
+									setOpenMenu(false)
+								}}
+							>Settings</button>
+
+							{/* <button
+								type="button"
+								role="menuitem"
+								onClick={() => {
+									setOpenMenu(false)
+								}}
+							>Feedback</button> */}
+						</div>
+					)}
+						<button className={styles.logoutButton} onClick={handleLogout}>
+							Logout
+						</button>
+					</div>
 				}
 			</header>
 

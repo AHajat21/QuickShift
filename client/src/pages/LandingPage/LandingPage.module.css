@@ -8,7 +8,7 @@
 
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	min-height: 100%;
 	background: #ffffff;
 	color: var(--text);
 
@@ -110,7 +110,6 @@
 .hero {
 	padding: 70px 7%;
 	display: flex;
-	/* grid-template-columns: 0.95fr 1.05fr; */
 	justify-content: center;
 	align-items: center;
 	gap: 70px;
@@ -169,79 +168,6 @@
 	color: var(--muted);
 	font-size: 0.85rem;
 }
-
-/* HERO IMAGE PLACEHOLDER */
-.heroVisual {
-	position: relative;
-	padding: 20px 0;
-}
-
-.imagePlaceholder {
-	min-height: 390px;
-	padding: 35px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background: white;
-	border: 2px dashed #c8d9f1;
-	border-radius: 24px;
-	box-shadow: 0 24px 70px rgb(28 57 99 / 10%);
-}
-
-.placeholderIcon {
-	width: 70px;
-	height: 70px;
-	display: grid;
-	place-items: center;
-	border-radius: 18px;
-	background: #eaf2ff;
-	color: var(--primary);
-	font-size: 2.4rem;
-}
-
-/* .heroVisual img {
-	display: block;
-	width: 100%;
-	height: auto;
-	object-fit: contain;
-	border-radius: 18px;
-}
-
-.floatingCard {
-	position: absolute;
-	bottom: -5px;
-	left: -25px;
-	display: flex;
-	gap: 13px;
-	padding: 16px 20px;
-	background: white;
-	border: 1px solid #eaf0f8;
-	border-radius: 15px;
-	box-shadow: 0 12px 35px rgb(28 57 99 / 12%);
-}
-
-.floatingIcon {
-	width: 37px;
-	height: 37px;
-	display: grid;
-	place-items: center;
-	flex-shrink: 0;
-	border-radius: 50%;
-	background: #e8f7ed;
-	color: var(--green);
-	font-weight: 800;
-}
-
-.floatingCard strong {
-	font-size: 0.9rem;
-}
-
-.floatingCard p {
-	margin: 3px 0 0;
-	color: var(--muted);
-	font-size: 0.8rem;
-} */
 
 
 .sectionHeading {
@@ -323,6 +249,8 @@
 }
 
 .featureCard {
+	display: flex;
+	flex-direction: column;
 	flex-shrink: 0;
 	width: 80%;
 	scroll-snap-align: center;
@@ -336,7 +264,6 @@
 		box-shadow 0.2s ease,
 		border-color 0.2s ease;
 }
-
 .featureCard:hover {
 	transform: translateY(-5px);
 	border-color: #c6dcff;
@@ -487,18 +414,6 @@
 	}
 
 	.heroDescription {font-size: 1rem;}
-
-	/* .heroVisual {margin: 0 8px;}
-	.imagePlaceholder {
-		min-height: 300px;
-		padding: 25px;
-	}
-	.floatingCard {
-		left: -10px;
-		bottom: -20px;
-		padding: 13px 16px;
-	} */
-	 
 	.sectionHeading {margin-bottom: 40px;}
 	.stepsGrid {gap: 20px;}
 	.featureCard {padding: 24px;}
@@ -540,13 +455,6 @@
 	.navLinks a {font-size: 0.7rem;}
 	.heroActions {flex-direction: column;}
 	.stepsGrid {flex-direction: column;}
-
-	/* .floatingCard {
-		left: -5px;
-		right: -5px;
-		justify-content: center;
-	} */
-
 	.footerLinks {grid-template-columns: 1fr 1fr;}
 	.footerBottom {flex-direction: column;}
 }

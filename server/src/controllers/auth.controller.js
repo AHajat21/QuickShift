@@ -24,6 +24,14 @@ export const register = async (req, res, next) => {
 				password: passwordHash,
 				firstName,
 				lastName,
+			},
+			select: {
+				id: true,
+				firstName: true,
+				lastName: true,
+				email: true,
+				companyId: true,
+				isGuest: true
 			}
 		})
 
@@ -55,6 +63,14 @@ export const login = async (req, res, next) => {
 		const user = await prisma.users.findUnique({
 			where: {
 				email
+			},
+			select: {
+				id: true,
+				firstName: true,
+				lastName: true,
+				email: true,
+				companyId: true,
+				isGuest: true
 			}
 		})
 		if (!user) return res.status(401).json({
@@ -62,7 +78,6 @@ export const login = async (req, res, next) => {
 		})
 
 		const passwordIsValid = await verifyPassword(password, user.password);
-
 		if (!passwordIsValid) return res.status(401).json({
 			message: "Invalid email or password."
 		})
@@ -153,7 +168,15 @@ export const guestRegister = async (req, res, next) => {
 		}
 
 		const user = await prisma.users.create({
-			data: {isGuest: true}
+			data: {isGuest: true},
+	      select: {
+				id: true,
+				firstName: true,
+				lastName: true,
+				email: true,
+				companyId: true,
+				isGuest: true
+         }
 		})
 
 		await createSession(user.id, res)
@@ -170,7 +193,6 @@ export const guestRegister = async (req, res, next) => {
 export const guestConvert = async (req, res, next) => {
 	const { email, password, firstName, lastName } = req.body
 	const userId = req.user.id
-
 	
 	const errors = validationResult(req)
 	if (!errors.isEmpty()) return res.status(400).json({
@@ -193,6 +215,7 @@ export const guestConvert = async (req, res, next) => {
 		const deleteSession = prisma.sessions.deleteMany({
 			where: {userId}
 		})
+
 		const sessionToken = generateSessionToken()
 		const tokenHash = hashSessionToken(sessionToken)
 		const createSession = prisma.sessions.create({
@@ -202,6 +225,7 @@ export const guestConvert = async (req, res, next) => {
 				expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 			}
 		})
+
 		const [user] = await prisma.$transaction([
 			updatedUser, deleteSession, createSession
 		])
@@ -218,6 +242,118 @@ export const guestConvert = async (req, res, next) => {
 			message: "Successfully registered",
 			user: user
 		})
+	} catch (error) {
+		next(error)
+	}
+}
+
+
+export const updateMe = async (req, res, next) => {
+	const { firstName, lastName, email } = req.body
+	const userId = req.user.id
+	if (req.user.isGuest) return
+
+	const errors = validationResult(req)
+	if (!errors.isEmpty()) return res.status(400).json({
+		errors: errors.array()
+	})
+
+	try {
+		const user = await prisma.users.update({
+			where: {id: userId},
+			data: {
+				firstName, lastName, email
+			},
+			select: {
+				id: true,
+				firstName: true,
+				lastName: true,
+				email: true,
+				companyId: true,
+				isGuest: true
+			}
+		})
+
+		return res.status(200).json({
+			message: "Profile updated successfully",
+			user
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
+export const updatePassword = async (req, res, next) => {
+	const { currentPassword, newPassword } = req.body
+	const userId = req.user.id
+	if (req.user.isGuest) return res.status(403).json({
+      message: "Guest accounts cannot update passwords"
+   })
+
+	const errors = validationResult(req)
+	if (!errors.isEmpty()) return res.status(400).json({
+		errors: errors.array()
+	})
+
+	try {
+		const user = await prisma.users.findUnique({
+			where: {id: userId},
+			select: {password: true}
+		})
+		
+		const passwordIsValid = await verifyPassword(currentPassword, user.password);
+		if (!passwordIsValid) return res.status(401).json({
+			message: "Current password is incorrect."
+		})
+
+		const newPasswordHash = await hashPassword(newPassword)
+		await prisma.users.update({
+			where: {id: userId},
+			data: {password: newPasswordHash}
+		})
+
+		await prisma.sessions.deleteMany({
+			where: { userId }
+		})
+
+		res.clearCookie("session", {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+			path: "/"
+		})
+
+		return res.status(200).json({
+			message: "Password updated successfully"
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
+export const deleteMe = async (req, res, next) => {
+	const userId = req.user.id
+	try {
+		await prisma.$transaction(async (tx) => {
+			await tx.sessions.deleteMany({
+				where: {userId}
+			})
+
+			await tx.users.delete({
+				where: {id: userId}
+			})
+		})
+
+		res.clearCookie("session", {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+			path: "/"
+		})
+
+		return res.status(200).json({
+			message: "Account deleted successfully"
+		})		
 	} catch (error) {
 		next(error)
 	}

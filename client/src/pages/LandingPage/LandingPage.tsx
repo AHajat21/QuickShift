@@ -45,23 +45,6 @@ const LandingPage = () => {
 
 					<div className={styles.heroNote}>Built for small businesses.</div>
 				</div>
-
-				{/* <div className={styles.heroVisual}>
-					<div className={styles.imagePlaceholder}>
-						<div className={styles.placeholderIcon}>▦</div>
-						<img
-							src=""
-							alt="QuickShift weekly timetable"
-						/>
-					</div>
-					<div className={styles.floatingCard}>
-						<span className={styles.floatingIcon}>✓</span>
-						<div>
-							<strong>One organised schedule</strong>
-							<p>Your week, at a glance.</p>
-						</div>
-					</div>
-				</div> */}
 			</section>
 
 
@@ -112,26 +95,52 @@ const LandingPage = () => {
 
 				<div className={styles.featuresScroll}>
 					<article className={styles.featureCard}>
-						<div className={styles.featureIcon}>👥</div>
-						<h3><span>✓</span> Create employees and manage availabilties</h3>
+						<div className={styles.featureVisual}>
+							<div className={styles.featureIcon}>👥</div>
+						</div>
+						
+						<h3><span>✓</span>Manage employee availabilties</h3>
 						<p>
-							for each employee, each day.
+							For each employee, each day.
 						</p>
 					</article>
 
 					<article className={styles.featureCard}>
-						<div className={styles.featureIcon}>📅</div>
+						<div className={styles.featureVisual}>
+							<div className={styles.featureIcon}>📅</div>
+						</div>
+						
 						<h3><span>✓</span> Create your timetables intuitively</h3>
 						<p>
-							using your employee availabilities.
+							Using your employee availabilities.
+						</p>
+					</article>
+
+					<article className={styles.featureCard}>
+						<div className={styles.featureVisual}>
+							<div className={styles.featureIcon}>🗓️</div>
+						</div>
+						<h3><span>✓</span>Duplicate existing timetables</h3>
+						<p>
+							To save time for your next timetable.
+						</p>
+					</article>
+
+					<article className={styles.featureCard}>
+						<div className={styles.featureVisual}>
+							<div className={styles.featureIcon}>🗓️</div>
+						</div>
+						<h3><span>✓</span>Download and share your timetables</h3>
+						<p>
+							To save time for your next timetable.
 						</p>
 					</article>
 
 					<article className={styles.featureCard}>
 						<div className={styles.featureIcon}>🗓️</div>
-						<h3><span>✓</span>Duplicate existing timetables</h3>
+						<h3>...And so much more planned</h3>
 						<p>
-							to save time for your next timetable.
+							Contact me to request specific features
 						</p>
 					</article>
 				</div>
@@ -182,7 +191,7 @@ const LandingPage = () => {
 						</div>
 
 						<div>
-							<a href="mailto:ahajat60@gmail.com">ahajat60@gmail.com</a>
+							<a href="mailto:quickshiftsupport@gmail.com">quickshiftsupport@gmail.com</a>
 						</div>
 					</div>
 				</div>

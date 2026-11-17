@@ -10,6 +10,7 @@ import Company from "./pages/Company/Company.tsx"
 import Unavailabilities from "./pages/Unavailabilities/Unavailabilities.tsx"
 import ManageTimetable from "./pages/Timetables/ManageTimetable.tsx"
 import LandingPage from "./pages/LandingPage/LandingPage.tsx"
+import SettingsPage from "./pages/Settings/SettingsPage.tsx"
 
 const App = () => {
 
@@ -30,6 +31,8 @@ const App = () => {
 							<Route path="timetables/:timetableId" element={<ManageTimetable />} />
 							<Route path="company" element={<Company />} />
 							<Route path="availabilities" element={<Unavailabilities />} />
+
+							<Route path="settings" element={<SettingsPage />} />
 						</Route>
 					</Route>
 				</Routes>

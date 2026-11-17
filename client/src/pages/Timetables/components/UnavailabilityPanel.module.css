@@ -4,6 +4,7 @@
 	overflow-x: auto;
 	overscroll-behavior-x: contain;
 	scrollbar-width: thin;
+	border-radius: 12px;
 }
 
 .unavailabilitiesChart {
@@ -23,6 +24,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	text-align: center;
 	
 	font-size: 0.7rem;
 	font-weight: 600;
@@ -75,6 +77,9 @@
 
 	z-index: 2;
 }
+.rowHeader:nth-last-child(2) {
+	border-bottom-left-radius: 12px;
+}
 
 .unavailabilityCell {
 	position: relative;
@@ -86,9 +91,12 @@
 	background-image: linear-gradient(
 		to right,
 		transparent calc(100% - 1px),
-		#f1f1f1bb calc(100% - 1px)
+		#e9e9e9bb calc(100% - 1px)
 	);
 	background-size: calc(100% / 24) 100%;
+}
+.unavailabilityCell:last-child {
+	border-bottom-right-radius: 12px;
 }
 .unavailabilityCell:hover {
 	background-color: #fafafa;

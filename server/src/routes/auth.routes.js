@@ -1,6 +1,6 @@
 import express from "express"
-import { register, login, logout, getMe, guestRegister, guestConvert } from "../controllers/auth.controller.js"
-import { loginValidator, registrationValidator } from "../validators/auth.validator.js"
+import { register, login, logout, getMe, guestRegister, guestConvert, updateMe, updatePassword, deleteMe } from "../controllers/auth.controller.js"
+import { loginValidator, registrationValidator, updateMeValidator, updatePasswordValidator } from "../validators/auth.validator.js"
 import { authenticate, requireGuest } from "../middleware/auth.middleware.js"
 
 const router = express.Router()
@@ -15,11 +15,7 @@ router.post(
 	loginValidator,
 	login
 )
-router.get(
-	"/me",
-	authenticate,
-	getMe
-)
+
 router.post(
 	"/logout",
 	authenticate,
@@ -36,6 +32,29 @@ router.post(
 	requireGuest,
 	registrationValidator,
 	guestConvert
+)
+
+router.get(
+	"/me",
+	authenticate,
+	getMe
+)
+router.patch(
+	"/me",
+	authenticate,
+	updateMeValidator,
+	updateMe
+)
+router.patch(
+	"/me/password",
+	authenticate,
+	updatePasswordValidator,
+	updatePassword
+)
+router.delete(
+	"/me",
+	authenticate,
+	deleteMe
 )
 
 export default router

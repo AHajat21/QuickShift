@@ -15,7 +15,7 @@ export const registrationValidator = [
 
 	body("lastName")
 		.optional()
-		.trim(),
+		.trim()
 ]
 
 export const loginValidator = [
@@ -25,4 +25,27 @@ export const loginValidator = [
 
 	body("password")
 		.notEmpty().withMessage("Password is required")
+]
+
+
+export const updateMeValidator = [
+	body("email")
+		.trim()
+		.isEmail().withMessage("A valid email is required"),
+
+	body("firstName")
+		.trim()
+		.notEmpty().withMessage("First name is required"),
+
+	body("lastName")
+		.optional()
+		.trim()
+]
+export const updatePasswordValidator = [
+	body("newPassword")
+		.isLength({ min: 8 }).withMessage("Password must be 8 characters ")
+		.trim(),
+	body("currentPassword")
+		.isLength({ min: 8 }).withMessage("Password must be 8 characters ")
+		.trim()
 ]

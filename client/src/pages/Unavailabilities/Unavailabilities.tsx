@@ -134,7 +134,10 @@ const Unavailabilities = () => {
 
 		if (!newUnavailability.startTime) return
 
-		if (mins <= timeToMinutes(newUnavailability.startTime)) return
+		if (mins <= timeToMinutes(newUnavailability.startTime)) {
+			toast.error("End time must be greater than start time")
+			return
+		}
 
 		createUnavailability(
 			employeeId,
