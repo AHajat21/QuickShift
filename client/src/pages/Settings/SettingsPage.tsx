@@ -8,12 +8,10 @@ import styles from './SettingsPage.module.css'
 const SettingsPage = () => {
 	const { user, setUser } = useAuth()
 
-	// Personal information
 	const [firstName, setFirstName] = useState(user?.firstName ?? '')
 	const [lastName, setLastName] = useState(user?.lastName ?? '')
 	const [email, setEmail] = useState(user?.email ?? '')
 
-	// Password
 	const [currentPassword, setCurrentPassword] = useState('')
 	const [newPassword, setNewPassword] = useState('')
 	const [confirmPassword, setConfirmPassword] = useState('')
@@ -38,7 +36,6 @@ const SettingsPage = () => {
 				lastName,
 				email,
 			})
-
 			setUser(response.data.user)
 
 			toast.success('Personal information updated')
@@ -87,7 +84,6 @@ const SettingsPage = () => {
 		const confirmed = window.confirm(
 			'Are you sure you want to delete your account? This action cannot be undone.'
 		)
-
 		if (!confirmed) return
 
 		try {
@@ -165,7 +161,6 @@ const SettingsPage = () => {
 				</SettingsSection>
 
 
-				{/* Security */}
 				<SettingsSection
 					title="Password & security"
 					description="Keep your account secure by regularly updating your password."
@@ -222,7 +217,6 @@ const SettingsPage = () => {
 				</SettingsSection>
 
 
-				{/* Danger Zone */}
 				<SettingsSection
 					title="Danger zone"
 					description="Irreversible actions relating to your account."
@@ -246,7 +240,6 @@ const SettingsPage = () => {
 						</button>
 					</div>
 				</SettingsSection>
-
 			</div>
 		</div>
 	)

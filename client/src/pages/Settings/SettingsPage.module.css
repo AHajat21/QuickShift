@@ -11,8 +11,6 @@
 	background: var(--background);
 }
 
-/* Page Header */
-
 .pageHeader {
 	margin-bottom: 32px;
 }
@@ -21,16 +19,14 @@
 	font-size: 28px;
 	font-weight: 700;
 	color: var(--text);
-	margin: 0 0 6px;
+	margin-bottom:  6px;
 }
 
 .pageHeader p {
 	font-size: 14px;
 	color: var(--muted);
-	margin: 0;
 }
 
-/* Settings Layout */
 
 .settingsContainer {
 	max-width: 850px;
@@ -39,7 +35,6 @@
 	gap: 24px;
 }
 
-/* Individual Sections */
 
 .section {
 	background: white;
@@ -58,20 +53,18 @@
 	font-size: 17px;
 	font-weight: 650;
 	color: var(--text);
-	margin: 0 0 5px;
+	margin-bottom: 5px;
 }
 
 .sectionHeader p {
 	font-size: 13px;
 	color: var(--muted);
-	margin: 0;
 }
 
 .sectionContent {
 	padding: 24px;
 }
 
-/* Forms */
 
 .formGrid {
 	display: grid;
@@ -94,7 +87,6 @@
 
 .inputGroup input {
 	width: 100%;
-	box-sizing: border-box;
 	padding: 11px 13px;
 	border: 1px solid var(--border);
 	border-radius: 7px;
@@ -114,7 +106,6 @@
 	border-color: #b7cfc0;
 }
 
-/* Buttons */
 
 .formFooter {
 	display: flex;
@@ -144,7 +135,6 @@
 	cursor: not-allowed;
 }
 
-/* Danger Zone */
 
 .dangerCard {
 	display: flex;
@@ -161,14 +151,13 @@
 	font-size: 14px;
 	font-weight: 650;
 	color: #b43e3e;
-	margin: 0 0 6px;
+	margin-bottom: 6px;
 }
 
 .dangerCard p {
 	font-size: 13px;
 	line-height: 1.5;
 	color: var(--muted);
-	margin: 0;
 	max-width: 450px;
 }
 
@@ -190,12 +179,9 @@
 	border-color: #d77b7b;
 }
 
-/* Responsive */
 
 @media (max-width: 650px) {
-	.settingsPage {
-		padding: 20px 15px;
-	}
+	.settingsPage {padding: 20px 15px;}
 
 	.formGrid {
 		grid-template-columns: 1fr;
@@ -203,16 +189,12 @@
 	}
 
 	.sectionHeader,
-	.sectionContent {
-		padding: 18px;
-	}
+	.sectionContent {padding: 18px;}
 
 	.dangerCard {
 		flex-direction: column;
 		align-items: flex-start;
 	}
 
-	.dangerButton {
-		width: 100%;
-	}
+	.dangerButton {width: 100%;}
 }

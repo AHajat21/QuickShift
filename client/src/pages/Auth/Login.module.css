@@ -79,7 +79,7 @@
 	padding: 48px;
 }
 
-/* Intro section */
+
 .intro {
 	max-width: 490px;
 	flex: 1;
@@ -109,13 +109,12 @@
 
 .intro > p {
 	max-width: 440px;
-
 	color: #64746a;
 	font-size: 1.08rem;
 	line-height: 1.85;
 }
 
-/* Login card */
+
 .loginBox {
 	flex: 1;
 	max-width: 490px;
@@ -129,10 +128,7 @@
 		0 3px 10px rgba(39, 77, 54, 0.025);
 }
 
-.formHeader {
-	margin-bottom: 28px;
-}
-
+.formHeader {margin-bottom: 28px;}
 .formHeader h2 {
 	margin: 12px 0 8px;
 	color: #26392d;
@@ -326,7 +322,7 @@
 		width: 100%;
 		max-width: 490px;
 		justify-self: center;
-		padding: 24px 18px;
+		padding: 36px;
 	}
 }
 

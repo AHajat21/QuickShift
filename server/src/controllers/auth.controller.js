@@ -61,17 +61,7 @@ export const login = async (req, res, next) => {
 
 	try {
 		const user = await prisma.users.findUnique({
-			where: {
-				email
-			},
-			select: {
-				id: true,
-				firstName: true,
-				lastName: true,
-				email: true,
-				companyId: true,
-				isGuest: true
-			}
+			where: {email}
 		})
 		if (!user) return res.status(401).json({
 			message: "Invalid email or password."
@@ -335,12 +325,12 @@ export const deleteMe = async (req, res, next) => {
 	const userId = req.user.id
 	try {
 		await prisma.$transaction(async (tx) => {
-			await tx.sessions.deleteMany({
-				where: {userId}
-			})
-
 			await tx.users.delete({
 				where: {id: userId}
+			})
+
+			await tx.sessions.deleteMany({
+				where: {userId}
 			})
 		})
 
