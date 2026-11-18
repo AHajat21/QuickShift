@@ -35,11 +35,7 @@ const Login = () => {
 
 		setIsSubmitting(true)
 
-		if (user?.isGuest) {
-			// REPLACE with guest delete
-			await api.post('/auth/logout')
-
-		}
+		if (user?.isGuest) await api.post('/auth/me/delete')
 
 		const promise = api.post('/auth/login', {
 			email: email.trim(),

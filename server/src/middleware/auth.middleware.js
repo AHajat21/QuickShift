@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma.js";
 import { hashSessionToken } from "../utils/session.js";
+import { ABSOLUTE_RENEWAL_THRESHOLD, RENEWAL_THRESHOLD, SESSION_DURATION } from "../utils/constants.js";
 
 export const authenticate = async (req, res, next) => {
 	const sessionToken = req.cookies?.session
@@ -14,17 +15,38 @@ export const authenticate = async (req, res, next) => {
 			include: {user: true}
 		})
 
-		if (!session) {console.log(session);return res.status(401).json({
+		if (!session) return res.status(401).json({
 			message: "Authentication required"
-		})}
+		})
 
-		if (new Date() >= session.expiresAt) {
+		if (new Date() >= session.expiresAt || Date.now() - session.createdAt.getTime() >= ABSOLUTE_RENEWAL_THRESHOLD) {
 			await prisma.sessions.delete({
 				where: {id: session.id}
 			})
 
 			return res.status(401).json({
 				message: "Authentication required"
+			})
+		}
+
+		const timeRemaining = session.expiresAt.getTime() - new Date().getTime()
+		if (timeRemaining < RENEWAL_THRESHOLD) {
+			const newExpiry = new Date(Math.min(
+				Date.now() + SESSION_DURATION,
+				absoluteExpiry
+			))
+
+			await prisma.sessions.update({
+				where: { id: session.id },
+				data: {expiresAt: newExpiry}
+			})
+
+			res.cookie("session", sessionToken, {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === "production",
+				sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+				maxAge: SESSION_DURATION,
+				path: "/"
 			})
 		}
 

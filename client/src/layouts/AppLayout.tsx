@@ -54,6 +54,7 @@ const AppLayout = () => {
 			}
 		})
 	}
+	
 
 	return (
 		<div className={styles.appLayout}>
@@ -89,47 +90,49 @@ const AppLayout = () => {
 				</nav>
 				
 				
-				{user?.isGuest ? 
-					<Link to="/register" className={styles.guestButton}>
-						Register!
-					</Link>
-				:
+
 					<div className={styles.accountWrapper} ref={menuContainerRef}>
-						<button
-							type="button"
-							className={styles.menuButton}
-							aria-label={`Options for user`}
-							aria-haspopup="menu"
-							aria-expanded={openMenu}
-							onClick={() =>
-								setOpenMenu(openMenu ? false : true)
-							}
-						>👤</button>
-						{openMenu && (
-						<div className={styles.dropdown} role="menu">
+						{user?.isGuest ? 
+							<Link to="/register" className={styles.guestButton}>
+								Register!
+							</Link>
+						:
+						<>
 							<button
 								type="button"
-								role="menuitem"
-								onClick={() => {
-									navigate("/settings")
-									setOpenMenu(false)
-								}}
-							>Settings</button>
+								className={styles.menuButton}
+								aria-label={`Options for user`}
+								aria-haspopup="menu"
+								aria-expanded={openMenu}
+								onClick={() =>
+									setOpenMenu(openMenu ? false : true)
+								}
+							>👤</button>
+							{openMenu &&
+							<div className={styles.dropdown} role="menu">
+								<button
+									type="button"
+									role="menuitem"
+									onClick={() => {
+										navigate("/settings")
+										setOpenMenu(false)
+									}}
+								>Settings</button>
 
-							{/* <button
-								type="button"
-								role="menuitem"
-								onClick={() => {
-									setOpenMenu(false)
-								}}
-							>Feedback</button> */}
-						</div>
-					)}
-						<button className={styles.logoutButton} onClick={handleLogout}>
-							Logout
-						</button>
+								{/* <button
+									type="button"
+									role="menuitem"
+									onClick={() => {
+										setOpenMenu(false)
+									}}
+								>Feedback</button> */}
+							</div>
+							}
+							<button className={styles.logoutButton} onClick={handleLogout}>
+								Logout
+							</button>
+						</>}
 					</div>
-				}
 			</header>
 
 			<main>

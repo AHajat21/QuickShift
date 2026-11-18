@@ -1,15 +1,16 @@
 import { prisma } from "../lib/prisma.js"
+import { SESSION_DURATION } from "../utils/constants.js"
 import { generateSessionToken, hashSessionToken } from "../utils/session.js"
 
 export const createSession = async (userId, res) => {
 	const sessionToken = generateSessionToken()
 	const tokenHash = hashSessionToken(sessionToken)
-
+z
 	await prisma.sessions.create({
 		data: {
 			userId,
 			tokenHash,
-			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+			expiresAt: new Date(Date.now() + SESSION_DURATION)
 		}
 	})
 	res.cookie("session", sessionToken, {
@@ -17,6 +18,6 @@ export const createSession = async (userId, res) => {
 		secure: process.env.NODE_ENV === "production",
 		sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 		path: "/",
-		maxAge: 7 * 24 * 60 * 60 * 1000
+		maxAge: SESSION_DURATION
 	})
 }

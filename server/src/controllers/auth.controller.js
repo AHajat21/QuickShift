@@ -3,6 +3,7 @@ import { hashPassword, verifyPassword } from "../utils/password.js";
 import { prisma } from "../lib/prisma.js"
 import { generateSessionToken, hashSessionToken } from "../utils/session.js";
 import { createSession } from "../services/createSession.js";
+import { SESSION_DURATION } from "../utils/constants.js";
 
 export const register = async (req, res, next) => {
 	const { email, password, firstName, lastName } = req.body
@@ -74,6 +75,7 @@ export const login = async (req, res, next) => {
 
 		await createSession(user.id, res)
 
+		delete user.password
 		return res.status(200).json({
 			message: "Successful login",
 			user
@@ -212,7 +214,7 @@ export const guestConvert = async (req, res, next) => {
 			data: {
 				userId,
 				tokenHash,
-				expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+				expiresAt: new Date(Date.now() + SESSION_DURATION)
 			}
 		})
 
@@ -225,7 +227,7 @@ export const guestConvert = async (req, res, next) => {
 			secure: process.env.NODE_ENV === "production",
 			sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 			path: "/",
-			maxAge: 7 * 24 * 60 * 60 * 1000
+			maxAge: SESSION_DURATION
 		})
 
 		return res.status(201).json({
@@ -324,15 +326,14 @@ export const updatePassword = async (req, res, next) => {
 export const deleteMe = async (req, res, next) => {
 	const userId = req.user.id
 	try {
-		await prisma.$transaction(async (tx) => {
-			await tx.users.delete({
+		await prisma.$transaction([
+			prisma.users.delete({
 				where: {id: userId}
-			})
-
-			await tx.sessions.deleteMany({
+			}),
+			prisma.sessions.deleteMany({
 				where: {userId}
 			})
-		})
+		])
 
 		res.clearCookie("session", {
 			httpOnly: true,
